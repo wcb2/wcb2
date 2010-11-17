@@ -1,0 +1,95 @@
+auto_connect
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	Okre¶la, czy sesja bêdzie ³±czona automagicznie przy starcie programu.
+
+charset
+	typ: tekst
+	domy¶lna warto¶æ: brak
+	
+	Kodowanie u¿ywane w wiadomo¶ciach przychodz±cych i wychodz±cych. Je¶li
+	nieustalone, xmsg nie bêdzie dokonywa³ konwersji - tzn. wykorzystane
+	bêdzie aktualne kodowanie ekg2.
+
+dotfile_suffix
+	typ: tekst
+	domy¶lna warto¶æ: brak
+	
+	Okre¶la sufiks dodawany do ukrytych plików tworzonych po odebraniu
+	wiadomo¶ci. Opcja ta pozwala obs³ugiwaæ jeden katalog wiadomo¶ci przez
+	kilka niezale¿nych od siebie klientów.
+
+max_filesize
+	typ: liczba
+	domy¶lna warto¶æ: 16384
+	
+	Plik wiêksze ni¿ warto¶æ tej zmiennej, bêd± ignorowane (lub usuwane)
+	przez wtyczkê.
+
+max_oneshot_files
+	typ: liczba
+	domy¶lna warto¶æ: 25
+	
+	Maksymalna liczba plików, jakie przetworzone zostaj± podczas jednego
+	wywo³ania funkcji skanuj±cej. Po przekroczeniu tej liczby, funkcja jest
+	wstrzymywana i tworzony jest timer ponawiaj±cy, patrz:
+	oneshot_resume_timer. Warto¶æ zerowa oznacza brak ograniczenia.
+
+name_separator
+	typ: tekst
+	domy¶lna warto¶æ: .
+	
+	Separator oddzielaj±cy zasadnicz± czê¶æ nazwy (u¿ywan± w UID-ach)
+	od sufiksu. Nazwa pliku bêdzie ³amana na ostatnim wyst±pieniu tego
+	znaku. Warto¶æ nieustalona wy³±cza dzielenie. W przypadku podania
+	wiêkszej liczby znaków, brany bêdzie pod uwagê ten, wystêpuj±cy
+	najbli¿ej koñca nazwy pliku.
+
+oneshot_resume_timer
+	typ: liczba
+	domy¶lna warto¶æ: 3
+	
+	Okre¶la czas (w sekundach), po jakim operacja wstrzymana po
+	przekroczeniu max_oneshot_files, zostaje wznowiona (a¿ do ponownego
+	przetworzenia okre¶lonej liczby plików). Je¶li zmienna ta bêdzie mia³a
+	warto¶æ 0, operacja zostanie ponowiona dopiero przy kolejnym
+	niezale¿nym wywo³aniu funkcji (np. przy kolejnym ³±czeniu sesji).
+
+rescan_timer
+	typ: liczba
+	domy¶lna warto¶æ: 0 or 300
+	
+	Interwa³ ponownego wczytywania katalogu wiadomo¶ci przychodz±cych.
+	Zmienna ta nie powinna byæ u¿ywana w ¶rodowiskach, wspieraj±cych
+	inotify, tak wiêc domy¶lnie ma tam warto¶æ 0.
+
+send_cmd
+	typ: tekst
+	domy¶lna warto¶æ: (brak)
+	
+	Polecenie u¿ywane do wysy³ania wiadomo¶ci przy u¿yciu wtyczki.
+	Uruchomione bêdzie z dwoma argumentami - UID-em (bez xmsg:) oraz
+	¶cie¿k± do pliku z wiadomo¶ci±. Proszê zwróciæ uwagê, ¿e xmsg
+	nie sprawdza kodu zakoñczenia aplikacji/skryptu, tak wiêc wszelakie
+	b³êdy zwracane byæ winny poprzez u¿ycie katalogu wiadomo¶ci
+	przychodz±cych.
+
+unlink_sent
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	Okre¶la, czy pliki wiadomo¶ci przychodz±cych powinny byæ usuwane
+	po odczytaniu. W przeciwnym razie, dla plików tych tworzone bêd± tzw.
+	dotfiles (ukryte pliki, informuj±ce xmsg, ¿e wiadomo¶æ ju¿ zosta³a
+	odczytana).
+
+unlink_toobig
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	Okre¶la, czy po napotkaniu pliku przekraczaj±cego max_filesize, nale¿y
+	go pomijaæ (0) czy te¿ usun±æ (1). W przypadku pomijania pliku, celem
+	unikniêcia ponawiania siê komunikatu, plik taki bêdzie oznaczany za
+	pomoc± tzw. dotfile (ukrytego pliku).
+

@@ -1,0 +1,314 @@
+// opis komend dla protoko³u jabber
+// (c) copyright 2001-2003 wojtek kaniewski <wojtekka@irc.pl>
+// (c) copyright      2004 piotr kupisiewicz <deletek@ekg2.org>
+// (c) copyright      2004 tomasz torcz <zdzichu@ekg2.org>
+
+_autoaway
+	parametry: 
+	krotki opis: zmienia stan na zajêty
+
+_autoback
+	parametry: 
+	krotki opis: zmienia stan na dostêpny
+
+add
+	parametry: <JID> [nazwa]
+	krotki opis: dodaje u¿ytkownika do naszego rostera, jednocze¶nie prosz±c o autoryzacjê
+
+auth
+	parametry: <opcje> <JID> 
+	krotki opis: obs³uga autoryzacji
+	
+	<akcja> <JID> 
+	
+	  -a, --accept <JID>    autoryzuje JID
+	
+	  -d, --deny <JID>      odmawia udzielenia autoryzacji lub j± odbiera
+	
+	  -r, --request <JID>   wysy³a ¿±danie autoryzacji
+	
+	  -c, --cancel <JID>    wysy³a ¿±danie cofniêcia autoryzacji
+	
+	  -j, --reject <JID>	odrzuca ¿±danie autoryzacji
+	
+	  -l, --list		wy¶wietla oczekuj±ce ¿±dania
+	
+	  -p, --probe		wysy³a pytanie o obecno¶æ u¿ytkownika
+
+away
+	parametry: [opis/-]
+	krotki opis: zmienia stan na zajêty
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+back
+	parametry: [opis/-]
+	krotki opis: zmienia stan na dostêpny
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+ban
+	parametry: <kana³> <JID> [powód]
+	krotki opis: banuje JID z kana³u lub wy¶wietla listê banów
+	
+	Je¿eli nie podano JID wy¶wietla listê zbanowanych uzytkowników.
+	W przeciwnym wypadku banuje dany JID z okre¶lonego kana³u.
+
+bookmark
+	parametry: <opcje>
+	krotki opis: zarzadzanie zakladkami serwer-side (jabber:iq:private)
+	
+	Zarzadza zakladkami (dodaje/modyfikuje/usuwa/wyswietla).
+	Ustawienie zmiennej sesyjnej auto_bookmark_sync zalecane.
+	
+	 -d, --display                       wyswietla.
+	
+	 -g, --get                           pobiera, bez wyswietlania
+	
+	 -c, --clear                         czysci
+	
+	 -p, --put                           wysyla liste lokalna na serwer (automatycznie robione po dodaniu/modyfikacji/usunieciu)
+	
+	 -a, --add  --url <url> [-- nazwa]   dodaje nowy wpis do zakladek ze stronami WWW
+	
+	 -a, --add  --conf <jid>             dodaje nowy wpis do zakladek z konferencjami
+	
+	            [--autojoin 1]           czy automatycznie sie dolaczac po polaczeniu do serwera [niezaimplentowane w ekg2, ale wiele klientow umie :)]
+	
+	            [--nick nasznick]
+	
+	            [--pass haslo] 
+	
+	            [-- nazwa]
+	
+	 -m, --modify                       NIE ZAIMPLEMENTOWANE, modyfikuje :)
+	
+	 -r, --remove                       NIE ZAIMPLEMENTOWANE, usuwa :)
+
+change
+	parametry:  <opcje>
+	krotki opis: zmienia informacje w katalogu publicznym
+	
+	  -f, --fullname <imiê i nazwisko>
+	
+	  -n, --nick <pseudonim>
+	
+	  -b, --born <data urodzenia>	(zapisana wg. ISO 8601, tj. rrrr-mm-dd)
+	
+	  -c, --city <miasto>
+	
+	  -d, --description <opis>
+	
+	  -C, --country <kraj>
+	
+	  -p, --photo <¶cie¿ka do zdjecia>
+	
+	Je¶li który¶ z parametrów nie zostanie podany, jego warto¶æ zostanie 
+	wyczyszczona w katalogu publicznym. Podanie parametru ,,%T-%n'' 
+	wyczy¶ci %Twszystkie%n pola.
+
+chat
+	parametry: 
+	krotki opis: wysy³a wiadomo¶æ w ramach rozmowy
+
+connect
+	parametry: 
+	krotki opis: ³±czy siê z serwerem
+
+del
+	parametry: [nazwa]
+	krotki opis: usuwa z naszego rostera
+
+deop
+	parametry: [kana³] [nick]
+	krotki opis: degraduje nick do roli go¶cia
+	
+	Odbiera u¿ytkownikowi prawa moderatora kana³u oraz prawo wysy³ania
+	wiadomo¶ci je¿eli kana³ jest moderowany.
+
+devoice
+	parametry: [kana³] [nick]
+	krotki opis: degraduje nick do roli go¶cia
+	
+	Odbiera u¿ytkownikowi prawa moderatora kana³u oraz prawo wysy³ania
+	wiadomo¶ci je¿eli kana³ jest moderowany.
+
+disconnect
+	parametry:  [opis/-]
+	krotki opis: roz³±cza siê od serwera
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+dnd
+	parametry: [opis/-]
+	krotki opis: zmienia stan na nie przeszkadzaæ
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+ffc
+	parametry: [opis/-]
+	krotki opis: zmienia stan na chêtny do rozmowy
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+kick
+	parametry: [kana³] [nick]
+	krotki opis: wyrzuca nick z kana³u
+
+invisible
+	parametry: [opis/-]
+	krotki opis: zmienia stan na zajêty
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+join
+	parametry: <konferencja> [nick]
+	krotki opis: przy³±cza do konferencji
+	
+	Przy³±cza do konferencji. Je¿eli podana konferencja nie istnieje,
+	zak³ada now± konferencjê. Opcjonalnie ustawia nick u¿ytkownika w
+	konferencji.
+
+lastseen
+	parametry: 
+	krotki opis: pobiera informacjê o czasie wylogowania siê danego jid
+
+msg
+	parametry: 
+	krotki opis: wysy³a pojedyncz± wiadomo¶æ
+	
+	Wszyscy odbiorcy to * zamiast nadawcy. Poprzedzenie wiadomo¶ci 
+	wielolinijkowej ci±giem zdefiniowanym w zmiennej subject_prefix spowoduje 
+	potraktowanie pierwszej linijki jako tematu.
+
+modify
+	parametry:  <alias> <opcje>
+	krotki opis: zmienia wpisy w li¶cie kontaktów
+	
+	Opcje mog± byæ nastêpuj±ce:
+	
+	-n, --nickname <pseudonim>     wpis w li¶cie kontaktów
+
+op
+	parametry: <konferencja> <nick>
+	krotki opis: nadaje nickowi uprawnienia moderatora
+
+part
+	parametry: <konferencja>
+	krotki opis: opuszcza konferencjê
+
+passwd
+	parametry: 
+	krotki opis: zmienia has³o
+
+privacy
+	parametry: <opcje>
+	
+	Zarzadza lista ignorowanych serwer-side (%gjabber:iq:privacy%n).
+	Ustawienie zmiennej sesyjnej %Tauto_privacylist_sync%n wymagane.
+	Ustawienie zmiennej sesyjnej %Tprivacy_list%n zalecane (jesli nie, zakladamy ze korzystasz z listy %Tekg2%n).
+	Jesli w parametrach nie ma podanej listy, to operujemy na liscie
+	zdefiniowanej w %Tprivacy_list%n.
+	
+	%RKOMENDA EKSPERYMENTALNA, PROSZE INFORMOWAC O WSZYSTKICH BUGACH, Z DOKLADNYM OPISEM.%n
+	
+	
+	  [--lists]                                         wyswietla listy dostepne na serwerze
+	
+	  [--get] lista                                     wyswietla liste.
+	
+	  --session lista                                   ustawia lista jako aktywna, jesli podano %T-%n deaktywuje aktualna liste.
+	
+	  --default lista                                   ustawia liste jako domyslna, jesli podano %T-%n kasuje ustawienia.
+	
+	  --unset lista                                     kasuje liste %r(NIEODWRACALNE!!)%n
+	
+	  --sync                                            %g[WEWNETRZNA KOMENDA]%n Wysyla liste lokalna do serwera (automatycznie robione po dodaniu/zmianie/usunieciu)
+	
+	  --set <co> [--order numerek] [-zabron] [+dozwol]  dodaje wpis do listy
+	
+	  	<co>              albo xmpp:osoba albo @grupa albo %Tnone%n, %Tfrom%n, %Tto%n, %Tboth%n gdy definiujemy poziom autoryzacji
+	
+		[--order numerek] ustawia ktory to ma byc element na liscie.
+	
+		[-zabron]         Parametr moze byc powtorzony wielokrotnie, znak minusa, a nastepnie jedna z opcji: iq, msg, pin, pout lub gwiazdka jesli wszystkie.
+	
+		[+pozwol]         Parametr moze byc powtorzony wielokrotnie, znak plusa, a nastepnie jedna z opcji: iq, msg, pin, pout lub gwiazdka dla okreslenia ze wszystkie.
+	
+		%r!!! UWAGA !!! Po dodaniu pierwszego elementu do listy, jest wymagane aktywowanie listy przez %g/privacy --session lista%n
+	
+	 --remove #id                                       usuwa wpis z numerem id z listy.
+	
+	 --modify                                           zmienia wpis, NIEZAIMPLEMENTOWANE.
+	 
+
+reconnect
+	parametry: 
+	krotki opis: roz³±cza i ³±czy siê ponownie
+
+reply
+	parametry: <#reply-id> ...
+	krotki opis: odpisuje na w±tek
+	
+	Wysy³a wiadomo¶æ jako kontynuacjê wskazanego przez reply-id w±tku.
+	Mo¿liwe jest podanie tematu jak w msg, w przeciwnym razie temat
+	zostanie utworzone w oparciu o temat w±tku (poprzedzony
+	subject_reply_prefix).
+
+tmsg
+	parametry: <uid/nick> <id-watku> ...
+	krotki opis: wysy³a wiadomo¶æ w±tkowan±
+	
+	Dzia³a podobnie jak msg, z tym, ¿e dodatkowy, drugi parametr zawiera
+	identyfikator w±tku dla wiadomo¶ci.
+
+topic
+	parametry:  [konferencja] <nowy temat>
+	krotki opis: ustawia topic MUC
+
+unban
+	parametry: <konferencja> <JID>
+	krotki opis: zdejmuje ban na dany JID z kana³u
+	
+	Je¿eli nie podano JID wy¶wietla listê zbanowanych uzytkowników.
+	W przeciwnym wypadku usuwa ban danego JID z okre¶lonego kana³u.
+
+userinfo
+	parametry: 
+	krotki opis: pobiera informacje z katalogu Jabbera o danym jid
+
+ver
+	parametry: 
+	krotki opis: pobiera informacjê o sytemie operacyjnym i wersji klienta Jabbera danego jid
+
+voice
+	parametry: <konferencja> <nick>
+	krotki opis: daje "g³os" nickowi
+	
+	Nadaje u¿ytkownikowi uprawnienia do wysy³ania wiadomo¶ci w
+	konferencji, nawet je¶li konferencja jest moderowana.
+	
+	Uwaga: ustawienie voice na uzytkowniku bêd±cym moderatorem spowoduje
+	odebraniu mu praw administratora.
+
+xa
+	parametry: [opis/-]
+	krotki opis: zmienia stan na bardzo zajêty
+	
+	Je¿eli nie podano opisu to bêdzie szukany losowy opis.
+	Podanie ,,%T-%n'' zamiast powodu spowoduje wyczyszczenie opisu.
+
+xml
+	parametry: 
+	krotki opis: wysy³a polecenie xml
+	
+	Polecenie musi byæ zakodowanie w UTF-8, a wszystkie znaki specjalne u¿ywane w XML 
+	(& < >) musz± byæ zamienione na odpowiadaj±ce im sekwencje.
+
+// $Id: commands-pl.txt 4832 2009-07-06 14:39:23Z darkjames $

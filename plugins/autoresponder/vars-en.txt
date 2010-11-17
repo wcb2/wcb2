@@ -1,0 +1,44 @@
+allowed_sessions
+	type: string
+	default value: (none)
+	
+	A comma-separated list of sessions, for which autoresponder plugin
+	will be used. Both UIDs and aliases can be used.
+	
+	Note that when using this plugin with a "gg" session, you need to
+	ignore or add to your roster the special user "gg:0", who sends "system
+	messages". Otherwise, the server may drop your connection right after
+	establishing it.
+
+answer
+	type: string
+	default value: (none)
+	
+	Correct answer for your question - i.e. if user does reply with exact
+	string, his further messages will be delivered to user. If null, then
+	autoresponder will expect user to rewrite the 'question' string.
+
+greeting
+	type: string
+	default value: (none)
+	
+	If set, that message will be sent to user, when he sends correct
+	answer.
+
+match_mode
+	type: integer
+	default value: 1
+	
+	Defines match mode for comparing specified answer with incoming
+	messages. Possible values:
+		0 - exact match
+		1 - substring match (answer must be somewhere in msg)
+		2 - POSIX regular expression match
+
+question
+	type: string
+	default value: (none)
+	
+	Question sent to unknown user on incoming message receival. If null,
+	autoresponder will be disabled.
+

@@ -1,0 +1,11 @@
+<!DOCTYPE ekg2log [
+<!ELEMENT message (time,sender,body)>
+<!ATTLIST message class (msgrecv|chatrecv|msgsend|chatsend|msgsystem)>
+<!ELEMENT time (received,sent?)>
+<!ELEMENT received (#PCDATA)>
+<!ELEMENT sent (#PCDATA)>
+<!ELEMENT sender (uid,nick)>
+<!ELEMENT uid (#PCDATA)>
+<!ELEMENT nick (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+]>

@@ -1,0 +1,336 @@
+<!--
+   userbook.xml
+-->
+
+<chapter id="faq">
+   <title>
+      Frequently Asked Questions 
+   </title>
+   <sect1 id="faq-install">
+      <title>Installation</title>
+      <qandaset>
+         <qandaentry>
+            <question>
+               <para>
+                  Where can I find EKG2 sources ?
+               </para>
+            </question>
+            <answer>
+               <para>
+	          You should visit <ulink url="http://ekg2.org">/http://ekg2.org</ulink>.
+		  There is some Files section and you can download from there everyday
+		  snapshots. You can also use CVS, which makes you able to have current
+		  version of program (for instance. if somebody fixed some segvault problem 
+		  with EKG2 10 minutes ago). Way of using CVS is described on webpage.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+  	          I have CVS EKG2, but when I'm doing ./autogen some errors about 
+		  missing libtoolize, libttol, aclocal, autoheader, automake, autoconf,
+		  autom4te appear. What should I do ?
+               </para>
+            </question>
+            <answer>
+               <para>
+     		  First of all check if you have installed newest versions of 
+		  those tools (maybe you should browse <filename>/usr/ports/devel
+		  </filename>). If you have installed everything it means that 
+		  EKG2 can't find them. It is caused by missing simlinks connected
+		  with those tools. Usually they are in <filename>/usr/local/bin
+		  </filename> and I suggest to make some symlinks like <command>ln
+		    -s libtoolize19 libtoolize</command> and do this with every tool.
+	  	  I suggest to do it always with autotools.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+  	          In BSD system when I'm executing <command>./configure</command> libgadu
+		  or/and expat is disabled. What should I do ? 
+               </para>
+            </question>
+            <answer>
+               <para>
+		  FreeBSD has other localization of library files and sometimes it is hard
+		  to find them. It is recommended to add arguments --with-libgadu=/usr/local
+		  or/and --with-expat=/usr/local. Of course you have to have them installed.
+               </para>
+               <programlisting role="shell">
+<![CDATA[
+$ ./autogen.sh --with-libgadu=/usr/local --with-expat=/usr/local 
+$ ./configure --with-libgadu=/usr/local --with-expat=/usr/local
+]]>
+               </programlisting>
+               <para>
+                  <emphasis>libgadu</emphasis> can be found on <ulink
+                     url="http://dev.null.pl/ekg/">http://dev.null.pl/ekg/</ulink>
+	          (libgadu should be compiled with <parameter>--enable-shared</parameter>
+	     	  parametr).
+               </para>
+               <para>
+		   <emphasis>expat</emphasis> can be found in official ports tree or in system
+		   sources (in newest versions like FreeBSD 5.3.x or newer).
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+		  In BSD system when I'm trying to compile program some errors about libintl.h
+		  from gettext.h apper.     
+               </para>
+               <screen>
+<![CDATA[
+gcc -DHAVE_CONFIG_H -I. -I. -I../.. -I../../libltdl -g -O2 -Wall -MT main.lo -M
+D -MP -MF .deps/main.Tpo -c main.c  -fPIC -DPIC -o .libs/main.o
+In file included from ../../ekg/themes.h:27,
+                 from main.c:41:
+../../gettext.h:26:22: libintl.h: No such file or directory
+]]>
+               </screen>
+               <para>
+		  gettext is installed in system. What should I do ?
+               </para>
+            </question>
+            <answer>
+               <para>
+		  Unfortunatly it is caused by diffrent localization of libraries
+		  (diffrent then in Linux systems). The easier solution is to add
+		  to <command>./autogen.sh</command> or <command>./configure option
+                     --with-libintl-prefix=/usr/local/include</command>
+               </para>
+               <programlisting role="shell">
+<![CDATA[
+$ ./autogen.sh --with-libintl-prefix=/usr/local/include
+$ ./configure --with-libintl-prefix=/usr/local/include
+]]>
+               </programlisting>
+            </answer>
+         </qandaentry>
+      </qandaset>
+   </sect1>
+   <sect1 id="faq-usage">
+      <title>Usage</title>
+      <qandaset>
+         <qandaentry>
+            <question>
+               <para>
+		  Where are some variables like proxy, server etc ?     
+               </para>
+            </question>
+            <answer>
+               <para>
+		  Variables like this ones are specific for every protocol and
+		  they are in session variables.     
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  How can I remove variable ?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  <command>set -variable</command>
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+	       <para>
+		  EKG2 doesn't show my nickname when I'm sending messages.
+      		  What should I do ?		  
+               </para>
+            </question>
+            <answer>
+               <para>
+                  You should add alias variable to session.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Po zmianie wielko¶ci terminala przestaj± mi dzia³aæ strza³ki!
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Masz star± wersjê biblioteki ncurses. Zainstaluj nowsz±
+                  wersjê lub popro¶ o to administratora systemu.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Jak wy¶wietlaæ wiadomo¶ci, które wysy³am?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Nale¿y ustawiæ warto¶æ zmiennej
+                  <varname>display_sent</varname> na <literal>1</literal>.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Nie mam kolorów w ekg, co robiæ?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Najprawdopodobniej masz ustawiony nieprawid³owy typ
+                  terminala. Spróbuj wpisaæ <command>export TERM=ansi</command>
+                  (lub <command>setenv TERM ansi</command> dla pow³oki *csh)
+                  przed uruchomieniem ekg. Je¶li to nie pomo¿e, zamiast
+                  <literal>ansi</literal> spróbuj podaæ
+                  <literal>screen</literal>, <literal>linux</literal>,
+                  <literal>xterm-color</literal> lub
+                  <literal>color_xterm</literal>.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Jak dodaæ kogo¶ do listy kontaktów w GG?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  <command>/add gg:1234567 Pseudonim</command>
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Przy dodawaniu kogo¶ do listy kontaktów w GG dostajê b³±d
+                  <computeroutput>invalid id</computeroutput>, co zrobiæ?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Upewnij siê, ¿e plugin gg jest za³adowany. Polecenie
+                  <command>/plugin +gg</command> powinno pomóc.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Po wydaniu polecenia <command>/plugin +gg</command> program
+                  mówi, ¿e nie mo¿e odnale¼æ pluginu
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Upewnij siê, ¿e plugin gg jest skompilowany (w katalogu
+                  <filename>${prefix}/lib/ekg2/plugins/</filename> powinny
+                  znajdowaæ siê pliki <filename>gg.so</filename> i
+                  <filename>gg.la</filename>) oraz, ¿e ekg2 zosta³o
+                  skompilowane z obs³ug± libgadu (w jednej z ostatnich linijek
+                  wy¶wietlonych przez polecenie <command>./configure</command>,
+                  powinno siê wy¶wietliæ <computeroutput>libgadu:
+                     enabled</computeroutput>)
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Mam libgadu a mimo to <command>./configure</command>
+                  wy¶wietla <computeroutput>libgadu: disabled</computeroutput>
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Upewnij siê, ¿e <command>./configure</command> mo¿e odnale¼æ
+                  pliki nag³ówkowe biblioteki libgadu (m. in.
+                  <filename>libgadu.h</filename> oraz bibliotekê
+                  <filename>libgadu.so.3</filename>:
+                  <itemizedlist>
+                     <listitem>
+                        <simpara>
+                           katalog w którym znajduje siê libgadu.so.3 powinien
+                           byæ dopisany do pliku
+                           <filename>/etc/ld.so.conf</filename>; je¶li go tam
+                           nie ma, to nale¿y go dopisaæ i uruchomiæ program
+                           <command>ldconfig</command> jako root
+                        </simpara>
+                     </listitem>
+                     <listitem>
+                        <simpara>
+                           je¿eli to nie pomaga, a
+                           <filename>libgadu.so.3</filename> znajduje siê w
+                           niestandardowym miejscu, mo¿na spróbowaæ zrobiæ
+                           symboliczny link do tego pliku w
+                           <filename>/usr/lib</filename>
+                        </simpara>
+                     </listitem>
+                  </itemizedlist>
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Mam libgadu, plugin gg jest skompilowany, mimo to przy próbie
+                  za³adowania pluginu ekg2 wy¶wietla, ¿e nie mo¿e go odnale¼æ
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Upewnij siê, ¿e ekg2 mo¿e odnale¼æ bibliotekê libgadu.so.3 -
+                  odpowiednie kroki zosta³y przedstawione w pytaniu powy¿ej.
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  W moim systemie nie ma pliku
+                  <filename>libgadu.so.3</filename>
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Pobierz najnowsze libgadu, które mo¿na znale¼æ pod adresem
+                  <ulink url="http://dev.null.pl/ekg/libgadu-current.tar.gz">
+                     http://dev.null.pl/ekg/libgadu-current.tar.gz </ulink>,
+                  rozpakuj, skonfiguruj poleceniem <command>./configure
+                     --enable-shared</command>, skompiluj poleceniem
+                  <command>make</command> i jako root zainstaluj poleceniem
+                  <command>make install</command>
+               </para>
+            </answer>
+         </qandaentry>
+         <qandaentry>
+            <question>
+               <para>
+                  Jak ustawiæ tryb prywatny dla sesji Gadu-Gadu?
+               </para>
+            </question>
+            <answer>
+               <para>
+                  Wystarczy ustawiæ zmienn± sesyjn± <varname>private</varname>
+                  na <literal>1</literal>, na przyk³ad <command>/session
+                     gg:997997 private 1</command>
+               </para>
+            </answer>
+         </qandaentry>
+      </qandaset>
+   </sect1>
+</chapter>
+<!--
+   vim: filetype=docbk encoding=iso-8859-2
+-->

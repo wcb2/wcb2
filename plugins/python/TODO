@@ -1,0 +1,14 @@
+TODO:
+- przyk³adowe skrypty
+- dokoñczyæ modu³ ekg
+   * watch_bind
+- podmiana statusów/msgów
+/* 
+   dj: jak ?! 
+   ln: parsowaæ dane zwracane przez handler; handler ma zwracaæ tuple z
+   warto¶ciami takimi jak argumenty.
+ */
+- sprawdzanie czy handlery przyjmuj± odpowiednie argumenty
+- sprawdzanie poprawno¶ci typów na poziomie parsowania argumentów
+- rzucanie wyj±tku do ekg_config_get
+- poprawna implementacja ekg_config_len

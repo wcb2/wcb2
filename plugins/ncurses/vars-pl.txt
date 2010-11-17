@@ -1,0 +1,189 @@
+// opis dostêpnych zmiennych w pluginie ncurses
+// (c) copyright 2004 piotr kupisiewicz <deletek@ekg2.org>
+
+aspell
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	okre¶la, czy s³ownik ma zostaæ w³±czony.
+	wiêcej o samym s³owniku w slownik.txt.
+
+aspell_lang
+	typ: tekst
+	domy¶lna warto¶æ: "pl"
+	
+	okre¶la jêzyk wykorzystywany przez s³ownik.
+
+aspell_encoding
+	typ: tekst
+	domy¶lna warto¶æ: "iso8859-2"
+	
+	okre¶la kodowanie u¿ywane przez s³ownik.
+
+backlog_size
+	typ: liczba
+	domy¶lna warto¶æ: 1000
+	
+	ilo¶æ linii, która bêdzie zapisywana w buforze ekranu (tym, który
+	jest przewijany klawiszami Page Up i Page Down). nie mo¿e byæ
+	mniejsza ni¿ ilo¶æ linii na ekranie. 
+
+contacts
+	typ: liczba
+	domy¶lna warto¶æ: 2
+	
+	okre¶la, czy okienko z list± obecnych ma byæ wy¶wietlone z prawej
+	strony ekranu. je¶li jest równe 2, informacje o zmianie stanu nie
+	s± wy¶wietlane, ignoruj±c warto¶æ zmiennej ,,display_notify''.
+
+contacts_descr
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	czy wy¶wietlaæ opisy stanu kontaktów?
+
+contacts_edge
+	typ: liczba
+	domy¶lna warto¶æ: 2
+	
+	po³o¿enie listy kontaktów na ekranie (krawêd¼):
+	
+	  0 - lewa
+	
+	  1 - górna
+	
+	  2 - prawa
+	
+	  3 - dolna
+
+contacts_frame
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	czy wy¶wietlaæ ramkê oddzielaj±c± listê od g³ównego okna?
+
+contacts_groups
+	typ: tekst
+	domy¶lna warto¶æ: brak
+	
+	oddzielone przecinkiem grupy, które mo¿na prze³±czaæ w li¶cie
+	kontaktów klawiszem F4. Aby wy¶wietliæ u¿ytkowników z poza grupy: !grupa.
+	domy¶lnie wy¶wietlani s± wszyscy u¿ytkownicy.
+
+contacts_groups_all_sessions
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	Je¶li jest w³±czona, przy wy¶wietlaniu kontaktów z grupy brane s± pod
+	uwagê wszystkie sesje.
+
+contacts_margin
+	typ: liczba
+	domy¶lna warto¶æ: 1
+	
+	margines miêdzy list± kontaktów, a g³ównym oknem.
+
+contacts_metacontacts_swallow
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	Je¶li jest w³±czona, przy wy¶wietlaniu wszystkich u¿ytkowników gdy
+	w li¶cie kontaktów wy¶wietlany jest metakontakt, ukrywane s± poszczególne
+	kontakty do niego nale¿±ce.
+
+contacts_order
+	typ: tekst
+	domy¶lna warto¶æ: brak
+	
+	kolejno¶æ wy¶wietlania stanów na li¶cie kontaktów
+	
+	mo¿liwe stany to: 
+	
+	  ch - free for chat - chêtny do rozmowy
+	
+	  av - dostêpny
+	
+	  aw - zajêty 
+	
+	  xa - extended away - bardzo zajêty
+	
+	  dn - nie przeszkadzaæ
+	
+	  in - niewidoczny
+	
+	  no - niedostêpny
+	
+	  er - b³±d przy pobieraniu stanu
+	
+	  un - nieznany stan
+	
+	  bl - blokuj±cy
+	
+	mo¿na pomin±æ niektóre stany -- nie bêd± po prostu wy¶wietlane na li¶cie.
+
+contacts_orderbystate
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	czy grupowaæ opisy wg. statusu? je¶li nie, kontakty bêd± sortowane
+	alfabetyczne, ale wy¶wietlane bêd± tylko statusy, wymienione w opcji
+	contacts_order.
+
+contacts_size
+	typ: liczba
+	domy¶lna warto¶æ: 8
+	
+	okre¶la szeroko¶æ okienka z list± kontaktów.
+
+contacts_wrap
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	czy zawijaæ zbyt d³ugie kontakty?
+
+display_transparent
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	mówi, czy w t³o ma byæ przezroczyste. 
+
+enter_scrolls
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	je¶li w³±czone, wci¶niêcie klawisza Enter w pustej linii spowoduje
+	przesuniêcie ekranu o jedn± liniê. 
+
+header_size
+	typ: liczba
+	domy¶lna warto¶æ: 0
+	
+	okre¶la rozmiar nag³ówka okna wy¶wietlanego na górze ekranu.
+	maksymalna ilo¶æ linii to 5.
+
+kill_irc_window
+	typ: bool
+	domy¶lna warto¶æ: 1
+	
+	je¶li ustawiona na 0, nie mo¿na zamkn±æ okna kana³u ircowego przy
+	pomocy bindingu klawiaturowego.
+
+margin_size
+	typ: liczba
+	domy¶lna warto¶æ: 15
+	
+	okre¶la rozmiar marginesu wykorzystywanego przy /| w themach
+
+mark_on_window_change
+	typ: bool
+	domy¶lna warto¶æ: 0
+	
+	okre¶la czy wstawiaæ marker do okna przy przej¶ciu z niego do innego okna
+
+statusbar_size
+	typ: liczba
+	domy¶lna warto¶æ: 1
+	
+	okre¶la rozmiar paska stanu w liniach w zakresie od 1 do 5.
+
+$Id: vars-pl.txt 4651 2008-09-17 18:09:52Z darkjames $
