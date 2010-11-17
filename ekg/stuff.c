@@ -128,6 +128,7 @@ int config_display_color = 1;
 int config_beep = 1;
 int config_beep_msg = 1;
 int config_beep_chat = 1;
+int config_beep_groupchat = 1;
 int config_beep_notify = 1;
 char *config_console_charset;
 char *config_dcc_dir;

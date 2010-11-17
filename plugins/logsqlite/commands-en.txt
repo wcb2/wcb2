@@ -4,21 +4,29 @@
 
 last
 	parameters: [options] [uid]
-	short description: shows last logged messages
+	short description: shows logged messages
 	
-	  -n, --number <number>  Number of messages to show
+	  -a, --all               Show all messages(no limit)
 	
-	  -s, --search <text>    Show only messages containing text
+	  -d, --date <YYYY-mm-dd> Show messages for definite day
+	
+	  -n, --number <number>   Number of messages to show
+	
+	  -s, --search <text>     Show only messages containing text
           
-	  <uid>                  UID of user whose messages will be shown
+	  <uid>                   UID of user whose messages will be shown
 
 laststatus
 	parameters: [options] [uid]
-	short description: shows last logged changes of statuses
+	short description: shows logged changes of statuses
 	
-	  -n, --number <number>  Number of statuses to show
+	  -a, --all               Show all status changes(no limit)
 	
-	  -s, --search <text>    Show only statuses containing text
+	  -d, --date <YYYY-mm-dd> Show statuses for definite day
+	
+	  -n, --number <number>   Number of statuses to show
+	
+	  -s, --search <text>     Show only statuses containing text
           
-	  <uid>                  UID of user whose statuses will be shown
+	  <uid>                   UID of user whose statuses will be shown
 

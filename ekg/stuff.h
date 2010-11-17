@@ -177,6 +177,7 @@ extern char *config_back_reason;
 extern int config_beep;
 extern int config_beep_msg;
 extern int config_beep_chat;
+extern int config_beep_groupchat;
 extern int config_beep_notify;
 extern int config_completion_notify;
 extern char *config_completion_char;

@@ -985,6 +985,10 @@ JABBER_HANDLER(jabber_handle_message) {
 			int isour = (c && !xstrcmp(c->priv_data, nick)) ? 1 : 0;			/* is our message? */
 			char *formatted;
 			userlist_t *u;
+			int tous = !bsent && c && (text == xstrstr(text, c->priv_data));
+
+			if (!tous)
+				class |= EKG_MSGCLASS_NOT2US;
 
 		/* jesli (bsent != 0) wtedy mamy do czynienia z backlogiem */
 
@@ -1014,14 +1018,17 @@ JABBER_HANDLER(jabber_handle_message) {
 
 				formatted = format_string(format_find(
 							is_me ? ( isour ? "jabber_muc_me_sent" : "jabber_muc_me" )
-							      : ( isour ? "jabber_muc_send" : "jabber_muc_recv")),
+							      : ( isour ? "jabber_muc_send" : (tous ? "jabber_muc_recv2us" : "jabber_muc_recv"))),
 						session_name(s), uid2, nick, is_me ? text+4 : text, attr);
 			} else {
 				formatted = format_string(format_find("jabber_muc_notice"), session_name(s), uid+5, text);
 			}
-
-			protocol_message_emit(s, uid, NULL, formatted, format, sent, class, NULL, EKG_NO_BEEP, secure);
-
+			
+			if(tous && config_beep_groupchat)
+				protocol_message_emit(s, uid, NULL, formatted, format, sent, class, NULL, EKG_TRY_BEEP, secure);
+			else	
+				protocol_message_emit(s, uid, NULL, formatted, format, sent, class, NULL, EKG_NO_BEEP, secure);
+		
 			xfree(uid2);
 			xfree(nick);
 			xfree(formatted);
