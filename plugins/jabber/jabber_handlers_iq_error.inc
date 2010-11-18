@@ -26,7 +26,7 @@ static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 
 	debug_error("[JABBER] jabber_iq_error_string: code=%s, [%s]\n", __(ecode), __(reason));
 
-	return reason ? reason : xstrdup("ekg2 sux in parsing errors, for more info check debug");
+	return reason ? reason : xstrdup("ekg2 sux at parsing errors, for more info check debug");
 }
 
 /* this sux, no idea howto pass formatname to jabber_handle_iq_error_generic() */
