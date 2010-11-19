@@ -749,7 +749,7 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 	if (mclass == EKG_MSGCLASS_LOG || mclass == EKG_MSGCLASS_SENT_LOG)
 		separate = 1;
 
-	if ( (mclass == EKG_MSGCLASS_CHAT || mclass == EKG_MSGCLASS_SENT_CHAT) || 
+	if ( (mclass == EKG_MSGCLASS_CHAT || mclass == EKG_MSGCLASS_SENT_CHAT || mclass == EKG_MSGCLASS_GROUPCHAT) || 
 		  (!(config_make_window & 4) && (mclass == EKG_MSGCLASS_MESSAGE || mclass == EKG_MSGCLASS_SENT)) ) {
 		activity = to_me ? EKG_WINACT_IMPORTANT : EKG_WINACT_MSG;
 		separate = 1;
