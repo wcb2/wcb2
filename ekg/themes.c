@@ -810,13 +810,10 @@ static window_t *print_window_find(const char *target, session_t *session, int s
 
 	/* 1) let's check if we have such window as target... */
 
-	/* if it's jabber and we've got '/' in target strip it. [XXX, window resources] */
+	/* This part for used for some silly crap, bot now here we have detection of messages from conference window */
 	if ( ( (!xstrncmp(target, "tlen:", 5)) || (!xstrncmp(target, "xmpp:", 5)) ) && (tmp = xstrchr(target, '/')) && (mclass == EKG_MSGCLASS_GROUPCHAT)) {
 		newtarget = xstrndup(target, tmp - target);
 		w = window_find_s(session, newtarget);		/* and search for windows with stripped '/' */
-		/* even if w == NULL here, we use newtarget to create window without resource */
-		/* Yeah, we search for target on userlist, but u can be NULL also... */
-		/* XXX, optimize and think about it */
 	} else
 		w = window_find_s(session, target);
 
@@ -908,9 +905,7 @@ void print_window(const char *target, session_t *session, int activity, int sepa
 	va_start(ap, theme);
 
 	mclass = va_arg(ap,int);
-	
 	w = print_window_find(target, session, separate,mclass);
-	
 	print_window_c(w, activity, theme, ap);
 
 	va_end(ap);
