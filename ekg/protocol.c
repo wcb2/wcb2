@@ -556,11 +556,18 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 			target = (rcpts) ? rcpts[0] : NULL;
 			break;
 		case EKG_MSGCLASS_CHAT:
-			if (/*config_display_me && */ !xstrncmp(text, "/me ", 4)) {
+			if (!xstrncmp(text, "/me ", 4)) {
 				class_str = "chat_me";
 				is_me = 1;
 			} else
 				class_str = "chat";
+			break;
+		case EKG_MSGCLASS_GROUPCHAT:
+			if (!xstrncmp(text, "/me ", 4)) {
+				class_str = "chat_me";
+				is_me = 1;
+			} else
+				class_str = "groupchat";
 			break;
 		case EKG_MSGCLASS_SYSTEM:
 			class_str = "system";
@@ -704,6 +711,14 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 		if (config_sound_chat_file && dobeep)
 			play_sound(config_sound_chat_file);
 
+	} else if (mclass == EKG_MSGCLASS_GROUPCHAT) {
+
+		if (config_beep && config_beep_groupchat && dobeep)
+			query_emit_id(NULL, UI_BEEP);
+	
+		if (config_sound_chat_file && dobeep)
+			play_sound(config_sound_chat_file);
+		
 	} else if (mclass == EKG_MSGCLASS_MESSAGE) {
 
 		if (config_beep && config_beep_msg && dobeep)

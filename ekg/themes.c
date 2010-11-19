@@ -810,7 +810,7 @@ static window_t *print_window_find(const char *target, session_t *session, int s
 
 	/* 1) let's check if we have such window as target... */
 
-	/* This part for used for some silly crap, bot now here we have detection of messages from conference window */
+	/* This part for used for some silly crap, but now here we have detection of messages from conference window */
 	if ( ( (!xstrncmp(target, "tlen:", 5)) || (!xstrncmp(target, "xmpp:", 5)) ) && (tmp = xstrchr(target, '/')) && (mclass == EKG_MSGCLASS_GROUPCHAT)) {
 		newtarget = xstrndup(target, tmp - target);
 		w = window_find_s(session, newtarget);		/* and search for windows with stripped '/' */
