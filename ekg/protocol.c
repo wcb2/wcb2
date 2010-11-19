@@ -740,7 +740,7 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 		separate = 1;
 	}
 
-	print_window(target, s, activity, separate, class_str, user, timestamp,
+	print_window(target, s, activity, separate, class_str, mclass, user, timestamp,
 		(is_me ? text+4 : text),
 					/* XXX, get_uid() get_nickname() */
 		(mclass >= EKG_MSGCLASS_SENT ?

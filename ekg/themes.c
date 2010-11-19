@@ -31,6 +31,7 @@
 #include <errno.h>
 
 #include "dynstuff.h"
+#include "protocol.h"
 #include "stuff.h"
 #include "recode.h"
 #include "themes.h"
@@ -794,7 +795,7 @@ static void print_window_c(window_t *w, int activity, const char *theme, va_list
  * @param separate	- if essence of text is important to create new window
  */
 
-static window_t *print_window_find(const char *target, session_t *session, int separate) {
+static window_t *print_window_find(const char *target, session_t *session, int separate, int mclass) {
 	char *newtarget = NULL;
 	const char *tmp;
 	userlist_t *u;
@@ -810,7 +811,7 @@ static window_t *print_window_find(const char *target, session_t *session, int s
 	/* 1) let's check if we have such window as target... */
 
 	/* if it's jabber and we've got '/' in target strip it. [XXX, window resources] */
-	if ( ( (!xstrncmp(target, "tlen:", 5)) || (!xstrncmp(target, "xmpp:", 5)) ) && (tmp = xstrchr(target, '/'))) {
+	if ( ( (!xstrncmp(target, "tlen:", 5)) || (!xstrncmp(target, "xmpp:", 5)) ) && (tmp = xstrchr(target, '/')) && (mclass == EKG_MSGCLASS_GROUPCHAT)) {
 		newtarget = xstrndup(target, tmp - target);
 		w = window_find_s(session, newtarget);		/* and search for windows with stripped '/' */
 		/* even if w == NULL here, we use newtarget to create window without resource */
@@ -838,8 +839,7 @@ static window_t *print_window_find(const char *target, session_t *session, int s
 	/* if found, and we have nickname, than great! */
 	if (u && u->nickname)
 		target = u->nickname;			/* use nickname instead of target */
-	else if (u && u->uid && ( /* don't use u->uid, if it has resource attached */
-			(xstrncmp(u->uid, "tlen:", 5) && xstrncmp(u->uid, "xmpp:", 5)) || !xstrchr(u->uid, '/')))
+	else if (u && u->uid) /* don't use u->uid, if it has resource attached */
 		target = u->uid;			/* use uid instead of target. XXX here. think about jabber resources */
 	else if (newtarget)
 		target = newtarget;			/* use target with stripped '/' */
@@ -902,12 +902,17 @@ static window_t *print_window_find(const char *target, session_t *session, int s
 
 void print_window(const char *target, session_t *session, int activity, int separate, const char *theme, ...) {
 	window_t *w;
+	int mclass = 0;
 	va_list ap;
 
-	w = print_window_find(target, session, separate);
-
 	va_start(ap, theme);
+
+	mclass = va_arg(ap,int);
+	
+	w = print_window_find(target, session, separate,mclass);
+	
 	print_window_c(w, activity, theme, ap);
+
 	va_end(ap);
 }
 
@@ -916,7 +921,7 @@ void print_info(const char *target, session_t *session, const char *theme, ...) 
 	va_list ap;
 
 	/* info configuration goes here... */
-	w = print_window_find(target, session, 0);
+	w = print_window_find(target, session, 0,0);
 
 	va_start(ap, theme);
 	print_window_c(w, EKG_WINACT_JUNK, theme, ap);
@@ -928,7 +933,7 @@ void print_warning(const char *target, session_t *session, const char *theme, ..
 	va_list ap;
 
 	/* warning configuration goes here... */
-	w = print_window_find(target, session, 0);
+	w = print_window_find(target, session, 0,0);
 
 	va_start(ap, theme);
 	print_window_c(w, EKG_WINACT_JUNK, theme, ap);

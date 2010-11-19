@@ -71,6 +71,7 @@ typedef enum {
 	/* recv */
 	EKG_MSGCLASS_MESSAGE	= 0,	/* single message */
 	EKG_MSGCLASS_CHAT,		/* chat message */
+	EKG_MSGCLASS_GROUPCHAT, /* groupchat message */
 	EKG_MSGCLASS_SYSTEM,		/* system message */
 	EKG_MSGCLASS_LOG,		/* old logged message (used by logsqlite 'last_print_on_open') */
 

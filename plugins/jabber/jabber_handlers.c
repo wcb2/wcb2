@@ -883,8 +883,12 @@ JABBER_HANDLER(jabber_handle_message) {
 	}
 
 	const char *type = jabber_attr(n->atts, "type");
-	if (class == -1)
-		class = (!xstrcmp(type, "chat") || !xstrcmp(type, "groupchat") ? EKG_MSGCLASS_CHAT : EKG_MSGCLASS_MESSAGE);
+	if (class == -1){
+		class = (!xstrcmp(type, "chat") ? EKG_MSGCLASS_CHAT : EKG_MSGCLASS_MESSAGE);
+		if( !xstrcmp(type, "groupchat") )
+			class = EKG_MSGCLASS_GROUPCHAT;
+	}
+
 	const int nonthreaded = (!nthread || !nthread->data);
 	const int hassubject = (nsubject && nsubject->data);
 
