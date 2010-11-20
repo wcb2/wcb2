@@ -750,6 +750,8 @@ JABBER_HANDLER(jabber_handle_message) {
 				{
 					etext = jabber_unescape(nerr->data);
 					break;
+				} else if (!(nerr->children)){
+						etext = jabber_unescape(nerr->name);
 				}
 				
 		if (nbody && nbody->data) {
