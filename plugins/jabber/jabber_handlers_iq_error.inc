@@ -6,7 +6,7 @@ static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 
 	if (!n) {
 		debug_error("[JABBER] jabber_iq_error_string() IQ ERROR, but without <error?\n");
-		/* return xstrdup("Strange shit with server answer\n"); */
+		return xstrdup("Strange shit with server answer\n");
 	}
 
 	/* XXX, przeczytac RFC, i zobaczyc jak prawdziwe klienty XMPP to robia */
