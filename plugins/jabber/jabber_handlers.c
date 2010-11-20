@@ -1028,7 +1028,7 @@ JABBER_HANDLER(jabber_handle_message) {
 				formatted = format_string(format_find("jabber_muc_notice"), session_name(s), uid+5, text);
 			}
 			
-			if(tous && config_beep_groupchat)
+			if(tous && !isour && config_beep_groupchat)
 				protocol_message_emit(s, uid, NULL, formatted, format, sent, class, NULL, EKG_TRY_BEEP, secure);
 			else	
 				protocol_message_emit(s, uid, NULL, formatted, format, sent, class, NULL, EKG_NO_BEEP, secure);
