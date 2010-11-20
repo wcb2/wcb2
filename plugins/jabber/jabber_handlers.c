@@ -739,9 +739,19 @@ JABBER_HANDLER(jabber_handle_message) {
 
 	if (nerr) {
 		char *ecode = jabber_attr(nerr->atts, "code");
-		char *etext = jabber_unescape(nerr->data);
 		char *recipient = get_nickname(s, uid);
+		char *etext = NULL;
 
+		if (nerr->data) 
+			etext = jabber_unescape(n->data);
+		else 
+			for (nerr = nerr->children; nerr; nerr = nerr->next) 
+				if (nerr->data)
+				{
+					etext = jabber_unescape(nerr->data);
+					break;
+				}
+				
 		if (nbody && nbody->data) {
 			char *tmp2 = jabber_unescape(nbody->data);
 			char *mbody = xstrndup(tmp2, 15);
