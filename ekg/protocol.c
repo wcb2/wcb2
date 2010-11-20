@@ -562,13 +562,6 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 			} else
 				class_str = "chat";
 			break;
-		case EKG_MSGCLASS_GROUPCHAT:
-			if (!xstrncmp(text, "/me ", 4)) {
-				class_str = "chat_me";
-				is_me = 1;
-			} else
-				class_str = "groupchat";
-			break;
 		case EKG_MSGCLASS_SYSTEM:
 			class_str = "system";
 			target = "__status";
@@ -711,14 +704,6 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 		if (config_sound_chat_file && dobeep)
 			play_sound(config_sound_chat_file);
 
-	} else if (mclass == EKG_MSGCLASS_GROUPCHAT) {
-
-		if (config_beep && config_beep_groupchat && dobeep)
-			query_emit_id(NULL, UI_BEEP);
-	
-		if (config_sound_chat_file && dobeep)
-			play_sound(config_sound_chat_file);
-		
 	} else if (mclass == EKG_MSGCLASS_MESSAGE) {
 
 		if (config_beep && config_beep_msg && dobeep)
@@ -749,13 +734,13 @@ char *message_print(const char *session, const char *sender, const char **rcpts,
 	if (mclass == EKG_MSGCLASS_LOG || mclass == EKG_MSGCLASS_SENT_LOG)
 		separate = 1;
 
-	if ( (mclass == EKG_MSGCLASS_CHAT || mclass == EKG_MSGCLASS_SENT_CHAT || mclass == EKG_MSGCLASS_GROUPCHAT) || 
+	if ( (mclass == EKG_MSGCLASS_CHAT || mclass == EKG_MSGCLASS_SENT_CHAT) || 
 		  (!(config_make_window & 4) && (mclass == EKG_MSGCLASS_MESSAGE || mclass == EKG_MSGCLASS_SENT)) ) {
 		activity = to_me ? EKG_WINACT_IMPORTANT : EKG_WINACT_MSG;
 		separate = 1;
 	}
 
-	print_window(target, s, activity, separate, class_str, mclass, user, timestamp,
+	print_window(target, s, activity, separate, class_str, user, timestamp,
 		(is_me ? text+4 : text),
 					/* XXX, get_uid() get_nickname() */
 		(mclass >= EKG_MSGCLASS_SENT ?
