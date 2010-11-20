@@ -2,7 +2,6 @@
 message %K<%c<%C< %n%|%c%2%n%3\n
 chat %K<%c<%C< %n%|%c%2%n%3\n
 sent %K>%g>%G> %n%|%3\n
-conference %c<%C%1%c>%n %n%|%3\n
 -query_started_window
 log %K<%c<%c< %n%|%c%2%n%3\n
 sent_log %K>%g>%g> %n%|%c%2%n%3\n
