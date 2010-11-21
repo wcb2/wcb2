@@ -1,4 +1,3 @@
-
 EKG2 uses the autotools package for building. If you are checking out the
 source code directly from CVS, you probably need to call:
 	$ ./autogen.sh [configure options]
@@ -16,4 +15,3 @@ To see all available options for configure (or autogen.sh), please use
 '--help'. If compilation fails on one of the plugins, you can append '-k' flag
 to make, so it'll ignore the failures (but please report the problem to the
 authors).
-
