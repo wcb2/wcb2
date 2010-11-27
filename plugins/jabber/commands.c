@@ -1561,10 +1561,94 @@ static COMMAND(jabber_command_private) {
 						if (book) list_add(&(j->bookmarks), book);
 					}
 					break;
-				case (2):	 /* modify item XXX */
+				case (2):	 /* modify item */
 					{
+						struct list *bookmarks = j->bookmarks;
+						jabber_bookmark_t * book = NULL;
+						
+						if (!bookmarks)
+						{
+							printq("generic_error", "You have no bookmarks");
+							bookmark_sync = 4;
+							break;
+						}
 
+						if (!xstrcmp(splitted[0], "url")) 
+						{
+							while (book = bookmarks->data)
+							{
+								if (!xstrcmp(book->priv_data.url->url,splitted[1]))
+								{
+									if (jabber_attr(splitted, "name"))
+									{
+										xfree(book->priv_data.url->name);
+										book->priv_data.url->name = xstrdup(jabber_attr(splitted, "name"));
+									} 
+									else
+										bookmark_sync = -1;
+									break;
+								}
+
+								if (bookmarks->next)
+									bookmarks = bookmarks->next;
+								else
+								{
+									printq("generic_error", "No such bookmark");
+									bookmark_sync = 4;
+									break;
+								}
+							}
+						} 
+						else if (!xstrcmp(splitted[0], "conf"))
+							 {
+								while (book = bookmarks->data)
+								{
+									if (!xstrcmp(book->priv_data.conf->jid,splitted[1]))
+									{
+										if (jabber_attr(splitted, "autojoin"))
+										{
+											if (atoi(jabber_attr(splitted, "autojoin")))
+												book->priv_data.conf->autojoin = 1;
+											else
+												book->priv_data.conf->autojoin = 0;
+										}
+
+										if (jabber_attr(splitted, "name"))
+										{
+											xfree(book->priv_data.conf->name);
+											book->priv_data.conf->name = xstrdup(jabber_attr(splitted, "name"));
+										}
+										
+										if (jabber_attr(splitted, "nick"))
+										{
+											xfree(book->priv_data.conf->nick);
+											book->priv_data.conf->nick = xstrdup(jabber_attr(splitted, "nick"));
+										}
+										
+										if (jabber_attr(splitted, "pass"))
+										{
+											xfree(book->priv_data.conf->pass);
+											book->priv_data.conf->pass = xstrdup(jabber_attr(splitted, "pass"));
+										}
+
+										break;
+									}
+
+									if (bookmarks->next)
+										bookmarks = bookmarks->next;
+									else
+									{
+										printq("generic_error", "No such bookmark");
+										bookmark_sync = 4;
+										break;
+									}
+								}
+
+						     }
+						else
+							 bookmark_sync = -1;
 					}
+					break;
 				case (3):    /* remove item */
 					{   
 						struct list *bookmarks = j->bookmarks;
