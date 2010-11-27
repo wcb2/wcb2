@@ -89,10 +89,14 @@ bookmark
 	
 	  --pass            <pass> 
 	
+	  --name            <name>
 	
-	example:
 	
-	  /bookmark --add --conf my@conference.server.domain --autojoin 1 --nick nick --pass pass -- #conference
+	examples:
+	
+	  /bookmark --add --conf my@conference.server.domain --autojoin 1 --nick nick --pass pass --name #conference
+	
+	  /bookmark -r --url <useless_url>
 
 change
 	parameters:  <options>

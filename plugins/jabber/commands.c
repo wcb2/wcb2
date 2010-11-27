@@ -1499,8 +1499,6 @@ static COMMAND(jabber_command_private) {
 	jabber_private_t *j = jabber_private(session);
 	char *namespace;	/* <nazwa> */
 	
-	int flag = 0;           /* state flag */
-	
 	int config = 0;			/* 1 if name == jid:config */
 	int bookmark = 0;		/* 1 if name == jid:bookmark */
 
@@ -1533,8 +1531,8 @@ static COMMAND(jabber_command_private) {
 				case (1):    /* add item */ 
 					{       
 						/* Usage: 
-						 *	/jid:bookmark --add --url url [-- name]
-						 *	/jid:bookmark --add --conf jid [--autojoin 1] [--nick cos] [--pass cos] [-- name] 
+						 *	/jid:bookmark --add --url url [--name name]
+						 *	/jid:bookmark --add --conf jid [--autojoin 1] [--nick cos] [--pass cos] [--name name] 
 						 */
 						jabber_bookmark_t *book = NULL;
 
@@ -1543,7 +1541,7 @@ static COMMAND(jabber_command_private) {
 							book->type	= JABBER_BOOKMARK_URL;
 
 							book->priv_data.url = xmalloc(sizeof(jabber_bookmark_url_t));
-							book->priv_data.url->name = xstrdup(jabber_attr(splitted, ""));
+							book->priv_data.url->name = xstrdup(jabber_attr(splitted, "name"));
 							book->priv_data.url->url	= xstrdup(splitted[1]);
 
 						} else if (!xstrcmp(splitted[0], "conf")) {
@@ -1551,7 +1549,7 @@ static COMMAND(jabber_command_private) {
 							book->type	= JABBER_BOOKMARK_CONFERENCE;
 
 							book->priv_data.conf = xmalloc(sizeof(jabber_bookmark_conference_t));
-							book->priv_data.conf->name = xstrdup(jabber_attr(splitted, ""));
+							book->priv_data.conf->name = xstrdup(jabber_attr(splitted, "name"));
 							book->priv_data.conf->jid	= xstrdup(splitted[1]);
 							book->priv_data.conf->nick= xstrdup(jabber_attr(splitted, "nick")); 
 							book->priv_data.conf->pass= xstrdup(jabber_attr(splitted, "pass"));
@@ -1564,11 +1562,15 @@ static COMMAND(jabber_command_private) {
 					}
 					break;
 				case (2):	 /* modify item XXX */
+					{
+
+					}
 				case (3):    /* remove item */
 					{   
-						char *name  = xstrdup(jabber_attr(splitted, "name")); /* Name of bookmark */
 						struct list *bookmarks = j->bookmarks;
 						jabber_bookmark_t * book = NULL;
+						
+						char *tmp = NULL;
 
 						if (!bookmarks)
 						{
@@ -1577,7 +1579,7 @@ static COMMAND(jabber_command_private) {
 							break;
 						}
 						
-						if (xstrcmp(splitted[0], "name"))
+						if (xstrcmp(splitted[0], "name") && xstrcmp(splitted[0], "url") && xstrcmp(splitted[0], "conf"))
 						{
 							bookmark_sync = -1;
 							break;
@@ -1585,7 +1587,14 @@ static COMMAND(jabber_command_private) {
 
 						while (book = bookmarks->data)
 						{
-							if (!xstrcmp(book->priv_data.conf->name,name))
+							if (!xstrcmp(splitted[0], "name"))
+								tmp = book->priv_data.conf->name;
+							else if (!xstrcmp(splitted[0], "conf"))
+								tmp = book->priv_data.conf->jid;
+							else
+								tmp = book->priv_data.url->url;
+
+							if (!xstrcmp(tmp,splitted[1]))
 							{
 								jabber_bookmarks_freeone(j, book);
 								break;
