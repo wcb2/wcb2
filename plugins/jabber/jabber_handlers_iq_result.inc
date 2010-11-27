@@ -352,10 +352,8 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_private) {
 							book->priv_data.conf->autojoin ? "X" : " ", book->priv_data.conf->nick, book->priv_data.conf->pass);
                     
 					if (!xstrcmp(ns, "storage:bookmarks") && !xstrncmp(id, "config", 6)) /* If it's not --get - don't connect */
-						if (book->priv_data.conf->autojoin) {
+						if (book->priv_data.conf->autojoin)
 							command_exec_format(NULL, s, 2, "/join %s %s %s", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
-						}
-
 
 				} else if (!xstrcmp(child->name, "url")) {
 					book->type	= JABBER_BOOKMARK_URL;

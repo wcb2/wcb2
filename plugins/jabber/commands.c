@@ -1516,6 +1516,30 @@ static COMMAND(jabber_command_private) {
 		if (match_arg(params[0], 'm', ("modify"), 2))	bookmark_sync = 2;	/* modify item */
 		if (match_arg(params[0], 'r', ("remove"), 2))	bookmark_sync = 3;	/* remove item */
 
+		/* Connect to  already bookmarked conference */
+		if (match_arg(params[0], 'j', ("join"), 2))
+		{
+			struct list *bookmarks = j->bookmarks;
+			jabber_bookmark_t *book = NULL;
+			
+			while (book = bookmarks->data)
+			{
+				if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->name,params[1]))
+				{
+					command_exec_format(NULL, session, 2, "/join %s %s %s", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
+					return 0;
+				}
+
+				if (bookmarks->next)
+					bookmarks = bookmarks->next;
+				else
+				{
+					printq("generic_error", "No such bookmark");
+					return -1;
+				}
+			}
+		}
+
 		if (bookmark_sync) {
 			const char *p[2]	= {("-p"), NULL};	/* --put */
 			char **splitted		= NULL;
@@ -1577,7 +1601,7 @@ static COMMAND(jabber_command_private) {
 						{
 							while (book = bookmarks->data)
 							{
-								if (!xstrcmp(book->priv_data.url->url,splitted[1]))
+								if ((book->type == JABBER_BOOKMARK_URL) && !xstrcmp(book->priv_data.url->url,splitted[1]))
 								{
 									if (jabber_attr(splitted, "name"))
 									{
@@ -1603,7 +1627,7 @@ static COMMAND(jabber_command_private) {
 							 {
 								while (book = bookmarks->data)
 								{
-									if (!xstrcmp(book->priv_data.conf->jid,splitted[1]))
+									if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->jid,splitted[1]))
 									{
 										if (jabber_attr(splitted, "autojoin"))
 										{
@@ -2540,7 +2564,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:back", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:ban", "! ? ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:bookmark", "!p ?", jabber_command_private, JABBER_FLAGS_REQ,
-			"-a --add -c --clear -d --display -m --modify -r --remove");
+			"-a --add -c --clear -d --display -j --join -m --modify -r --remove");
 	command_add(&jabber_plugin, "xmpp:config", "!p", jabber_command_private,	JABBER_FLAGS_REQ,
 			"-c --clear -d --display -g --get -p --put");
 	command_add(&jabber_plugin, "xmpp:change", "!p ? p ? p ? p ? p ? p ?", jabber_command_change, JABBER_FLAGS_REQ, 

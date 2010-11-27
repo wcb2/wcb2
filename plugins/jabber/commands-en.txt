@@ -61,7 +61,7 @@ ban
 	conference. Otherwise it bans specified JID from the given conference.
 
 bookmark
-	parameters: <action> <options> <JID/URL> -- <name>
+	parameters: <action> <options>
 	short description: edit bookmarks on server
 	
 	<actions>
@@ -71,6 +71,8 @@ bookmark
 	  --remove		remove bookmark 
 	
 	  --clear		remove all bookmarks
+	
+	  --join            join already bookmarked conference
 	
 	  --modify		modify selected bookmark
 	
@@ -94,16 +96,17 @@ bookmark
 	
 	examples:
 	
-	  Add new bookmark:       /bookmark -a --conf my@conference.server.domain --autojoin 1 --nick nick --pass pass --name #conference
+	  Add new bookmark:       /bookmark -a --conf my@conference.server.domain --autojoin 1 --nick <nick> --pass <pass> --name <name>
 	
 	  Remove useless one:     /bookmark -r --url <useless_url>
 	
-	  Change nick:            /bookmark -m --conf my@conference.server.domain --nick new_nick
+	  Change nick:            /bookmark -m --conf my@conference.server.domain --nick <new_nick>
 	
 	  View all bookmarks:     /bookmark -d
 	
 	  Remove all bookmarks:   /bookmark -c
-	  
+	
+	  Join conference:        /bookmark -j <name>
 
 change
 	parameters:  <options>
