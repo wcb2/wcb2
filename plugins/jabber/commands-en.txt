@@ -94,9 +94,16 @@ bookmark
 	
 	examples:
 	
-	  /bookmark --add --conf my@conference.server.domain --autojoin 1 --nick nick --pass pass --name #conference
+	  Add new bookmark:       /bookmark -a --conf my@conference.server.domain --autojoin 1 --nick nick --pass pass --name #conference
 	
-	  /bookmark -r --url <useless_url>
+	  Remove useless one:     /bookmark -r --url <useless_url>
+	
+	  Change nick:            /bookmark -m --conf my@conference.server.domain --nick new_nick
+	
+	  View all bookmarks:     /bookmark -d
+	
+	  Remove all bookmarks:   /bookmark -c
+	  
 
 change
 	parameters:  <options>
