@@ -1498,7 +1498,9 @@ privacy_delete_ok:
 static COMMAND(jabber_command_private) {
 	jabber_private_t *j = jabber_private(session);
 	char *namespace;	/* <nazwa> */
-
+	
+	int flag = 0;           /* state flag */
+	
 	int config = 0;			/* 1 if name == jid:config */
 	int bookmark = 0;		/* 1 if name == jid:bookmark */
 
@@ -1528,7 +1530,8 @@ static COMMAND(jabber_command_private) {
 			}
 
 			switch (bookmark_sync) {
-				case (1):	{	/* add item */
+				case (1):    /* add item */ 
+					{       
 						/* Usage: 
 						 *	/jid:bookmark --add --url url [-- name]
 						 *	/jid:bookmark --add --conf jid [--autojoin 1] [--nick cos] [--pass cos] [-- name] 
@@ -1553,20 +1556,60 @@ static COMMAND(jabber_command_private) {
 							book->priv_data.conf->nick= xstrdup(jabber_attr(splitted, "nick")); 
 							book->priv_data.conf->pass= xstrdup(jabber_attr(splitted, "pass"));
 
-							if (jabber_attr(splitted, "autojoin") && atoi(jabber_attr(splitted, "autojoin")))	book->priv_data.conf->autojoin = 1;
-/*							else											book->priv_data.conf->autojoin = 0; */
+							if (jabber_attr(splitted, "autojoin") && atoi(jabber_attr(splitted, "autojoin")))	
+								book->priv_data.conf->autojoin = 1;
+
 						} else bookmark_sync = -1;
 						if (book) list_add(&(j->bookmarks), book);
 					}
 					break;
-				case (2):		/* modify item XXX */
-				case (3):		/* remove item XXX */
+				case (2):	 /* modify item XXX */
+				case (3):    /* remove item */
+					{   
+						char *name  = xstrdup(jabber_attr(splitted, "name")); /* Name of bookmark */
+						struct list *bookmarks = j->bookmarks;
+						jabber_bookmark_t * book = NULL;
+
+						if (!bookmarks)
+						{
+							printq("generic_error", "You have no bookmarks");
+							bookmark_sync = 4;
+							break;
+						}
+						
+						if (xstrcmp(splitted[0], "name"))
+						{
+							bookmark_sync = -1;
+							break;
+						}
+
+						while (book = bookmarks->data)
+						{
+							if (!xstrcmp(book->priv_data.conf->name,name))
+							{
+								jabber_bookmarks_freeone(j, book);
+								break;
+							}
+							
+							if (bookmarks->next)
+								bookmarks = bookmarks->next;
+							else
+							{
+								printq("generic_error", "No such bookmark");
+								bookmark_sync = 4;
+								break;
+							}
+						}
+					}
+					break;
 				default:	/* error */
 					bookmark_sync = -bookmark_sync;		/* make it negative -- error */
 					debug("[JABBER, BOOKMARKS] switch(bookmark_sync) sync=%d ?!\n", bookmark_sync);
 			}
 
 			array_free(splitted);
+			if (bookmark_sync ==  4)
+				return -1;
 			if (bookmark_sync > 0) {
 				return jabber_command_private(name, (const char **) p, session, target, quiet); /* synchronize db */
 			} else if (bookmark_sync < 0) {

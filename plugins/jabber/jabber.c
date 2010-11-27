@@ -259,6 +259,13 @@ int jabber_bookmarks_free(jabber_private_t *j) {
 	return 0;
 }
 
+int jabber_bookmarks_freeone(jabber_private_t *j, jabber_bookmark_t *book) {
+	if (!j || !j->bookmarks) return -1;
+
+	LIST_REMOVE(&(j->bookmarks), book, list_jabber_bookmarks_free);
+	return 0;
+}
+
 /**
  * jabber_print_version()
  *
