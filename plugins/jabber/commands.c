@@ -1593,7 +1593,7 @@ static COMMAND(jabber_command_private) {
 						if (!bookmarks)
 						{
 							printq("generic_error", "You have no bookmarks");
-							bookmark_sync = 4;
+							bookmark_sync = -2;
 							break;
 						}
 
@@ -1618,7 +1618,7 @@ static COMMAND(jabber_command_private) {
 								else
 								{
 									printq("generic_error", "No such bookmark");
-									bookmark_sync = 4;
+									bookmark_sync = -2;
 									break;
 								}
 							}
@@ -1663,7 +1663,7 @@ static COMMAND(jabber_command_private) {
 									else
 									{
 										printq("generic_error", "No such bookmark");
-										bookmark_sync = 4;
+										bookmark_sync = -2;
 										break;
 									}
 								}
@@ -1683,7 +1683,7 @@ static COMMAND(jabber_command_private) {
 						if (!bookmarks)
 						{
 							printq("generic_error", "You have no bookmarks");
-							bookmark_sync = 4;
+							bookmark_sync = -2;
 							break;
 						}
 						
@@ -1713,7 +1713,7 @@ static COMMAND(jabber_command_private) {
 							else
 							{
 								printq("generic_error", "No such bookmark");
-								bookmark_sync = 4;
+								bookmark_sync = -2;
 								break;
 							}
 						}
@@ -1725,7 +1725,7 @@ static COMMAND(jabber_command_private) {
 			}
 
 			array_free(splitted);
-			if (bookmark_sync ==  4)
+			if (bookmark_sync ==  -2)
 				return -1;
 			if (bookmark_sync > 0) {
 				return jabber_command_private(name, (const char **) p, session, target, quiet); /* synchronize db */
