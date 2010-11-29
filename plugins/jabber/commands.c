@@ -2077,14 +2077,6 @@ static COMMAND(jabber_muc_command_join) {
 
 	mucuid = xmpp_uid(target);
 
-#if 0
-	if (newconference_find(session, mucuid)) {
-		printq("conferences_already_joined", session_name(session), mucuid);
-		xfree(mucuid);
-		return 1;
-	}
-#endif
-		
 	tmp = jabber_escape(username);
 	watch_write(j->send_watch, "<presence to='%s/%s'><x xmlns='http://jabber.org/protocol/muc'>%s</x></presence>", 
 			target, tmp, password ? password : "");
@@ -2580,7 +2572,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:ffc", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:find", "?", jabber_command_find, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:invisible", "r", jabber_command_away,		JABBER_ONLY, NULL);
-	command_add(&jabber_plugin, "xmpp:join", "! ? ?", jabber_muc_command_join, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:join", "!C ? ?", jabber_muc_command_join, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:kick", "! ! ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:lastseen", "!u", jabber_command_lastseen, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
