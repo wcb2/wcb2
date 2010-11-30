@@ -1526,7 +1526,7 @@ static COMMAND(jabber_command_private) {
 			{
 				if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->name,params[1]))
 				{
-					command_exec_format(NULL, session, 2, "/join %s %s %s", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
+					command_exec_format(NULL, session, 2, "/join %s \"%s\" \"%s\"", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
 					return 0;
 				}
 
