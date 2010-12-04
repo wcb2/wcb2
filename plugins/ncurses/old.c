@@ -2592,7 +2592,7 @@ end:
 
 		if (
 #if USE_UNICODE
-			(getch_ret == KEY_CODE_YES || ch < 0x100 /* TODO CHECK */) &&
+			ch <= KEY_MAX &&
 #endif
 			(b = ncurses_binding_map[ch]) && b->action)
 		{
