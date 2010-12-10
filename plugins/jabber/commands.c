@@ -1541,6 +1541,10 @@ static COMMAND(jabber_command_private) {
 		}
 
 		if (bookmark_sync) {
+            /* Get bookmarks */
+            command_exec(NULL, session, "/bookmark -g", 2);
+            j = jabber_private(session);
+		
 			const char *p[2]	= {("-p"), NULL};	/* --put */
 			char **splitted		= NULL;
 			
