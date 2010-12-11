@@ -88,4 +88,4 @@ s± ustawiane jako mrugaj±ce (w zasadzie to element blink strutkury userlist_t).
 Ui-ncurses obs³ugujê to poprzez odczytanie stosownego theme'a i wy¶wietlenie 
 go w sposób prawid³owy.
 
-$Id: ui-ncurses.txt 5013 2010-10-04 13:52:16Z wiechu $
+$Id$

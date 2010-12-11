@@ -21,4 +21,4 @@ kilka uwag co do przeno¶no¶ci kodu:
 5) trzeba uwa¿aæ na kolejno¶æ bajtów, je¶li pisze siê lub czyta binarne
    warto¶ci liczbowe z plików lub gniazd.
 
-$Id: przenosny-kod.txt 2 2003-09-10 20:16:45Z wojtekka $
+$Id$

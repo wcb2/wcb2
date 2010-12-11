@@ -37,4 +37,4 @@ klucz nadawcy w katalogu ~/.ekg2/keys.
 
 Zarz±dzanie kluczami odbywa siê za pomoc± polecenia ,,key''.
 
-$Id: sim.txt 2018 2006-09-24 10:18:00Z darkjames $
+$Id$

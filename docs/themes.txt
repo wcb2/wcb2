@@ -110,4 +110,4 @@ odstêp reguluje siê poprzez zmienn± ncurses:margin_size.
 
 * * *
 
-$Id: themes.txt 4009 2008-06-02 09:56:12Z wiechu $
+$Id$
