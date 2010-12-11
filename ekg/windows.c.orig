@@ -887,7 +887,7 @@ COMMAND(cmd_window) {
 void window_session_set(window_t *w, session_t *new_session) {
 	static int lock;
 
-	if (!w)
+	if (!w || !new_session)		/* XXX, new_session == NULL? */
 		return;
 
 	if (w->session == new_session)

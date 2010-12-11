@@ -267,17 +267,20 @@ int session_remove(const char *uid)
 
 	if (!(s = session_find(uid)))
 		return -1;
-	if (s == session_current)
-		session_current = NULL;
 
 	count = sessions_count();
 
 	for (w = windows; w; w = w->next) {
-		if (w->session == s) {
-			w->session = NULL;
-			if (count > 1)
-				window_session_cycle(w);
-		} 
+		if (w->session == s && count > 1)
+			window_session_cycle(w);
+
+		if (w->session == s)
+			window_session_set(w, NULL);
+	}
+
+	if (s == session_current) {		/* shouldn't happen */
+		session_current = NULL;
+		query_emit_id(NULL, SESSION_CHANGED);
 	}
 	
 	if (s->connected)
@@ -309,7 +312,6 @@ int session_remove(const char *uid)
 	}
 
 	tmp = xstrdup(uid);
-	query_emit_id(NULL, SESSION_CHANGED);
 	query_emit_id(NULL, SESSION_REMOVED, &tmp);
 	xfree(tmp);
 
