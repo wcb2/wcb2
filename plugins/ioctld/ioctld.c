@@ -1,4 +1,4 @@
-/* $Id: ioctld.c 4842 2009-07-22 23:02:54Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2002 Pawe³ Maziarz <drg@infomex.pl>
