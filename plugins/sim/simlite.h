@@ -1,4 +1,4 @@
-/* $Id: simlite.h 795 2004-10-23 10:42:28Z deletek $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>

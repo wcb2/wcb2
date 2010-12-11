@@ -14,4 +14,4 @@ key
 	
 	  [-l, --list] [numer/alias]  wy¶wietla posiadane klucze publiczne
 
-$Id: commands-pl.txt 1319 2005-12-12 20:29:45Z leafnode $
+$Id$

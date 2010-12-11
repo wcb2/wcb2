@@ -1,7 +1,7 @@
 // ma³y opis dostêpnych zmiennych pluginu sim
 // (c) copyright 2001-2003 wojtek kaniewski <wojtekka@irc.pl>
 // (c) copyright      2004 piotr kupisiewicz <deletek@ekg2.org>
-// $Id: vars-pl.txt 1319 2005-12-12 20:29:45Z leafnode $
+// $Id$
 
 encryption
 	typ: bool

@@ -1,4 +1,4 @@
-/* $Id: simlite.c 4746 2008-12-21 11:34:07Z porridge $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
