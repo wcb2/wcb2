@@ -47,4 +47,4 @@ sms_send_app
 	tre¶æ wiadomo¶ci. do tego celu nadaje siê program Miko³aja
 	Rydzewskiego ze strony http://ceti.pl/~miki/
 
-$Id: vars-pl.txt 1319 2005-12-12 20:29:45Z leafnode $
+$Id$

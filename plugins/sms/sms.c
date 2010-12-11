@@ -1,4 +1,4 @@
-/* $Id: sms.c 4417 2008-08-17 12:31:34Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>
