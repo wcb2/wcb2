@@ -1,4 +1,4 @@
-/* $Id: main.h 4415 2008-08-17 12:30:49Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2006 Szymon Bilinski <ecimon(at)babel.pl>

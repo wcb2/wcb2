@@ -1,4 +1,4 @@
-/* $Id: main.c 4835 2009-07-22 10:49:59Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2006 Szymon Bilinski <ecimon(at)babel.pl>

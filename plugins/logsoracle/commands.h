@@ -1,4 +1,4 @@
-/* $Id: commands.h 2362 2007-02-22 20:47:07Z darkjames $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2006 Szymon Bilinski <ecimon(at)babel.pl>
