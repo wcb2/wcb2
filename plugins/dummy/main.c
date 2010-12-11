@@ -1,4 +1,4 @@
-/* $Id: main.c 3827 2008-02-29 21:17:10Z wiechu $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Jan Kowalski <jan.kowalski@gdzies.pl>
