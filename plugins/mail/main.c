@@ -1,4 +1,4 @@
-/* $Id: main.c 4781 2009-02-11 15:58:29Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2001-2003 Piotr Domagalski <szalik@szalik.net>
