@@ -1,4 +1,4 @@
-/* $Id: rc.h 2217 2006-12-30 20:56:50Z darkjames $ */
+/* $Id$ */
 
 #ifndef __EKG_RC_RC_H
 #define __EKG_RC_RC_H
