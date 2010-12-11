@@ -1,4 +1,4 @@
-/* $Id: token.h 2240 2007-01-11 19:08:45Z darkjames $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Adam Czerwiñski <acze@acze.net>

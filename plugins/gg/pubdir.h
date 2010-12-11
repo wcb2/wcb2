@@ -1,4 +1,4 @@
-/* $Id: pubdir.h 4414 2008-08-17 12:30:18Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl

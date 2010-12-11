@@ -1,4 +1,4 @@
-/* $Id: pubdir.c 4901 2010-02-05 01:54:59Z wiechu $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl

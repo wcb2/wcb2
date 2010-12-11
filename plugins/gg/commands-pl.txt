@@ -266,4 +266,4 @@ userlist
 	
 	  -p, --put    umieszcza listê na serwerze
 
-$Id: commands-pl.txt 4926 2010-06-04 13:31:02Z wiechu $
+$Id$

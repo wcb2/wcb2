@@ -84,4 +84,4 @@ split_messages
 	wiadomo¶ci. je¿eli 1 to wiadomo¶æ dzielona jest na czê¶ci, je¶li 0
 	to wiadomo¶æ jest wysy³ana niekompletna
 
-$Id: vars-pl.txt 4068 2008-07-08 14:55:00Z wiechu $
+$Id$

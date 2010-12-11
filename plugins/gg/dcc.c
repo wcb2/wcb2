@@ -1,4 +1,4 @@
-/* $Id: dcc.c 4746 2008-12-21 11:34:07Z porridge $ */
+/* $Id$ */
 
 #include "ekg2-config.h"
 

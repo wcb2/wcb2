@@ -1,4 +1,4 @@
-/* $Id: gg.c 5000 2010-09-30 08:48:25Z wiechu $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl

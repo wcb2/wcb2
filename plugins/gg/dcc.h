@@ -1,4 +1,4 @@
-/* $Id: dcc.h 3593 2007-12-05 08:53:53Z darkjames $ */
+/* $Id$ */
 
 #ifndef __EKG_GG_DCC_H
 #define __EKG_GG_DCC_H
