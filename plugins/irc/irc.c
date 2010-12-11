@@ -191,6 +191,7 @@ static QUERY(irc_session_init) {
 	ekg_recode_utf8_inc();
 
 	j = xmalloc(sizeof(irc_private_t));
+	j->nick_modes = j->nick_signs = NULL;
 	j->fd = -1;
 
 	j->conv_in = (void *) -1;
@@ -266,6 +267,8 @@ static QUERY(irc_session_deinit) {
 
 	for (i = 0; i<SERVOPTS; i++) 
 		xfree(j->sopt[i]);
+
+	xfree(j->nick_modes);
 
 	xfree(j);
 	return 0;
@@ -1377,7 +1380,7 @@ static COMMAND(irc_command_msg) {
 	ischn = !!xstrchr(SOP(_005_CHANTYPES), uid[4]);
 /* PREFIX */
 	/* ok new irc-find-person checked */
-	if ((ischn && (person = irc_find_person(j->people, j->nick)) && (perchn = irc_find_person_chan(person->channels, (char *)uid))))
+	if ((ischn && (person = irc_find_person(j, j->people, j->nick)) && (perchn = irc_find_person_chan(person->channels, (char *)uid))))
 		prefix[0] = *(perchn->sign);
 
 	if (!ischn || (!session_int_get(session, "SHOW_NICKMODE_EMPTY") && *prefix==' '))
@@ -1795,7 +1798,7 @@ static QUERY(irc_topic_header) {
 		
 		/* person */
 		/* ok new irc-find-person checked */
-		if ((per = irc_find_person((j->people), targ+4))) { 
+		if ((per = irc_find_person(j, j->people, targ+4))) { 
 			*top   = saprintf("%s@%s", per->ident, per->host);
 			*setby = xstrdup(per->realname);
 			*modes = NULL;
@@ -1934,8 +1937,7 @@ static COMMAND(irc_command_names) {
 	int sort_status[6] = {EKG_STATUS_AVAIL, EKG_STATUS_AWAY, EKG_STATUS_XA, EKG_STATUS_INVISIBLE, EKG_STATUS_FFC, EKG_STATUS_DND};
 	int sum[6]   = {0, 0, 0, 0, 0, 0};
 
-	int len;
-	char **mp, *channame, *cchn, *pfx0, *pfx1;
+	char **mp, *channame, *cchn;
 
 	channel_t *chan;
 	string_t buf;
@@ -1955,10 +1957,7 @@ static COMMAND(irc_command_names) {
 
 	buf = string_init(NULL);
 
-	len = xstrlen(SOP(_005_PREFIX))>>1;
-	pfx0 = SOP(_005_PREFIX) + 1;		// point to "ov)@+"
-	pfx1 = SOP(_005_PREFIX) + len + 1;	// point to "@+"
-	for (i = 0; i < len; i++) {
+	for (i = 0; i <= xstrlen(j->nick_modes); i++) {
 		static char mode_str[2] = { '?', '\0' };
 		const char *mode;
 
@@ -1970,7 +1969,7 @@ static COMMAND(irc_command_names) {
 		 *	]", and whole will be treated as long 'longest_nick+2' long string :)
 		 */
 
-		switch (pfx0[i]) {
+		switch (j->nick_modes[i]) {
 			case 'o':	lvl = 0; break;
 			case 'h':	lvl = 1; break;
 			case 'v':	lvl = 2; break;
@@ -1978,12 +1977,8 @@ static COMMAND(irc_command_names) {
 			case 'a':	lvl = 4; break;
 			default:	lvl = 5; break;
 		}
-		if (pfx1[i]) {
-			mode = mode_str;
-			mode_str[0] = pfx1[i];
-		} else {
-			mode = fillchars;
-		}
+
+		mode = (mode_str[0] = j->nick_signs[i]) ? mode_str : fillchars;
 
 		for (ul = chan->window->userlist; ul; ul = ul->next) {
 			userlist_t *ulist = ul;
@@ -2009,7 +2004,7 @@ static COMMAND(irc_command_names) {
 
 	print_info(channame, session, "none2", "");
 #define plvl(x) itoa(sum[x])
-	if (len > 3) /* has halfops */
+	if (sum[1]+sum[3]+sum[4] != 0) /* has halfops, admins or owners */
 		print_info(channame, session, "IRC_NAMES_TOTAL_H", session_name(session), cchn, itoa(count), plvl(0), plvl(1), plvl(2), plvl(5), plvl(3), plvl(4));
 	else
 		print_info(channame, session, "IRC_NAMES_TOTAL", session_name(session), cchn, itoa(count), plvl(0), plvl(2), plvl(5));
@@ -2173,7 +2168,7 @@ static COMMAND(irc_command_ban) {
 		 * what is written above this is normal, DELETE THIS NOTE L8R
 		 */
 		/* ok new irc-find-person checked */
-		person = irc_find_person(j->people, (char *) *mp);
+		person = irc_find_person(j, j->people, (char *) *mp);
 		if (person) 
 			temp = irc_make_banmask(session, person->nick+4, person->ident, person->host);
 		if (temp) {
@@ -2839,24 +2834,24 @@ static int irc_theme_init()
 	/* %2 - prefix, %3 - nick, %4 - nick+ident+host, %5 - chan, %6 - msg*/
 	format_add("irc_msg_sent",	"%P<%n%3/%5%P>%n %6", 1);
 	format_add("irc_msg_sent_n",	"%P<%n%3%P>%n %6", 1);
-	format_add("irc_msg_sent_chan",	"%P%7<%w%{2@%+gcp}X%2%3%P>%n %6", 1);
-	format_add("irc_msg_sent_chanh","%P%7<%W%{2@%+GCP}X%2%3%P>%n %6", 1);
+	format_add("irc_msg_sent_chan",	"%P%7<%w%{2*!@%+yrgcp}X%2%3%P>%n %6", 1);
+	format_add("irc_msg_sent_chanh","%P%7<%W%{2*!@%+YRGCP}X%2%3%P>%n %6", 1);
 	
 	format_add("irc_not_sent",	"%P(%n%3/%5%P)%n %6", 1);
 	format_add("irc_not_sent_n",	"%P(%n%3%P)%n %6", 1);
-	format_add("irc_not_sent_chan",	"%P%7(%w%{2@%+gcp}X%2%3%P)%n %6", 1);
-	format_add("irc_not_sent_chanh","%P%7(%W%{2@%+GCP}X%2%3%P)%n %6", 1);
+	format_add("irc_not_sent_chan",	"%P%7(%w%{2*!@%+yrgcp}X%2%3%P)%n %6", 1);
+	format_add("irc_not_sent_chanh","%P%7(%W%{2*!@%+YRGCP}X%2%3%P)%n %6", 1);
 
 //	format_add("irc_msg_f_chan",	"%B<%w%{2@%+gcp}X%2%3/%5%B>%n %6", 1); /* NOT USED */
 //	format_add("irc_msg_f_chanh",	"%B<%W%{2@%+GCP}X%2%3/%5%B>%n %6", 1); /* NOT USED */
-	format_add("irc_msg_f_chan_n",	"%B%7<%w%{2@%+gcp}X%2%3%B>%n %6", 1);
-	format_add("irc_msg_f_chan_nh",	"%B%7<%W%{2@%+GCP}X%2%3%B>%n %6", 1);
+	format_add("irc_msg_f_chan_n",	"%B%7<%w%{2*!@%+yrgcp}X%2%3%B>%n %6", 1);
+	format_add("irc_msg_f_chan_nh",	"%B%7<%W%{2*!@%+YRGCP}X%2%3%B>%n %6", 1);
 	format_add("irc_msg_f_some",	"%b<%n%3%b>%n %6", 1);
 
 //	format_add("irc_not_f_chan",	"%B(%w%{2@%+gcp}X%2%3/%5%B)%n %6", 1); /* NOT USED */
 //	format_add("irc_not_f_chanh",	"%B(%W%{2@%+GCP}X%2%3/%5%B)%n %6", 1); /* NOT USED */
-	format_add("irc_not_f_chan_n",	"%B(%w%{2@%+gcp}X%2%3%B)%n %6", 1);
-	format_add("irc_not_f_chan_nh",	"%B(%W%{2@%+GCP}X%2%3%B)%n %6", 1);
+	format_add("irc_not_f_chan_n",	"%B(%w%{2*!@%+yrgcp}X%2%3%B)%n %6", 1);
+	format_add("irc_not_f_chan_nh",	"%B(%W%{2*!@%+YRGCP}X%2%3%B)%n %6", 1);
 	format_add("irc_not_f_some",	"%b(%n%3%b)%n %6", 1);
 	format_add("irc_not_f_server",	"%g!%3%n %6", 1);
 
@@ -2874,10 +2869,10 @@ static int irc_theme_init()
 	format_add("irc_quit",		_("%> %Y%2%n has quit irc (%4)\n"), 1);
 	format_add("irc_split",		"%> ", 1);
 	format_add("irc_unknown_ctcp",	_("%> %Y%2%n sent unknown CTCP %3: (%4)\n"), 1);
-	format_add("irc_ctcp_action_y_pub",	"%y* %2%n  %4\n", 1);
-	format_add("irc_ctcp_action_y",		"%Y* %2%n  %4\n", 1);
-	format_add("irc_ctcp_action_pub",	"%y* %2%n  %5\n", 1);
-	format_add("irc_ctcp_action",		"%Y* %2%n  %5\n", 1);
+	format_add("irc_ctcp_action_y_pub",	"%y* %2%n  %4", 1);
+	format_add("irc_ctcp_action_y",		"%Y* %2%n  %4", 1);
+	format_add("irc_ctcp_action_pub",	"%y* %2%n  %5", 1);
+	format_add("irc_ctcp_action",		"%Y* %2%n  %5", 1);
 	format_add("irc_ctcp_request_pub",	_("%> %Y%2%n requested ctcp %5 from %4\n"), 1);
 	format_add("irc_ctcp_request",		_("%> %Y%2%n requested ctcp %5\n"), 1);
 	format_add("irc_ctcp_reply",		_("%> %Y%2%n CTCP reply from %3: %5\n"), 1);

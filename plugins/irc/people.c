@@ -67,7 +67,7 @@ int irc_xstrcasecmp_default(char *str1, char *str2)
  *     priv_data->channels 
  *     priv_data->people->channels->onchan
  */
-people_t *irc_find_person(list_t p, char *nick)
+people_t *irc_find_person(irc_private_t *j, list_t p, char *nick)
 {
 	int (*comp_func)(char *,char*);
 	people_t *person;
@@ -78,7 +78,7 @@ people_t *irc_find_person(list_t p, char *nick)
 	if (!xstrncmp(nick, IRC4, 4))
 		debug_error("programmer's mistake in call to irc_find_person!: %s\n", nick);
 
-	if (*nick == '+' || *nick == '%' || *nick == '@') nick++;
+	if (xstrchr(j->nick_signs, *nick)) nick++;
 
 	comp_func = irc_xstrcasecmp_default;
 
@@ -172,15 +172,11 @@ static people_t *irc_add_person_int(session_t *s, irc_private_t *j,
 	people_chan_t *pch_tmp;
 	userlist_t *ulist;
 	window_t *w;
-	int i, k, mode = 0, irccol = 0;
-	char *ircnick, *modes, *t;
+	int mode = 0, irccol = 0;
+	char *ircnick, *t;
 
-	k = (xstrlen(SOP(_005_PREFIX))>>1);
-	modes = xmalloc(k * sizeof(char));
-	for (i=0; i<k; i++) modes[i] = SOP(_005_PREFIX)[i+k+1];
-	modes[i-1] = '\0';
-	if ((t = xstrchr(modes, *nick)))
-		mode = 1<<(k-(t-modes)-2);
+	if ((t = xstrchr(j->nick_signs, *nick)))
+		mode = 1 << (t - j->nick_signs);
 
 	/* debug("irc_add_person_int: %s %d %d\n", modes, mode, k); */
 	if (mode) nick++;
@@ -192,12 +188,12 @@ static people_t *irc_add_person_int(session_t *s, irc_private_t *j,
 	if (w && !(ulist = userlist_find_u(&(w->userlist), ircnick))) {
 	/*	debug("+userlisty %d, ", mode); */
 		ulist = userlist_add_u(&(w->userlist), ircnick, nick);
-		irccol = irc_color_in_contacts(modes, mode, ulist);
+		irccol = irc_color_in_contacts(j, mode, ulist);
 	}
 
 	/* add entry in priv_data->people if nick's not yet there */
 	/* ok new irc-find-person checked */
-	if (!(person = irc_find_person(j->people, nick))) {
+	if (!(person = irc_find_person(j, j->people, nick))) {
 	/*	debug("+%s lista ludzi, ", nick); */
 		person = xmalloc(sizeof(people_t));
 		person->nick = xstrdup(ircnick);
@@ -205,7 +201,7 @@ static people_t *irc_add_person_int(session_t *s, irc_private_t *j,
 		list_add(&(j->people), person);
 	}
 	/* add entry in priv_data->channels->onchan if nick's not yet there */
-	if (!(peronchan = irc_find_person(chan->onchan, nick)))  {
+	if (!(peronchan = irc_find_person(j, chan->onchan, nick)))  {
 	/*	debug("+do kana³u, "); */
 		list_add(&(chan->onchan), person);
 	}
@@ -224,7 +220,6 @@ static people_t *irc_add_person_int(session_t *s, irc_private_t *j,
 	/*	debug(" %08X\n", person->channels); */
 	} //else { pch_tmp->mode = mode; }
 
-	xfree(modes);
 	return person;
 }
 
@@ -364,7 +359,7 @@ int irc_del_person_channel(session_t *s, irc_private_t *j, char *nick, char *cha
 
 	if (!(chan = irc_find_channel(j->channels, channame)))
 		return -1;
-	if (!(person = irc_find_person(j->people, nick)))
+	if (!(person = irc_find_person(j, j->people, nick)))
 		return -1;
 
 	ret = irc_del_person_channel_int(s, j, person, chan);
@@ -401,7 +396,7 @@ int irc_del_person(session_t *s, irc_private_t *j, char *nick,
 	int ret;
 	char *longnick;
 
-	if (!(person = irc_find_person(j->people, nick))) 
+	if (!(person = irc_find_person(j, j->people, nick))) 
 		return -1;
 
 	/* if person doesn't have any channels, we shouldn't get here
@@ -526,37 +521,33 @@ channel_t *irc_add_channel(session_t *s, irc_private_t *j, char *name, window_t 
 	return NULL;
 }
 
-int irc_color_in_contacts(char *modes, int mode, userlist_t *ul)
+int irc_color_in_contacts(irc_private_t *j, int mode, userlist_t *ul)
 {
 	int  i, len;
-	len = xstrlen(modes);
+	len = (xstrlen(SOP(_005_PREFIX))>>1) - 1;
 
 	/* GiM: this could be done much easier on intel ;/ */
 	for (i=0; i<len; i++)
-		if (mode & (1<<(len-1-i))) break;
+		if (mode & (1<<i)) break;
 	
-
-	switch (i) {
-		case 0:	ul->status = EKG_STATUS_AVAIL;		break;
-		case 1:	ul->status = EKG_STATUS_AWAY;		break;
-		case 2:	ul->status = EKG_STATUS_XA;		break;
-		case 3:	ul->status = EKG_STATUS_INVISIBLE;	break;
-		default:ul->status = EKG_STATUS_ERROR;		break;
+	switch (j->nick_modes[i]) {
+		case 'o':	ul->status = EKG_STATUS_AVAIL;		break;	/* op */
+		case 'h':	ul->status = EKG_STATUS_AWAY;		break;	/* half-op */
+		case 'v':	ul->status = EKG_STATUS_XA;		break;	/* voice */
+		case 'q':	ul->status = EKG_STATUS_INVISIBLE;	break;	/* owner */
+		case 'a':	ul->status = EKG_STATUS_FFC;		break;	/* admin */
+		default:	ul->status = EKG_STATUS_DND;		break;	/* rest */
 	}
 	return i;
 }
 
 int irc_nick_prefix(irc_private_t *j, people_chan_t *ch, int irc_color)
 {
-	char *t = SOP(_005_PREFIX);
-	char *p = xstrchr(t, ')');
-	*(ch->sign)=' ';
-	(ch->sign)[1] = '\0';
-	if (p) {
-		p++;
-		if (irc_color < xstrlen(p))
-			*(ch->sign) = p[irc_color];
-	} 
+	ch->sign[0] = ' ';
+	ch->sign[1] = '\0';
+	if (irc_color < xstrlen(j->nick_signs))
+		*(ch->sign) = j->nick_signs[irc_color];
+
 	return 0;
 }
 		
@@ -583,7 +574,7 @@ int irc_nick_change(session_t *s, irc_private_t *j, char *old_nick, char *new_ni
 	window_t *w;
 	char *t1, *t2 = irc_uid(new_nick);
 
-	if (!(per = irc_find_person(j->people, old_nick))) {
+	if (!(per = irc_find_person(j, j->people, old_nick))) {
 		debug_error("irc_nick_change() person not found?\n");
 		xfree(t2);
 		return 0;
