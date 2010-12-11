@@ -1,0 +1,26 @@
+// opis wydarzeñ, których mo¿na u¿ywaæ poleceniem /on
+// (c) copyright 2004-2005 Piotr Kupisiewicz <deli@rzepaknet.us>
+
+protocol-message:
+	odpowiada za odebrane wiadomo¶ci. jako parametr przekazywany jest UID lub nickname.
+
+event_avail:
+	zmiana statusu na dostêpny. nie przekazywany jest ¿aden parametr
+
+event_away:
+	zmiana statusu na away. nie przekazywany jest ¿aden parametr
+
+event_na:
+	zmiana statusu na niedostêpny. nie przekazywany jest ¿aden parametr.
+
+event_online:
+	zmiana statusu z niedostêpnego na dostêpny/zaraz wracam. nie 
+	przekazywany jest ¿aden parametr.
+
+event_offline:
+	zmiana statusu z dostêpnego/zaraz wracam na niedostêpny. nie
+	przekazywany jest ¿aden parametr.
+
+event_descr:
+	zmiana opisu. przekazywany jest opis jako parametr.
+

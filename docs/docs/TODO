@@ -1,0 +1,67 @@
+Nie zawracaj ludziom g³owy i nie pisz, ¿e chcia³by¶ co¶ zaproponowaæ, je¶li
+zosta³o wymienione na poni¿szych listach. Listy lub wiadomo¶ci, ¿eby co¶
+z nich dostaæ bêd± albo ignorowane, albo odpowied¼ mo¿e byæ wulgarna.
+Zwykle im dana sprawa jest wy¿ej na li¶cie, tym wa¿niejsze jest jej
+rozwi±zanie.
+
+* przed wydaniem:
+  - zmieniæ mylne nazwy plików np old.c w ncurses na co¶ sensownego
+  - THANKS - chyba przydatny by³by taki plik
+
+* klient:
+  - bindowane CTRL+Strza³ki, PageUP itd (del)
+  - ostatnio pisz±ca osoba blinka przez 5 sekund, w rogu ekranu (Oli)
+  - uporz±dkowane i dobrze dzia³aj±ce okna p³ywaj±ce (sz?)
+  - zmienna beep_*_away (rmrmg)
+  - osobna historia dla ka¿dego okna (koniu)
+  - zapisywanie backlog'a z okna do pliku (G.Sulek)
+  - zdarzenie dotycz±ce nowej konferencji (pmb)
+  - /ignore dla u¿ytkowników spoza listy kontaktów (mateusza)
+  - ,,wje¿d¿anie'' i automatyczne chowanie listy kontaktów, co¶ na wzór pasku
+    zadañ w windowsach (w)
+  - mo¿liwo¶æ definiowania kolorów p³ywaj±cych okien: t³o, ramka (w)
+  - mo¿liwo¶æ blokowania terminala po d³u¿szym czasie nieaktywno¶ci (Gambler)
+  - okienka oparte o kolejne wywo³ania xterma (fidor)
+  - dokumentacja do themes - opis ka¿dego formatu (del)
+
+  - naprawic config_keep_reason, kod z ekg1 sie przyda.
+
+* gg 
+  - dodawanie do tre¶ci wiadomo¶ci, w której jest obrazek informacji o tym 
+    (adamm)
+  - "rozs±dne" nazwy dla zapisywanych obrazków (adamm)
+
+* jabber
+  - resolve SRV first
+  - emit events, authorisation-request and so on
+  - conference support (similar to gg_command_msg() in gg)
+  - ignore support 
+
+*** Przed wydaniem wersji 1.0 ***
+
+[jabber]
+	- edycja oraz wyszukiwanie informacji osobistej w katalogu 
+	  u¿ytkowników
+	- rejestracja nowego konta jabberowego
+	
+[ekg2]
+	- poprawiæ wszelkie znane b³êdy
+	- kompilacja na FreeBSD
+	- poprawiæ /window move tak, aby dzia³a³o analogicznie do tego 
+	  znanego z irssi
+
+[irc]
+	- poprawiæ wszelkie znane b³êdy
+	- popracowaæ nad stabilno¶ci±
+
+
+*** *** *** *** ***
+W userlist_free() kasujemy przyporzadkowanie w->uid <==> w->nickname
+Dlatego trzeba dla kazdego okna danej sesji poprawic w->target na taki ktory bedzie dzialac
+nawet jak skasujemy userliste.
+
+[Zmienne sesyjne]
+   gdy zmienna zaczyna sie od '__' wtedy sprawdzajmy tylko s->local_vars, oraz gdy nie istnieje dodajmy.
+   Jesli nie, to wtedy sprawdz tylko zmienne zdefiniowane przez PLUGIN_VAR_ADD, a gdy nie ma nie dodawaj.
+   Zrobic wczesniej audyt kodu, czy wszystkie pluginy spelniaja te zalozenia.
+

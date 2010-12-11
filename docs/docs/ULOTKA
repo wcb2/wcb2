@@ -1,0 +1,47 @@
+
+	  
+          "Czytanie dokumentacji mo¿e powodowaæ raka i choroby serca"
+                 minister do spraw informatyzacji i Windows [1]
+
+
+czyli krótki przewodnik po dokumentacji:
+
+README		opis programu. g³ówny plik dokumentacji.
+
+FAQ		najczê¶ciej zadawane pytania. je¶li masz jaki¶ problem,
+		zajrzyj najpierw tutaj. wszelkie pytania, na które mo¿na
+		tu znale¼æ odpowied¼ bêd± ignorowane, lub reakcja bêdzie
+		z³o¶liwa i nieprzyjemna.
+
+TODO		lista rzeczy, które czekaj± w kolejce na realizacjê. je¶li
+		chcesz napisaæ, ¿e przyda³aby siê jaka¶ rzecz, najpierw
+		zajrzyj tutaj. mo¿liwe, ¿e kto¶ wcze¶niej zg³osi³
+		,,zapotrzebowanie''.
+
+vars.txt	opis zmiennych u¿ywanych przez program.
+
+commands.txt	opis funkcji u¿ywanych przez program
+
+files.txt	opis formatów plików: listy kontaktów, konfiguracji,
+		historii, emotikonów.
+
+themes.txt	opis dotycz±cy zmiany wygl±du klienta. przydatny dla tych,
+		którzy lubi± bawiæ siê w kolorki.
+
+devel-hints.txt	wskazówki dla tych, którzy chc± co¶ poprawiæ w ekg/libgadu.
+
+przenosny-kod.txt
+		kilka wskazówek na temat pisania kodu przeno¶nego miêdzy
+		ró¿nymi uniksami.
+
+gdb.txt		szybki kurs obs³ugi gdb.
+
+ui-ncurses.txt	opis interfejsu ncurses oraz ustawieñ/mo¿liwo¶ci wystêpuj±cych
+		wy³±cznie w tym interfejsie.
+
+sim.txt		wskazówki dotycz±ce korzystania z szyfrowania wiadomo¶ci.
+
+
+[1] autor Jacek Pop³awski, <slrnaor068.54v.jp@darkwood.somewhere>
+
+$Id$

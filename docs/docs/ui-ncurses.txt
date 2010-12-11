@@ -1,0 +1,91 @@
+// ui-ncurses
+// (c) copyright 2002 wojtek kaniewski <wojtekka@irc.pl>
+// (c) copyright 2004 Piotr Kupisiewicz <deli@rzepaknet.us>
+
+Interfejs ten ró¿ni siê nieco od readline z okienkami. G³ówn± ró¿nic± jest
+fakt, ¿e pierwsze okienko istnieje _zawsze_ i jest oknem stanu. Do niego
+lec± informacje o pojawianiu siê i znikaniu ludzi. Szczegó³y dotycz±ce
+obs³ugi klawiatury znajduj± siê w pliku README.
+
+Zalecane ustawienia:
+
+	set display_ack 3
+	set display_sent 1
+	set make_window 2
+
+Pasek stanu zawiera zegar, informacje o w³asnym numerku (kolor okre¶la
+stan: czarny -- niedostêpny, bia³y -- dostêpny, szary -- zajêty, ciemnoszary
+-- niewidoczny), numer aktualnego okna, informacje o aktywno¶ci w innych
+oknach, nowej poczcie itd.
+
+Dodano nowy format ,,statusbar''. podobnie jak i reszta obs³uguje kolory,
+ale nie ma dope³niania, mrugania itp. s± za to konstrukcje warunkowe oraz
+rozszerzone informacje:
+
+	%{activity}	lista okien, w których siê co¶ pojawi³o
+	%{debug}	jeste¶my w oknie debug
+	%{descr}	opis (naszego) stanu
+	%{mail}		ilo¶æ nowej poczty lub pusty je¶li nie ma
+	%{more}		dopisano co¶ do okna, gdy jest przewiniête
+	%{nick}		w³asny pseudonim {XXX niezaimplementowane}
+	%{query}	rozmówca w aktualnym oknie
+	%{query_descr}	opis stanu rozmówcy
+	%{query_ip}	IP rozmówcy
+	%{query_nickname}	tylko nickname rozmówcy z aktualnego okna
+	%{session}	identyfikator lub alias sesji
+	%{time}		aktualny czas w formatcie okre¶lonym przez statusbar_timestamp
+	%{typing}	informacja o wprowadzaniu tekstu przez rozmówcê
+	%{uin}		w³asny numer {XXX niezaimplementowane}
+	%{url}		adres do strony ekg
+	%{version}	wersja ekg
+	%{window}	numer aktualnego okna
+
+W oknie sesji IRC mo¿na dodatkowo uzyskaæ:
+	%{irctopic}	temat kana³u
+	%{irctopicby}	kto ustawi³ temat
+	%{ircmode}	tryb IRC
+
+
+Konstrukcje warunkowe pozwalaj± dodawaæ do pasku stanu teksty tylko,
+gdy spe³niony zostanie okre¶lony warunek. Konstrukcje te wygl±daj±
+nastêpuj±co:
+
+	%{?warunek tekst}	tekst wy¶wietlony przy spe³nionym warunku
+	%{?!warunek tekst}	tekst wy¶wietlony przy niespe³nionym warunku
+
+Warunkiem mo¿e byæ dostêpno¶æ którego¶ z wy¿ej wymienionych tekstów.
+Je¶li na przyk³ad w aktualnym oknie jest prowadzona rozmowa, warunek
+%{?query ...} bêdzie spe³niony. Je¶li nie skonfigurowali¶my w³asnego
+numeru, spe³niony bêdzie warunek %{?!uin ...}. ponadto wystêpuj± równie¿:
+
+	%{?away ...}		stan zajêty
+	%{?avail ...}		stan dostêpny
+	%{?notavail ...}	stan niedostêpny (niepo³±czony)
+	%{?invisible ...}	stan niewidoczny
+	%{?more ...}		dopisano co¶ do okna, gdy jest przewiniête
+	%{?query_away ...}	rozmówca zajêty
+	%{?query_avail ...}	rozmówca dostêpny
+	%{?query_notavail ...}	rozmówca niedostêpny
+	%{?query_invisible ...}	rozmówca niewidoczny
+
+Warunki mo¿na zagnie¿d¿aæ, tzn. %{?query %{!?query_descr ...}} zostanie
+wy¶wietlone, je¶li prowadzona jest rozmowa, ale rozmówca nie ma stanu
+opisowego.
+
+Dziêki temu mo¿na konstruowaæ kosmiczne paski stanu, ale i tak domy¶lny
+powinien wystarczyæ ka¿demu. Jest mo¿liwo¶æ rozszerzenia pasku stanu do
+maksymalnie 5-ciu linii. Kolejne linie s± opisane formatami ,,statusbar2'',
+,,statusbar3'' itd. Je¶li wystêpuje format ,,statusbar1'', ma on
+pierwszeñstwo przed ,,statusbar''.
+
+Mo¿liwe jest te¿ w³±czenie nag³ówka okna, tj. paska wy¶wietlanego u góry
+ekranu, nad oknami. jest on opisany formatami ,,header'', ,,header1'',
+,,header2'' itd., analogicznie do paska stanu. dostêpne formaty s± identyczne.
+
+Lista kontaktów, która jest dostêpna po prawej (zazwyczaj) stronie okna, 
+poprzez w³±czenie ncurses:contacts. Kontakty, które aktualnie do nas pisz±
+s± ustawiane jako mrugaj±ce (w zasadzie to element blink strutkury userlist_t).
+Ui-ncurses obs³ugujê to poprzez odczytanie stosownego theme'a i wy¶wietlenie 
+go w sposób prawid³owy.
+
+$Id$
