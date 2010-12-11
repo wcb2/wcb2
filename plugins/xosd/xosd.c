@@ -1,4 +1,4 @@
-/* $Id: xosd.c 4746 2008-12-21 11:34:07Z porridge $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2004-2005 Adam Kuczyñski <dredzik@ekg2.org>
