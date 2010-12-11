@@ -1,4 +1,4 @@
-/* $Id: main.h 4781 2009-02-11 15:58:29Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003-2004 Leszek Krupiñski <leafnode@wafel.com>

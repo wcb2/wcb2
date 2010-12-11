@@ -1,4 +1,4 @@
-/* $Id: main.c 4856 2009-07-25 15:02:53Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003-2005 Tomasz Torcz <zdzichu@irc.pl>
