@@ -1,4 +1,4 @@
-/* $Id: python.c 4884 2010-01-22 21:57:48Z darkjames $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2004-2005 Leszek Krupiñski <leafnode@pld-linux.org>

@@ -1,4 +1,4 @@
-/* $Id: python-session.h 4416 2008-08-17 12:31:17Z peres $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2004-2005 Leszek Krupiński <leafnode@pld-linux.org>

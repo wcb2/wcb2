@@ -1,4 +1,4 @@
-/* $Id: python-config.c 4633 2008-09-14 18:01:32Z darkjames $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2004-2005 Leszek Krupiñski <leafnode@pld-linux.org>
