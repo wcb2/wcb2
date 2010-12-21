@@ -1,4 +1,4 @@
-/* $Id: contacts.c 4746 2008-12-21 11:34:07Z porridge $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2002-2005 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -57,7 +57,7 @@ int contacts_group_index = 0;
 static int contacts_edge = WF_RIGHT;
 static int contacts_frame = WF_LEFT;
 #define CONTACTS_ORDER_DEFAULT "chavawxadninnounerowadmenevi"			/* if you modify it, please modify also CONTACTS_ORDER_DEFAULT_LEN */
-#define CONTACTS_ORDER_DEFAULT_LEN 28					/* CONTACTS_ORDER_DEFAULT_LEN == strlen(CONTACTS_ORDER_DEFAULT) */
+#define CONTACTS_ORDER_DEFAULT_LEN 28					                /* CONTACTS_ORDER_DEFAULT_LEN == strlen(CONTACTS_ORDER_DEFAULT) */
 static char contacts_order[32] = CONTACTS_ORDER_DEFAULT;
 static size_t corderlen	= CONTACTS_ORDER_DEFAULT_LEN;			/* it must be always equal xstrlen(contacts_order) XXX please note if you add somewhere code which modify contacts_order */
 

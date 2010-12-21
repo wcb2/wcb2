@@ -1,4 +1,4 @@
-/* $Id: bindings.c 4984 2010-09-11 22:58:30Z wiechu $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2002-2004 Wojtek Kaniewski <wojtekka@irc.pl>
@@ -190,9 +190,11 @@ static BINDING_FUNCTION(binding_backward_delete_char)
 
 static BINDING_FUNCTION(binding_window_kill)
 {
+	/* rfc2811: "Channels names are strings (beginning with a '&', '#', '+' or '!' character)..." */
+	const char *pfx = "&#+!";
 	char * ptr;
 	ptr = xstrstr(window_current->target, "irc:");
-	if (ptr && ptr == window_current->target && (ptr[4] == '!' || ptr[4] == '#') && !config_kill_irc_window ) {
+	if (ptr && ptr == window_current->target && xstrchr(pfx, ptr[4]) && !config_kill_irc_window ) {
 		print("cant_kill_irc_window");
 		return;
 	}
@@ -1268,6 +1270,7 @@ QUERY(ncurses_binding_default)
 void ncurses_binding_init()
 {
 	va_list dummy;
+
 	memset(ncurses_binding_map, 0, sizeof(ncurses_binding_map));
 	memset(ncurses_binding_map_meta, 0, sizeof(ncurses_binding_map_meta));
 

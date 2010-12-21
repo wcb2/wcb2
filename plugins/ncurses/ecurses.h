@@ -1,4 +1,4 @@
-/* $Id: ecurses.h 4867 2009-09-30 08:09:14Z darkjames $ */
+/* $Id$ */
 
 #ifndef __EKG_NCURSES_ECURSES_H
 #define __EKG_NCURSES_ECURSES_H

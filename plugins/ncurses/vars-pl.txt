@@ -186,4 +186,4 @@ statusbar_size
 	
 	okre¶la rozmiar paska stanu w liniach w zakresie od 1 do 5.
 
-$Id: vars-pl.txt 4651 2008-09-17 18:09:52Z darkjames $
+$Id$

@@ -1,4 +1,4 @@
-/* $Id: bindings.h 4637 2008-09-16 10:29:42Z darkjames $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>

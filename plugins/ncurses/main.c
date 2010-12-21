@@ -1,4 +1,4 @@
-/* $Id: main.c 4975 2010-08-21 12:43:53Z wiechu $ */
+/* $Id$ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>
