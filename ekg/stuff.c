@@ -665,15 +665,15 @@ DYNSTUFF_LIST_DECLARE(newconferences, newconference_t, newconference_free_item,
 	static __DYNSTUFF_LIST_REMOVE_SAFE,	/* newconferences_remove() */
 	__DYNSTUFF_LIST_DESTROY)		/* newconferences_destroy() */
 
-userlist_t *newconference_member_find(newconference_t *conf, const char *uid) {
+userlist_t *newconference_member_find(newconference_t *conf, const char *nickname) {
 	userlist_t *ul;
 
-	if (!conf || !uid) return NULL;
+	if (!conf || !nickname) return NULL;
 
 	for (ul = conf->participants; ul; ul = ul->next) {
 		userlist_t *u = ul;
 
-		if (!xstrcasecmp(u->uid, uid))
+		if (!xstrcasecmp(u->nickname, nickname))
 			return u;
 	}
 	return NULL;

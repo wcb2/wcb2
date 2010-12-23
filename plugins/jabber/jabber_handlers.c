@@ -1535,9 +1535,9 @@ JABBER_HANDLER(jabber_handle_presence) {
 						}
 					} else if (!xstrcmp(child->name, "item")) { /* lista userow */
 						char *jid	  = jabber_unescape(jabber_attr(child->atts, "jid"));		/* jid */
-						char *role	  = jabber_unescape(jabber_attr(child->atts, "role"));		/* ? */
-						char *affiliation = jabber_unescape(jabber_attr(child->atts, "affiliation"));	/* ? */
-						char *nickjid	  = NULL;
+						char *role	  = jabber_unescape(jabber_attr(child->atts, "role"));		/* role */
+						char *affiliation = jabber_unescape(jabber_attr(child->atts, "affiliation"));	/* afilliation */
+						char *nickname	  = NULL;
 
 						newconference_t *c;
 						userlist_t *ulist;
@@ -1548,18 +1548,21 @@ JABBER_HANDLER(jabber_handle_presence) {
 							break;
 						}
 
-						if (tmp) nickjid = xmpp_uid(tmp + 1);
-						else	 nickjid = xstrdup(uid);
+						if (tmp) nickname = xstrdup(tmp + 1);
+						else	 nickname = xstrdup(uid);
 
-						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickjid + 5, jid, mucuid+5, "");
+						if (!jid)   jid = xstrdup("xmpp: ");
+						else        jid = xmpp_uid(jid);
 
-						ulist = newconference_member_find(c, nickjid);
+						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid + 5, mucuid + 5, "");
+
+						ulist = newconference_member_find(c, nickname);
 						if (ulist && na) { 
 							newconference_member_remove(c, ulist); 
 							ulist = NULL; 
 						} else if (!ulist) {
-							ulist = newconference_member_add(c, uid, nickjid + 5);
-							print_info(mucuid, s, "muc_joined", session_name(s), nickjid + 5, jid, mucuid+5, "", role, affiliation);
+							ulist = newconference_member_add(c, jid, nickname);
+							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid + 5, mucuid + 5, "", role, affiliation);
 						}
 
 						if (ulist) {
@@ -1572,8 +1575,8 @@ JABBER_HANDLER(jabber_handle_presence) {
 							}
 						}
 						query_emit_id(NULL, USERLIST_REFRESH);
-						debug("[MUC, PRESENCE] NEWITEM: %s (%s) ROLE:%s AFF:%s\n", nickjid, __(jid), role, affiliation);
-						xfree(nickjid);
+						debug("[MUC, PRESENCE] NEWITEM: %s (%s) ROLE:%s AFF:%s\n", nickname, __(jid), role, affiliation);
+						xfree(nickname);
 						xfree(jid); xfree(role); xfree(affiliation);
 					} else {
 						debug_error("[MUC, PRESENCE] wtf? child->name: %s\n", child->name);
