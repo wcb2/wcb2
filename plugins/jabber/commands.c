@@ -570,6 +570,29 @@ static COMMAND(jabber_command_passwd)
 	return 0;
 }
 
+/* Syntax: /pm [conference] <nick> <message> */
+static COMMAND(jabber_muc_command_pm) 
+{
+	newconference_t *c;
+	
+	c = newconference_find(session, params[0]);
+	if (c && newconference_member_find(c,params[1]))
+	{
+		command_exec_format(NULL, session, 0, "/chat %s/%s %s", params[0], params[1], params[2]);
+		return 0;
+	}
+
+	c = newconference_find(session, window_current->target);
+	if (c && newconference_member_find(c, params[0]))
+	{
+		command_exec_format(NULL, session, 0, "/chat %s/%s %s", window_current->target, params[0], params[1]);
+		return 0;
+	}
+	
+	printq("generic_error", "No such user or conference");
+	return -1;
+}
+
 static COMMAND(jabber_command_auth) {
 	jabber_private_t *j = session->priv;
 
@@ -2584,6 +2607,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:op", "! !", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:pm", "!Cu !u ?", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:privacy", "? ? ?", jabber_command_privacy,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:private", "!p ! ?", jabber_command_private,	JABBER_FLAGS_REQ, 

@@ -244,6 +244,10 @@ part
 	parameters: <conference>
 	short description: leaves conference
 
+pm
+	parameters: [conference] <nick> <message>
+	short description: Sends a private message to a conference member
+
 reconnect
 	parameters: 
 	short description: disconnects and connects again
