@@ -1551,18 +1551,15 @@ JABBER_HANDLER(jabber_handle_presence) {
 						if (tmp) nickname = xstrdup(tmp + 1);
 						else	 nickname = xstrdup(uid);
 
-						if (!jid)   jid = xstrdup("xmpp: ");
-						else        jid = xmpp_uid(jid);
-
-						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid + 5, mucuid + 5, "");
+						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, "");
 
 						ulist = newconference_member_find(c, nickname);
 						if (ulist && na) { 
 							newconference_member_remove(c, ulist); 
 							ulist = NULL; 
 						} else if (!ulist) {
-							ulist = newconference_member_add(c, jid, nickname);
-							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid + 5, mucuid + 5, "", role, affiliation);
+							ulist = newconference_member_add(c, xmpp_uid(jid), nickname);
+							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
 						if (ulist) {
