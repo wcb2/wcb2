@@ -1547,6 +1547,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 							xfree(jid); xfree(role); xfree(affiliation);
 							break;
 						}
+
 						if (tmp) nickjid = xmpp_uid(tmp + 1);
 						else	 nickjid = xstrdup(uid);
 
@@ -1557,7 +1558,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 							newconference_member_remove(c, ulist); 
 							ulist = NULL; 
 						} else if (!ulist) {
-							ulist = newconference_member_add(c, nickjid, nickjid + 5);
+							ulist = newconference_member_add(c, uid, nickjid + 5);
 							print_info(mucuid, s, "muc_joined", session_name(s), nickjid + 5, jid, mucuid+5, "", role, affiliation);
 						}
 
