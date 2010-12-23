@@ -2581,7 +2581,7 @@ void jabber_register_commands()
 			"-a --accept -d --deny -r --request -c --cancel");
 	command_add(&jabber_plugin, "xmpp:away", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:back", "r", jabber_command_away,	JABBER_ONLY, NULL);
-	command_add(&jabber_plugin, "xmpp:ban", "! ? ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:ban", "!C ? ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:bookmark", "!p ?", jabber_command_private, JABBER_FLAGS_REQ,
 			"-a --add -c --clear -d --display -j --join -m --modify -r --remove");
 	command_add(&jabber_plugin, "xmpp:config", "!p", jabber_command_private,	JABBER_FLAGS_REQ,
@@ -2592,20 +2592,20 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:connect", NULL, jabber_command_connect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:conversations", NULL, jabber_command_conversations,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:del", "!u", jabber_command_del,	JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:deop", "! !", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:devoice", "! !", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:deop", "!C !u", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:devoice", "!C !u", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:disconnect", "r", jabber_command_disconnect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:dnd", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:ffc", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:find", "?", jabber_command_find, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:invisible", "r", jabber_command_away,		JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:join", "!C ? ?", jabber_muc_command_join, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:kick", "! ! ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:kick", "!C !u ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:lastseen", "!u", jabber_command_lastseen, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
-	command_add(&jabber_plugin, "xmpp:op", "! !", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:op", "!C !u", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:pm", "!Cu !u ?", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);
@@ -2617,17 +2617,17 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:reply", "! !", jabber_command_reply, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:search", "? ?", jabber_command_search, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:tmsg", "!uU ! !", jabber_command_msg, JABBER_FLAGS_TARGET, NULL); /* threaded msg */
-	command_add(&jabber_plugin, "xmpp:topic", "? ?", jabber_muc_command_topic, JABBER_FLAGS_REQ, NULL);
+	command_add(&jabber_plugin, "xmpp:topic", "?C ?", jabber_muc_command_topic, JABBER_FLAGS_REQ, NULL);
 	command_add(&jabber_plugin, "xmpp:transpinfo", "? ?", jabber_command_transpinfo, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:transports", "? ?", jabber_command_transports, JABBER_FLAGS, NULL);
-	command_add(&jabber_plugin, "xmpp:unban", "! ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:unban", "!C ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:unregister", "?", jabber_command_register, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:userinfo", "!u", jabber_command_userinfo, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:userlist", "! ?", jabber_command_userlist, JABBER_FLAGS_REQ,
 			"-g --get -p --put"); /* BFW: it is unlike GG, -g gets userlist from file, -p writes it into it */
 	command_add(&jabber_plugin, "xmpp:vacation", "?", jabber_command_vacation, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:ver", "!u", jabber_command_ver,	JABBER_FLAGS_TARGET, NULL); /* ??? ?? ? ?@?!#??#!@? */
-	command_add(&jabber_plugin, "xmpp:voice", "! !", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:voice", "!C !u", jabber_muc_command_role, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:xa", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:xml", "!", jabber_command_xml,	JABBER_ONLY, NULL);
 
