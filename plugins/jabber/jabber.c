@@ -1402,6 +1402,9 @@ static int jabber_theme_init() {
 
 	format_add("jabber_ctcp_request",		_("%> (%1) %T%2%n requested IQ %g%4%n"), 1);
 
+/* common errors */
+	format_add("jabber_general_error",	_("%! Error from %g%1%n: %R(%2) %r%3"), 1);
+
 #endif	/* !NO_DEFAULT_THEME */
 	return 0;
 }

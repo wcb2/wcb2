@@ -83,7 +83,9 @@ JABBER_HANDLER_ERROR(jabber_handle_iq_error_search) {
 
 JABBER_HANDLER_ERROR(jabber_handle_iq_error_generic) {
 	char *error = jabber_iq_error_string(n);
-	debug_error("jabber_handle_iq_error_generic() %s\n", __(error));
+	char *ecode = jabber_attr(n->atts, "code");
+
+	print("jabber_generic_error", from, ecode, error);
 	xfree(error);
 }
 
