@@ -28,6 +28,39 @@ admin
 	Example (make room persistent):
 	  /admin xmpp:test@conference.example.com --muc#roomconfig_persistentroom 1
 
+affiliation
+	parameters: <affiliation> [conference] <jid> [reason]
+	short decription: changes affiliation of target MUC user
+	
+	Possible values:
+	
+	
+	<affiliation>	
+	
+	* outcast
+	
+	* none
+	
+	* member
+	
+	* admin
+	
+	* owner
+	
+	
+	[conference]
+	
+	Any conference where you have enought permissions. You must be already connected to it.
+	
+	
+	
+	Tips and examples:
+	
+	
+	* To ban this stupid fat troll: /affiliation outcast mr.handy@xmpp.org "Too fat"
+	
+	* To retrieve list of banned\blocked or other users use /muc_list command.
+
 auth
 	parameters: <options> <JID> 
 	short description: authorization support
@@ -61,13 +94,6 @@ back
 	
 	If description wasn't given, random description will be looked for.
 	Giving ,,%T-%n'' instead of description will clear description.
-
-ban
-	parameters: <conference> <JID> [reason]
-	short description: Bans the specified JID from the given conference
-	
-	If no JID is specified, command lists all jids banned from given
-	conference. Otherwise it bans specified JID from the given conference.
 
 bookmark
 	parameters: <action> <options>
@@ -156,20 +182,6 @@ del
 	parameters: [name]
 	short description: removes user from roster
 
-deop
-	parameters: <conference> <nick>
-	short description: take all privileges off from the nick
-	
-	Take voice and moderator privilages off from the given nick on the
-	given conference.
-
-devoice
-	parameters: <conference> <nick> [reason]
-	short description: take all privileges off from the nick
-	
-	Take voice and moderator privilages off from the given nick on the
-	given conference.
-
 disconnect
 	parameters:  [description/-]
 	short description: roz³±cza siê od serwera
@@ -208,10 +220,6 @@ join
 	
 	Joins conference as nick. If conference does not exists, creates it.
 
-kick
-	parameters: <conference> <nick> [reason]
-	short description: kick nick off the conference
-
 lastseen
 	parameters: <jid> 
 	short description: retrieves information on last logout time for given jid
@@ -231,10 +239,6 @@ modify
 	Possible options:
 	
 	-n, --nickname <nickname>     contact nickname
-
-op
-	parameters: <conference> <nick>
-	short description: Gives moderator privileges to the specified nick
 
 passwd
 	parameters: 
@@ -270,6 +274,35 @@ reply
 	Reply-ID. Message can contain subject like in msg, but if not
 	specified, old one (prefixed by subject_reply_prefix) will be used.
 
+role
+	parameters: <role> [conference] <nick> [reason]
+	short decription: changes role of target MUC user
+	
+	Possible values:
+	
+	
+	<role>	
+	
+	* none
+	
+	* visitor
+	
+	* participant
+	
+	* moderator
+	
+	
+	[conference]
+	
+	Any conference where you have enought permissions. You must be already connected to it.
+	
+	
+	
+	Tips and examples:
+	
+	
+	* To only kick this stupid fat troll: /role none mr.handy "Next time i use /affiliation command, sucker!"
+
 tmsg
 	parameters: uid/nickname thread-id ...
 	short description: sends message with thread
@@ -287,10 +320,6 @@ transpinfo
 transports
 	parameters: <jid>
 	short description: shows list of transports at given server
-
-unban
-	parameters: <conference> <JID>
-	short description: unban given JID from the muc conference
 
 unregister
 	parameters:
