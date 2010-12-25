@@ -2256,21 +2256,17 @@ static COMMAND(jabber_muc_command_role)
 	const char *role;
 	char *reason;
 
-	if (c = newconference_find(session, window_current->target))
-	{
-		nick = params[1];
-		reason = jabber_escape(params[2]);
-	}
-	else
+	if (!(c = newconference_find(session, window_current->target)))
 	{
 		printq("generic_error", "This command valid only in MUC");
 		return 1;
 	}
 
+	nick = params[1];
+
 	if (!newconference_member_find(c, nick))
 	{
 		printq("generic_error", "No such user in conference");
-		xfree(reason);
 		return 1;
 	}
 
@@ -2282,15 +2278,19 @@ static COMMAND(jabber_muc_command_role)
 		role = "visitor";
 	else if (!xstrcmp(params[0], "none"))
 		role = "none";
-	else {
+	else 
+	{
 		printq("generic_error", "Read the damn xep, you motherfucker");
 		return -1;
 	}
 
-	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) {
+	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin")))
+	{
 		printq("generic_error", "Error in getting id for command, check debug window");
 		return 1;
 	}
+	
+	reason = jabber_escape(params[2]);
 
 	watch_write(j->send_watch,
 		"<iq id=\"%s\" to=\"%s\" type=\"set\">"
@@ -2310,17 +2310,12 @@ static COMMAND(jabber_muc_command_affiliation)
 {	
 	jabber_private_t *j = session_private_get(session);
 	newconference_t *c;
+	userlist_t *u;
 		
-	const char *affiliation;
-	const char *id, *jid;
-	char *reason;
+	const char *affiliation, *id;
+	char *reason, *jid;
 
-	if (c = newconference_find(session, window_current->target))
-	{
-		jid = params[1];
-		reason = jabber_escape(params[2]);
-	}
-	else
+	if (!(c = newconference_find(session, window_current->target)))
 	{
 		printq("generic_error", "This command valid only in MUC");
 		return 1;
@@ -2336,18 +2331,27 @@ static COMMAND(jabber_muc_command_affiliation)
 		affiliation = "admin";
 	else if (!xstrcmp(params[0], "owner"))
 		affiliation = "owner";
-	else {
+	else 
+	{
 		printq("generic_error", "Read the damn xep you motherfucker");
 		return -1;
 	}
 
-	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) {
+	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) 
+	{
 		printq("generic_error", "Error in getting id for command, check debug window");
 		return 1;
 	}
 
+	if (u = newconference_member_find(c, params[1]))
+		jid = xstrdup(u->uid);
+	else
+		jid = xstrdup(params[1]);
+
 	if (!xstrncmp(jid, "xmpp:", 5))
 		jid += 5;
+
+	reason = jabber_unescape(params[2]);
 
 	watch_write(j->send_watch,
 		"<iq id=\"%s\" to=\"%s\" type=\"set\">"

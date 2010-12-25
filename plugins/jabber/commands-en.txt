@@ -29,7 +29,7 @@ admin
 	  /admin xmpp:test@conference.example.com --muc#roomconfig_persistentroom 1
 
 affiliation
-	parameters: <affiliation> <jid> [reason]
+	parameters: <affiliation> <jid/nick> [reason]
 	short decription: changes affiliation of target MUC user
 	
 	Possible values:
@@ -52,7 +52,7 @@ affiliation
 	Tips and examples:
 	
 	
-	* To ban this stupid fat troll: /affiliation outcast mr.handy@xmpp.org "Too fat"
+	* To ban this stupid fat troll: /affiliation outcast mr.handy "Too fat" (or /affiliation outcast mr.handy@jabber.org "Too fat")
 	
 	* To retrieve list of banned\owners\whatever use muc_list command.
 
