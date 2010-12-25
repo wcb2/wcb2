@@ -1228,8 +1228,8 @@ static int jabber_theme_init() {
 	format_add("jabber_muc_room_created", 
 		_("%> Room %W%2%n created, now to configure it: type %W/admin %g%2%n to get configuration form, or type %W/admin %g%2%n --instant to create instant one"), 1);
 	format_add("jabber_muc_list_title",	"%g,+=%G-------- MUC %1s list", 1);
-	format_add("jabber_muc_list_affil", "%g|| %c%3 %m%5", 1);	                          /* %1 - sessions  %2 - from %3 - jid %4 - aff %5 - reason                       */
-	format_add("jabber_muc_list_role",  "%g|| %W%4          %c%3 %m%7", 1);	                  /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role %7 - reason */
+	format_add("jabber_muc_list_affil", "%g|| %c%3 %m%5", 1);	                /* %1 - sessions  %2 - from %3 - jid %4 - aff %5 - reason           */
+	format_add("jabber_muc_list_role",  "%g|| %y%4 %m%3", 1);	                /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
 	format_add("jabber_muc_list_end",   "%g`+=%G-------- End of the list", 1);
 #if 0
 	format_add("jabber_send_chan", _("%B<%W%2%B>%n %5"), 1);
