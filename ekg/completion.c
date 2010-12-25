@@ -40,9 +40,6 @@
 #include "vars.h"
 #include "xmalloc.h"
 
-/* nadpisujemy funkcjê xstrncasecmp() odpowiednikiem z obs³ug± polskich znaków */
-#define xstrncasecmp(x...) xstrncasecmp_pl(x)
-
 char **ekg2_completions = NULL;
 static char **completions = NULL;	/* lista dope³nieñ */
 static char *last_line = NULL;
