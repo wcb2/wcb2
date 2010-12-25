@@ -572,20 +572,13 @@ static COMMAND(jabber_command_passwd)
 
 /* This function sends private messages in MUC
  *	
- *  Syntax: /pm [conference] <nick> <message>
+ *  Syntax: /pm <nick> <message>
  *
  */
 static COMMAND(jabber_muc_command_pm) 
 {
 	newconference_t *c;
 	
-	c = newconference_find(session, params[0]);
-	if (c && newconference_member_find(c,params[1]))
-	{
-		command_exec_format(NULL, session, 0, "/chat %s/%s %s", params[0], params[1], params[2]);
-		return 0;
-	}
-
 	c = newconference_find(session, window_current->target);
 	if (c && newconference_member_find(c, params[0]))
 	{
@@ -2251,7 +2244,7 @@ static COMMAND(jabber_muc_command_admin) {
 
 /* This function handles commands related to user roles:
  *	
- *  Syntax: /role <role> [conference] <nick> [reason]
+ *  Syntax: /role <role> <nick> [reason]
  *
  */
 static COMMAND(jabber_muc_command_role) 
@@ -2263,19 +2256,14 @@ static COMMAND(jabber_muc_command_role)
 	const char *role;
 	char *reason;
 
-	if (c = newconference_find(session, params[1]))
-	{
-		nick = params[2];
-		reason = jabber_escape(params[3]);
-	}
-	else if (c = newconference_find(session, window_current->target))
+	if (c = newconference_find(session, window_current->target))
 	{
 		nick = params[1];
 		reason = jabber_escape(params[2]);
 	}
 	else
 	{
-		printq("generic_error", "Cannot find this conference. Make shure you have connected to it");
+		printq("generic_error", "This command valid only in MUC");
 		return 1;
 	}
 
@@ -2315,72 +2303,57 @@ static COMMAND(jabber_muc_command_role)
 
 /*  This function handles commands related to affiliation. 
  *	
- *  Syntax: /affiliation <affiliation> [conference] <jid> [reason]
+ *  Syntax: /affiliation <affiliation> <jid> [reason]
  *
  */
 static COMMAND(jabber_muc_command_affiliation) 
 {	
 	jabber_private_t *j = session_private_get(session);
 	newconference_t *c;
-/*
-		const char *id;
+		
+	const char *affiliation;
+	const char *id, *jid;
+	char *reason;
 
-		if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) {
-			printq("generic_error", "Error in getting id for banlist request, check debug window");
-			return 1;
-		}
+	if (c = newconference_find(session, window_current->target))
+	{
+		jid = params[1];
+		reason = jabber_escape(params[2]);
+	}
+	else
+	{
+		printq("generic_error", "This command valid only in MUC");
+		return 1;
+	}
 
-		watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type=\"get\"><query xmlns=\"http://jabber.org/protocol/muc#admin\"><item affiliation=\"outcast\"/></query></iq>",
-			id, c->name+5);
-*/
-		const char *affiliation;
-		const char *id, *jid;
-		char *reason;
+	if (!xstrcmp(params[0], "outcast"))
+		affiliation = "outcast";
+	else if (!xstrcmp(params[0], "none"))
+		affiliation = "none";
+	else if (!xstrcmp(params[0], "member"))
+		affiliation = "member";
+	else if (!xstrcmp(params[0], "admin"))
+		affiliation = "admin";
+	else if (!xstrcmp(params[0], "owner"))
+		affiliation = "owner";
+	else {
+		printq("generic_error", "Read the damn xep you motherfucker");
+		return -1;
+	}
 
-		if (c = newconference_find(session, params[1]))
-		{
-			jid = params[2];
-			reason = jabber_escape(params[3]);
-		}
-		else if (c = newconference_find(session, window_current->target))
-		{
-			jid = params[1];
-			reason = jabber_escape(params[2]);
-		}
-		else
-		{
-			printq("generic_error", "Cannot find this conference. Make shure you have connected to it");
-			return 1;
-		}
+	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) {
+		printq("generic_error", "Error in getting id for command, check debug window");
+		return 1;
+	}
 
-		if (!xstrcmp(params[0], "outcast"))
-			affiliation = "outcast";
-		else if (!xstrcmp(params[0], "none"))
-			affiliation = "none";
-		else if (!xstrcmp(params[0], "member"))
-			affiliation = "member";
-		else if (!xstrcmp(params[0], "admin"))
-			affiliation = "admin";
-		else if (!xstrcmp(params[0], "owner"))
-			affiliation = "owner";
-		else {
-			printq("generic_error", "Read the damn xep, you motherfucker");
-			return -1;
-		}
+	if (!xstrncmp(jid, "xmpp:", 5))
+		jid += 5;
 
-		if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin"))) {
-			printq("generic_error", "Error in getting id for command, check debug window");
-			return 1;
-		}
-
-		if (!xstrncmp(jid, "xmpp:", 5))
-			jid += 5;
-
-		watch_write(j->send_watch,
-			"<iq id=\"%s\" to=\"%s\" type=\"set\">"
-			"<query xmlns=\"http://jabber.org/protocol/muc#admin\"><item affiliation=\"%s\" jid=\"%s\"><reason>%s</reason></item></query>"
-			"</iq>", id, c->name+5, affiliation, jid, reason ? reason : "");
-		xfree(reason);
+	watch_write(j->send_watch,
+		"<iq id=\"%s\" to=\"%s\" type=\"set\">"
+		"<query xmlns=\"http://jabber.org/protocol/muc#admin\"><item affiliation=\"%s\" jid=\"%s\"><reason>%s</reason></item></query>"
+		"</iq>", id, c->name+5, affiliation, jid, reason ? reason : "");
+	xfree(reason);
 
 	return 0;
 }
@@ -2631,7 +2604,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:_stanzas", "?", jabber_command_stanzas, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:add", "U ?", jabber_command_modify,	JABBER_FLAGS, NULL); 
 	command_add(&jabber_plugin, "xmpp:admin", "!C ?", jabber_muc_command_admin, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:affiliation", "!p !Cu ?u ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, "outcast none member admin owner");
+	command_add(&jabber_plugin, "xmpp:affiliation", "!p !u ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, "outcast none member admin owner");
 	command_add(&jabber_plugin, "xmpp:auth", "!p uU", jabber_command_auth,	JABBER_FLAGS_REQ,
 			"-a --accept -d --deny -r --request -c --cancel");
 	command_add(&jabber_plugin, "xmpp:away", "r", jabber_command_away,	JABBER_ONLY, NULL);
@@ -2659,7 +2632,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
 	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:pm", "!Cu !u ?", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
+	command_add(&jabber_plugin, "xmpp:pm", "!u !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:privacy", "? ? ?", jabber_command_privacy,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:private", "!p ! ?", jabber_command_private,	JABBER_FLAGS_REQ, 
@@ -2667,7 +2640,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:reconnect", NULL, jabber_command_reconnect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:register", "? ?", jabber_command_register, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:reply", "! !", jabber_command_reply, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:role", "!p !Cu ?u ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, "none visitor participant moderator");
+	command_add(&jabber_plugin, "xmpp:role", "!p !u ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, "none visitor participant moderator");
 	command_add(&jabber_plugin, "xmpp:search", "? ?", jabber_command_search, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:tmsg", "!uU ! !", jabber_command_msg, JABBER_FLAGS_TARGET, NULL); /* threaded msg */
 	command_add(&jabber_plugin, "xmpp:topic", "?C ?", jabber_muc_command_topic, JABBER_FLAGS_REQ, NULL);
