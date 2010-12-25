@@ -1227,7 +1227,9 @@ static int jabber_theme_init() {
 
 	format_add("jabber_muc_room_created", 
 		_("%> Room %W%2%n created, now to configure it: type %W/admin %g%2%n to get configuration form, or type %W/admin %g%2%n --instant to create instant one"), 1);
-	format_add("jabber_muc_banlist", _("%g|| %n %5 - %W%2%n: ban %c%3%n [%4]"), 1);	/* %1 sesja %2 kanal %3 kto %4 reason %5 numerek */
+	format_add("jabber_muc_list_title",		  "%g,+=%G-------- MUC %1s list", 1);
+	format_add("jabber_muc_list", _("%g|| %n %6 - %W%2%n: [ %g%4 %n] %c%3%n [%5]"), 1);	/* %1 - sessions  %2 - from %3 - jid %4 - affil %5 - reason %6 - counter */
+	format_add("jabber_muc_list_end",		  "%g`+=%G-------- End of the list", 1);
 #if 0
 	format_add("jabber_send_chan", _("%B<%W%2%B>%n %5"), 1);
 	format_add("jabber_send_chan_n", _("%B<%W%2%B>%n %5"), 1);
@@ -1403,7 +1405,7 @@ static int jabber_theme_init() {
 	format_add("jabber_ctcp_request",		_("%> (%1) %T%2%n requested IQ %g%4%n"), 1);
 
 /* common errors */
-	format_add("jabber_general_error",	_("%! Error from %g%1%n: %R(%2) %r%3"), 1);
+	format_add("jabber_generic_error",	_("%! Error from %g%1%n: %R(%2) %r%3"), 1);
 
 #endif	/* !NO_DEFAULT_THEME */
 	return 0;

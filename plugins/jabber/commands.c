@@ -570,7 +570,11 @@ static COMMAND(jabber_command_passwd)
 	return 0;
 }
 
-/* Syntax: /pm [conference] <nick> <message> */
+/* This function sends private messages in MUC
+ *	
+ *  Syntax: /pm [conference] <nick> <message>
+ *
+ */
 static COMMAND(jabber_muc_command_pm) 
 {
 	newconference_t *c;
@@ -590,7 +594,42 @@ static COMMAND(jabber_muc_command_pm)
 	}
 	
 	printq("generic_error", "No such user or conference");
-	return -1;
+	return 1;
+}
+
+/* This function retrieves 
+ *	
+ *  Syntax: /muc_list <affiliation\role> <list>
+ *
+ */
+static COMMAND(jabber_muc_command_muc_list) 
+{
+	jabber_private_t *j = session->priv;
+	newconference_t *c;
+	const char *id;
+	char *type;
+	char *list;
+
+	if (c = newconference_find(session, window_current->target))
+	{
+		type = xstrdup(params[0]);	
+		list = xstrdup(params[1]);	
+	} 
+	else
+	{
+		printq("generic_error", "This command valid only in MUC");
+		return 1;
+	}
+	
+	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin")))
+		printq("generic_error", "Error in getting id for list request, check debug window");
+	else	
+		watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type=\"get\"><query xmlns=\"http://jabber.org/protocol/muc#admin\"><item %s=\"%s\"/></query></iq>", id, c->name + 5, type, list);
+
+	xfree(type);
+	xfree(list);
+
+	return 0;
 }
 
 static COMMAND(jabber_command_auth) {
@@ -2618,6 +2657,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
+	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
 	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:pm", "!Cu !u ?", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);

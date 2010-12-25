@@ -953,14 +953,19 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_muc_admin) {
 	for (node = n->children; node; node = node->next) {
 		if (!xstrcmp(node->name, "item")) {
 			char *jid		= jabber_attr(node->atts, "jid");
-//			char *aff		= jabber_attr(node->atts, "affiliation");
+			char *aff		= jabber_attr(node->atts, "affiliation");
+			char *role		= jabber_attr(node->atts, "role");
 			xmlnode_t *reason	= xmlnode_find_child(node, "reason");
 			char *rsn		= reason ? jabber_unescape(reason->data) : NULL;
-
-			print("jabber_muc_banlist", session_name(s), from, jid, rsn ? rsn : "", itoa(++count));
+			
+			if (count == 0) print("jabber_muc_list_title", role ? role : aff);
+				print("jabber_muc_list", session_name(s), from, jid, aff, rsn ? rsn : "", itoa(++count));
+			if (!node) print("jabber_muc_list_end");
 			xfree(rsn);
 		}
 	}
+	
+	print("jabber_muc_list_end");
 }
 
 JABBER_HANDLER_SET(jabber_handle_iq_set_new_mail) {
