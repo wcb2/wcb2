@@ -930,48 +930,69 @@ static COMMAND(jabber_command_del) {
 	return 0;
 }
 
-/*
- * Warning! This command is kinda special:
- * it needs destination uid, so destination must be in our userlist.
- * It won't work for unknown JIDs.
- * When implementing new command don't use jabber_command_ver as template.
+/*  This function retrieves information about client/os/etc from a buddy. 
+ *	
+ *  Syntax: /ver <jid/nick>
+ *
  */
-
 static COMMAND(jabber_command_ver)
 {
-	const char *uid;
-	userlist_t *ut;
-	ekg_resource_t *rl;
-	int once = 0;
+	jabber_private_t *j = session_private_get(session);
+	userlist_t *u;
+	newconference_t *c;
+	ekg_resource_t *res;
+	char *uid, *to;
+	int error = 0;
 
-	if (!(uid = jid_target2uid(session, target, quiet)))
-		return -1;
-
-	if (!(ut = userlist_find(session, uid))) {
-		print("user_not_found", target);
-		return -1;
+	c = newconference_find(session, window_current->target);
+	
+	if (c && (u = newconference_member_find(c, params[0])))
+	{	
+		uid = saprintf("%s/%s", c->name + 5, u->nickname);
+	} 
+	else if (u = userlist_find_u(&session->userlist, params[0]))
+	{
+		uid = xstrdup(u->uid + 5);	
 	}
-	if (ut->status <= EKG_STATUS_NA) {
-		print("jabber_status_notavail", session_name(session), ut->uid);
-		return -1;
+	else
+	{
+		if (!xstrncmp("xmpp:", params[0], 5))
+			uid = xstrdup(params[0] + 5);
+		else
+			uid = xstrdup(params[0]);
 	}
 
-	if (!ut->resources) {
-		print("jabber_unknown_resource", session_name(session), target);
-		return -1;
+	if (u && u->status == EKG_STATUS_NA) 
+	{
+		print("jabber_status_notavail", session_name(session), u->uid);
+		error = 1;
 	}
-
-	for (rl = ut->resources; rl; rl = rl->next) {	/* send query to each resource */
-		ekg_resource_t *r = rl;
-
-		char *to = saprintf("%s/%s", uid + 5, r->name);
-
-		if (!jabber_iq_send(session, "versionreq_", JABBER_IQ_TYPE_GET, to, "query", "jabber:iq:version") && !once) {
-			printq("generic_error", "Error while sending jabber:iq:version request, check debug window");
-			once = 1;
+	else
+	{
+		if ((!u || c && !(u->resources)))
+		{
+			if (!jabber_iq_send(session, "versionreq_", JABBER_IQ_TYPE_GET, uid, "query", "jabber:iq:version")) 
+			{
+				printq("generic_error", "Error while sending jabber:iq:version request, check debug window");
+				error = 1;
+			}
 		}
+		else
+			for (res = u->resources; res; res = res->next)
+			{
+				to = saprintf("%s/%s", uid, res->name);
+
+				if (!jabber_iq_send(session, "versionreq_", JABBER_IQ_TYPE_GET, to, "query", "jabber:iq:version")) 
+					printq("generic_error", "Error while sending jabber:iq:version request, check debug window");
+				
+				xfree(to);
+			}
 	}
-	return 0;
+
+	xfree(uid);
+
+	if  (error) return -1;
+	else        return  0;
 }
 
 static COMMAND(jabber_command_userinfo) {
@@ -2630,7 +2651,6 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:invisible", "r", jabber_command_away,		JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:join", "!C ? ?", jabber_muc_command_join, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:lastseen", "!u", jabber_command_lastseen, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:member", "!C ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
@@ -2655,7 +2675,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:userlist", "! ?", jabber_command_userlist, JABBER_FLAGS_REQ,
 			"-g --get -p --put"); /* BFW: it is unlike GG, -g gets userlist from file, -p writes it into it */
 	command_add(&jabber_plugin, "xmpp:vacation", "?", jabber_command_vacation, JABBER_FLAGS, NULL);
-	command_add(&jabber_plugin, "xmpp:ver", "!u", jabber_command_ver,	JABBER_FLAGS_TARGET, NULL); /* ??? ?? ? ?@?!#??#!@? */
+	command_add(&jabber_plugin, "xmpp:ver", "!u", jabber_command_ver,	JABBER_FLAGS_TARGET, NULL); 
 	command_add(&jabber_plugin, "xmpp:xa", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:xml", "!", jabber_command_xml,	JABBER_ONLY, NULL);
 

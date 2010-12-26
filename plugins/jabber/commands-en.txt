@@ -381,8 +381,8 @@ vacation
 	short description: function is not implemented yet
 
 ver
-	parameters: 
-	short description: retrieves information about OS and client of given jid
+	parameters: <uid/nick> 
+	short description: retrieves information about OS and client of given uid/nick
 
 voice
 	parameters: <conference> <nick>
