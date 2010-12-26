@@ -84,7 +84,7 @@ default_nickname
 	type: string
 	default value: none
 	
-	This variable will be your nickname in MUC, if you won't specify another nick. 
+	This variable will be your nickname in MUC if you won't specify another nick 
 
 display_ctcp
 	type: bool

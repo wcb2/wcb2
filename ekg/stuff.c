@@ -673,7 +673,7 @@ userlist_t *newconference_member_find(newconference_t *conf, const char *nicknam
 	for (ul = conf->participants; ul; ul = ul->next) {
 		userlist_t *u = ul;
 
-		if (!xstrcasecmp(u->nickname, nickname))
+		if (!xstrcmp(u->nickname, nickname))
 			return u;
 	}
 	return NULL;
