@@ -937,7 +937,6 @@ static COMMAND(jabber_command_del) {
  */
 static COMMAND(jabber_command_ver)
 {
-	jabber_private_t *j = session_private_get(session);
 	userlist_t *u;
 	newconference_t *c;
 	ekg_resource_t *res;
@@ -969,7 +968,7 @@ static COMMAND(jabber_command_ver)
 	}
 	else
 	{
-		if ((!u || c && !(u->resources)))
+		if ((!u || (c && !(u->resources))))
 		{
 			if (!jabber_iq_send(session, "versionreq_", JABBER_IQ_TYPE_GET, uid, "query", "jabber:iq:version")) 
 			{
@@ -2134,7 +2133,6 @@ static COMMAND(jabber_command_vacation) { /* JEP-0109: Vacation Messages (DEFERR
  * @param params [2] (<b>password</b>)
  *
  * @todo make (session) variable jabber:default_muc && then if exists and params[0] has not specific server than append '@' jabber:default_muc and use it.
- * @todo make (session) variable jabber:default_nickname.
  * @todo history requesting, without history requesting.. etc
  */
 
@@ -2142,8 +2140,10 @@ static COMMAND(jabber_muc_command_join) {
 	jabber_private_t *j = session_private_get(session);
 	newconference_t *conf;
 
+	const char *default_nickname = session_get(session, "default_nickname");
+
 	char *tmp;
-	char *username = (params[1]) ? xstrdup(params[1]) : (tmp = xstrchr(session->uid, '@')) ? xstrndup(session->uid+5, tmp-session->uid-5) : NULL;
+	char *username = (params[1]) ? xstrdup(params[1]) : default_nickname ? xstrdup(default_nickname) : (tmp = xstrchr(session->uid, '@')) ? xstrndup(session->uid+5, tmp-session->uid-5) : NULL;
 	char *password = (params[1] && params[2]) ? saprintf("<password>%s</password>", params[2]) : NULL;
 
 	char *mucuid;

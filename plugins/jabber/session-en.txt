@@ -80,6 +80,12 @@ auto_find
 	
 	   >0 - finds out every vcard of every person, who sends us a message
 
+default_nickname
+	type: string
+	default value: none
+	
+	This variable will be your nickname in MUC, if you won't specify another nick. 
+
 display_ctcp
 	type: bool
 	default value: 0
