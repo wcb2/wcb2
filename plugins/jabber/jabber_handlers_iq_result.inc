@@ -346,14 +346,13 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_private) {
 					book->priv_data.conf->autojoin	= !xstrcmp(jabber_attr(child->atts, "autojoin"), "true");
 
 					book->priv_data.conf->nick	= jabber_unescape( (temp = xmlnode_find_child(child, "nick")) ? temp->data : NULL);
-					book->priv_data.conf->pass        = jabber_unescape( (temp = xmlnode_find_child(child, "password")) ? temp->data : NULL);
+					book->priv_data.conf->pass  = jabber_unescape( (temp = xmlnode_find_child(child, "password")) ? temp->data : NULL);
 
 					printq("jabber_bookmark_conf", session_name(s), book->priv_data.conf->name, book->priv_data.conf->jid,
 							book->priv_data.conf->autojoin ? "X" : " ", book->priv_data.conf->nick, book->priv_data.conf->pass);
-                    
-					if (!xstrcmp(ns, "storage:bookmarks") && !xstrncmp(id, "config", 6)) /* If it's not --get - don't connect */
-						if (book->priv_data.conf->autojoin)
-							command_exec_format(NULL, s, 2, "/join %s \"%s\" \"%s\"", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
+
+					if (!xstrcmp(ns, "storage:bookmarks") && !xstrncmp(id, "config", 6) && book->priv_data.conf->autojoin && j->bm_join)
+						command_exec_params(NULL, s, 2, "/xmpp:join", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
 
 				} else if (!xstrcmp(child->name, "url")) {
 					book->type	= JABBER_BOOKMARK_URL;
@@ -381,6 +380,7 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_private) {
 		else 			printq("jabber_private_list_empty", session_name(s), lname, ns);
 		xfree(lname);
 	}
+	if (j->bm_join) j->bm_join = 0;
 }
 
 JABBER_HANDLER_RESULT(jabber_handle_gmail_result_mailbox) {

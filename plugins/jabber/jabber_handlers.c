@@ -1697,6 +1697,7 @@ static void jabber_session_connected(session_t *s) {
 	jabber_private_t *j = jabber_private(s);
 
 	s->connecting = 0;
+	j->bm_join = 1;
 
 	protocol_connected_emit(s);
 

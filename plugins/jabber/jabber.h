@@ -148,6 +148,7 @@ typedef struct {
 #endif
 #endif
 	int id;				/**< queries ID */
+	int bm_join;            /**< for auto_join */
 	XML_Parser parser;		/**< expat instance */
 	char *server;			/**< server name */
 	uint16_t port;			/**< server's port number */

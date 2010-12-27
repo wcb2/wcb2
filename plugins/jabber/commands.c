@@ -1585,7 +1585,7 @@ static COMMAND(jabber_command_private) {
 	else			namespace = (char *) params[1];
 
 	if (bookmark) {				/* bookmark-only-commands */
-		int bookmark_sync	= 0;			/* 0 - no sync; 1 - sync (item added); 2 - sync (item modified) 3 - sync (item removed)	*/
+		int bookmark_sync	= 0;			/* -2 - do not sync (errors during action) -1 - error 0 - no sync; 1 - sync (item added); 2 - sync (item modified) 3 - sync (item removed)	*/
 	
 		if (match_arg(params[0], 'a', ("add"), 2))	bookmark_sync = 1;	/* add item */
 		if (match_arg(params[0], 'm', ("modify"), 2))	bookmark_sync = 2;	/* modify item */
@@ -1601,7 +1601,7 @@ static COMMAND(jabber_command_private) {
 			{
 				if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->name,params[1]))
 				{
-					command_exec_format(NULL, session, 2, "/join %s \"%s\" \"%s\"", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
+					command_exec_params(NULL, session, 2, "/join", book->priv_data.conf->jid, book->priv_data.conf->nick, book->priv_data.conf->pass);
 					return 0;
 				}
 
