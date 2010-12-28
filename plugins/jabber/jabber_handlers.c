@@ -1420,13 +1420,15 @@ static inline int jabber_status_int(int tlen, const char *text) {
 }
 
 static status_t role_and_affiliation_to_ekg2_status(char *role, char * affiliation) {
-	if(!xstrcmp(role, "moderator"))
-		return xstrcmp(affiliation, "owner") ? EKG_STATUS_ADMIN : EKG_STATUS_OWNER;
-	else if (!xstrcmp(role,"participant"))
-		return xstrcmp(affiliation, "member") ? EKG_STATUS_NONE : EKG_STATUS_MEMBER;
+	if(!xstrcmp(affiliation, "owner"))
+		return EKG_STATUS_OWNER;
+	else if(!xstrcmp(affiliation, "admin"))
+		return EKG_STATUS_ADMIN;
+	else if(!xstrcmp(affiliation, "member"))
+		return EKG_STATUS_MEMBER;
 	else if (!xstrcmp(role, "visitor"))
 		return EKG_STATUS_VISITOR;
-	else /* none */
+	else 
 		return EKG_STATUS_NONE;
 }
 									    
