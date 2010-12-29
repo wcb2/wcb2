@@ -2593,7 +2593,7 @@ size_t strlen_pl(const char *s) {
 	}
 	return count;
 #else
-	return xstrlne(s);
+	return xstrlen(s);
 #endif
 }
 
