@@ -13,6 +13,7 @@ Makefile.in
 README.new
 TAGS
 tags
+take_patch
 aclocal.m4
 autom4te.cache
 compile
