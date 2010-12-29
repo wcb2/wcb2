@@ -30,7 +30,7 @@ admin
 
 affiliation
 	parameters: <affiliation> <jid/nick> [reason]
-	short decription: changes affiliation of target MUC user
+	short description: changes affiliation of target MUC user
 	
 	Possible values:
 	
@@ -255,8 +255,6 @@ muc_list
 	
 		* outcast
 	
-		* none
-	
 		* member
 	
 		* admin
@@ -265,8 +263,6 @@ muc_list
 	
 	
 	-> role:
-	
-		* none
 	
 		* visitor
 	
@@ -310,7 +306,7 @@ reply
 
 role
 	parameters: <role> <nick> [reason]
-	short decription: changes role of target MUC user
+	short description: changes role of target MUC user
 	
 	Possible values:
 	
