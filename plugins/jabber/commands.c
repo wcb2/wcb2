@@ -590,7 +590,7 @@ static COMMAND(jabber_muc_command_pm)
 	return 1;
 }
 
-/* This function retrieves 
+/* This function retrieves lists from MUC 
  *	
  *  Syntax: /muc_list <affiliation\role> <list>
  *
@@ -610,7 +610,7 @@ static COMMAND(jabber_muc_command_muc_list)
 	} 
 	else
 	{
-		printq("generic_error", "This command valid only in MUC");
+		printq("generic_error", "/xmpp:muc_list only valid in MUC");
 		return 1;
 	}
 	
@@ -622,6 +622,44 @@ static COMMAND(jabber_muc_command_muc_list)
 	xfree(type);
 	xfree(list);
 
+	return 0;
+}
+
+/* This function changes nick in MUC 
+ *	
+ *  Syntax: /nick [conference] <new_nick>
+ *
+ */
+static COMMAND(jabber_muc_command_nick) {
+	jabber_private_t *j = session_private_get(session);
+	newconference_t *c;
+	const char *nickname;
+	const char *conference;
+	char *conference_uid;
+
+	if (params[1]) {
+		conference = params[0];
+		nickname = params[1];
+	} else {
+		conference = window_current->target;
+		nickname = params[0];
+	}
+
+	if (!xstrncmp(conference, "xmpp:", 5)) { 
+		conference += 5;
+	}
+
+	conference_uid = xmpp_uid(conference);
+
+	if (!(c = newconference_find(session, conference_uid))) {
+		printq("generic_error", "/xmpp:nick only valid in MUC");
+		return -1;
+	}
+
+	char *tmp = jabber_escape(nickname);
+	watch_write(j->send_watch, "<presence to=\"%s/%s\"/>", conference, tmp);
+	xfree(tmp);
+	xfree(conference_uid);
 	return 0;
 }
 
@@ -2293,7 +2331,7 @@ static COMMAND(jabber_muc_command_role)
 
 	if (!(c = newconference_find(session, window_current->target)))
 	{
-		printq("generic_error", "This command valid only in MUC");
+		printq("generic_error", "/xmpp:role only valid in MUC");
 		return 1;
 	}
 
@@ -2352,7 +2390,7 @@ static COMMAND(jabber_muc_command_affiliation)
 
 	if (!(c = newconference_find(session, window_current->target)))
 	{
-		printq("generic_error", "This command valid only in MUC");
+		printq("generic_error", "/xmpp:affiliation only valid in MUC");
 		return 1;
 	}
 
@@ -2669,6 +2707,7 @@ void jabber_register_commands()
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
+	command_add(&jabber_plugin, "xmpp:nick", "!C ?", jabber_muc_command_nick,	JABBER_FLAGS_REQ, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:pm", "!u !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);
