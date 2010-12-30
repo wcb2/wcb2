@@ -994,18 +994,32 @@ static COMMAND(jabber_command_ver)
 	else        return  0;
 }
 
-static COMMAND(jabber_command_userinfo) {
+static COMMAND(jabber_command_userinfo) 
+{
 	const char *uid;
+	newconference_t *c;
+	userlist_t *u;
 
-	/* jabber id: [user@]host[/resource] */
-	if (!(uid = jid_target2uid(session, target, quiet)))
-		return -1;
-	
-	if (!jabber_iq_send(session, "vcardreq_", JABBER_IQ_TYPE_GET, uid + 5, "vCard", "vcard-temp")) {
-		printq("generic_error", "Error while sending vCard request, check debug window");
-		return 1;
+	c = newconference_find(session, window_current->target);		
+
+	if (c && (u = newconference_member_find(c, target)))
+	{
+		uid = saprintf("%s/%s", c->name, u->nickname);
+	}
+	else if (!(uid = xstrdup(jid_target2uid(session, target, 1)))) 
+	{
+		printq("generic_error", "User not found");
+		return 1;			
 	}
 	
+	if (!jabber_iq_send(session, "vcardreq_", JABBER_IQ_TYPE_GET, uid + 5, "vCard", "vcard-temp")) 
+	{
+		printq("generic_error", "Error while sending vCard request, check debug window");
+		xfree(uid);
+		return 1;
+	}
+
+	xfree(uid);
 	return 0;
 }
 
