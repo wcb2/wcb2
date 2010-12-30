@@ -219,6 +219,10 @@ lastseen
 	parameters: <jid> 
 	short description: retrieves information on last logout time for given jid
 
+nick
+	parameters: [conference] <nick> 
+	short description: changes nick in given conference (if not given - in current)
+
 msg
 	parameters: <alias> 
 	short description: sends message
