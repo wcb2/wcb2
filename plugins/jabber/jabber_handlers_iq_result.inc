@@ -352,9 +352,9 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_private) {
 							book->priv_data.conf->autojoin ? "X" : " ", book->priv_data.conf->nick, book->priv_data.conf->pass);
 
 					if (!xstrcmp(ns, "storage:bookmarks") && !xstrncmp(id, "config", 6) && book->priv_data.conf->autojoin && j->bm_join)
-						command_exec_format(NULL, session, 2, "/join %s \"%s\" \"%s\"", 
+						command_exec_format(NULL, s, 2, "/join %s \"%s\" \"%s\"", 
 											book->priv_data.conf->jid, 
-											book->priv_data.conf->nick ? book->priv_data.conf->nick : session_get(session, "default_nickname"),
+											book->priv_data.conf->nick ? book->priv_data.conf->nick : session_get(s, "default_nickname"),
 											book->priv_data.conf->pass);
 
 				} else if (!xstrcmp(child->name, "url")) {
