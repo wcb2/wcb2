@@ -1229,7 +1229,7 @@ static int jabber_theme_init() {
 		_("%> Room %W%2%n created, now to configure it: type %W/admin %g%2%n to get configuration form, or type %W/admin %g%2%n --instant to create instant one"), 1);
 	format_add("jabber_muc_list_title",	"%g,+=%G------------ MUC %1s list", 1);
 	format_add("jabber_muc_list_affil", "%g|| %c%3 %m%5", 1);	                                          /* %1 - sessions  %2 - from %3 - jid %4 - aff %5 - reason           */
-	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmyg}X%(6)5 %n] %c%(,25)4 %m%3", 1);	              /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
+	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmaoyggg}X%(6)5 %n] %c%(,25)4 %m%3", 1);	              /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
 	format_add("jabber_muc_list_end",   "%g`+=%G------------ End of the list (%nTotal: %y%1%n)", 1);
 #if 0
 	format_add("jabber_send_chan", _("%B<%W%2%B>%n %5"), 1);
@@ -1373,8 +1373,8 @@ static int jabber_theme_init() {
 	/* %1 - session_name %2 - list_name %3 xmlns */
 	format_add("jabber_private_list_header",	_("%g,+=%G----- Private list: %T%2/%3%n"), 1);
 /* jabber:iq:private ## bookmarks */
-	format_add("jabber_bookmark_url",			_("%g|| %n[ %yURL %n]     %c%(,15)2 %m%(32)3%n"), 1);               /* %1 - session_name, bookmark  url item: %2 - name %3 - url */
-	format_add("jabber_bookmark_conf",			_("%g|| %n[ %gMUC %n] [%y%4%n] %c%(,15)2 %m%(32)3%n (%g%5%n)"), 1); /* %1 - session_name, bookmark conf item: %2 - name %3 - jid %4 - autojoin %5 - nick %6 - password */
+	format_add("jabber_bookmark_url",			_("%g|| %n[ %yURL %n]     %c%(,15)2 %m%(32)3%n"), 1);                /* %1 - session_name, bookmark  url item: %2 - name %3 - url */
+	format_add("jabber_bookmark_conf",			_("%g|| %n[ %gMUC %n] [%y%4%n] %c%(,15)2 %m%(32)3%n %g%5 %r%6"), 1); /* %1 - session_name, bookmark conf item: %2 - name %3 - jid %4 - autojoin %5 - nick %6 - password */
 /* jabber:iq:private ## config */
 	format_add("jabber_private_list_item",			"%g|| %n %4: %W%5%n",  1);			/* %4 - item %5 - value */
 	format_add("jabber_private_list_session",		"%g|| + %n Session: %W%4%n",  1);		/* %4 - uid */

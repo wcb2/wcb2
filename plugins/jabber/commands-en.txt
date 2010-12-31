@@ -130,7 +130,7 @@ bookmark
 	
 	  Remove useless one:     /bookmark -r --url <useless_url>
 	
-	  Change nick:            /bookmark -m --conf my@conference.server.domain --nick <new_nick>
+	  Change nick:            /bookmark -m --name <name_of_bookmark> --nick <new_nick>
 	
 	  View all bookmarks:     /bookmark -d
 	
