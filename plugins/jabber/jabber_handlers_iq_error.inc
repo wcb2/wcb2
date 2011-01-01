@@ -2,31 +2,21 @@
 
 static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 	const char *ecode;
-	char *reason = NULL;
+	char       *etext = NULL;
+	xmlnode_t  *ntext  = NULL;
 
 	if (!n) {
 		debug_error("[JABBER] jabber_iq_error_string() IQ ERROR, but without <error?\n");
 		return xstrdup("Strange shit with server answer\n");
 	}
 
-	/* XXX, przeczytac RFC, i zobaczyc jak prawdziwe klienty XMPP to robia */
-
 	ecode = jabber_attr(n->atts, "code");
-
-	if (n->data) {
-		reason = jabber_unescape(n->data);
-	} else {
-		for (n = n->children; n; n = n->next) {
-			if (n->name) {
-				reason = jabber_unescape(n->name);
-				break;
-			}
-		}
-	}
-
-	debug_error("[JABBER] jabber_iq_error_string: code=%s, [%s]\n", __(ecode), __(reason));
-
-	return reason ? reason : xstrdup("ekg2 sux at parsing errors, for more info check debug");
+	ntext = xmlnode_find_child(n, "text");
+	etext = ntext ? jabber_unescape(ntext->data) : NULL;
+	if (!etext && n->children) etext = jabber_unescape(n->children->name); 
+	
+	debug_error("[JABBER] jabber_iq_error_string: code=%s, [%s]\n", __(ecode), __(etext));
+	return etext ? etext : xstrdup("ekg2 sux at parsing errors, for more info check debug");
 }
 
 /* this sux, no idea howto pass formatname to jabber_handle_iq_error_generic() */

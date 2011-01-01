@@ -1601,7 +1601,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 		xfree(mucuid);
 	}
 	if (!ismuc && (!type || ( na || !xstrcmp(type, "error") || !xstrcmp(type, "available")))) {
-		xmlnode_t *nshow, *nstatus, *nerr, *temp;
+		xmlnode_t *nshow, *nstatus, *nerr, *ntext, *temp;
 		userlist_t *u = userlist_find(s, uid);
 		char *descr = /*u ? xstrdup(u->descr) :*/ NULL;
 		int status = /*u ? u->status :*/ 0;		/* it'll probably always get replaced */
@@ -1639,7 +1639,12 @@ JABBER_HANDLER(jabber_handle_presence) {
 				/* replace any status with error, if we've got one, XXX: or maybe not? */
 		if ((nerr = xmlnode_find_child(n, "error"))) { /* bledny */
 			char *ecode = jabber_attr(nerr->atts, "code");
-			char *etext = jabber_unescape(nerr->data);
+
+			ntext = xmlnode_find_child(nerr, "text");
+			char *etext = ntext ? jabber_unescape(ntext->data) : NULL;
+			
+			print("jabber_generic_error", from, ecode, etext);
+			
 			xfree(descr);
 			descr = saprintf("(%s) %s", ecode, __(etext));
 			xfree(etext);
