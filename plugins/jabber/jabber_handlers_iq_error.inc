@@ -2,8 +2,9 @@
 
 static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 	const char *ecode;
-	char       *etext = NULL;
-	xmlnode_t  *ntext  = NULL;
+	char       *etext     = NULL;
+	char       *estring   = NULL;
+	xmlnode_t  *ntext     = NULL;
 
 	if (!n) {
 		debug_error("[JABBER] jabber_iq_error_string() IQ ERROR, but without <error?\n");
@@ -13,13 +14,18 @@ static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 	ecode = jabber_attr(n->atts, "code");
 	ntext = xmlnode_find_child(n, "text");
 	etext = ntext ? jabber_unescape(ntext->data) : NULL;
-	if (!etext && n->children) etext = jabber_unescape(n->children->name); 
 	
-	debug_error("[JABBER] jabber_iq_error_string: code=%s, [%s]\n", __(ecode), __(etext));
-	return etext ? etext : xstrdup("ekg2 sux at parsing errors, for more info check debug");
-}
+	if (!etext && n->children) 
+		etext = jabber_unescape(n->children->name); 
 
-/* this sux, no idea howto pass formatname to jabber_handle_iq_error_generic() */
+	if (etext)
+		estring = xstrdup(etext);
+	else
+		estring = xstrdup("Ekg2 sux at parsing errors, for more info check debug");
+
+	debug_error("[JABBER] jabber_iq_error_string: code=%s, [%s]\n", __(ecode), __(etext));
+	return estring; 
+}
 
 JABBER_HANDLER_ERROR(jabber_handle_iq_error_last) {
 	char *error = jabber_iq_error_string(n);
@@ -72,11 +78,11 @@ JABBER_HANDLER_ERROR(jabber_handle_iq_error_search) {
 }
 
 JABBER_HANDLER_ERROR(jabber_handle_iq_error_generic) {
-	char *error = jabber_iq_error_string(n);
-	char *ecode = jabber_attr(n->atts, "code");
+	char *ecode = n ? jabber_attr(n->atts, "code") : NULL; 
+	char *etext = jabber_iq_error_string(n);
 
-	print("jabber_generic_error", from, ecode, error);
-	xfree(error);
+	print("jabber_generic_error", from, ecode, etext);
+	xfree(etext);
 }
 
 static const struct jabber_iq_generic_handler jabber_iq_error_handlers[] = {

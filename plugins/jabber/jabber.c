@@ -1238,10 +1238,13 @@ static int jabber_theme_init() {
 	format_add("jabber_recv_chan", _("%b<%w%2%b>%n %5"), 1);
 	format_add("jabber_recv_chan_n", _("%b<%w%2%b>%n %5"), 1);
 #endif
-		/* %1 sesja %2 nick %3 - jid %4 - kanal %6 - role %7 affiliation*/
+	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason %6 - role %7 - affiliation */
 	format_add("muc_joined",	_("%> %C%2%n %B[%c%3%B]%n has joined %W%4%n as a %g%6%n and a %g%7%n"), 1);
-		/* %1 sesja %2 nick %3 - jid %4 - kanal %5 - reason */
-	format_add("muc_left",		_("%> %c%2%n [%c%3%n] has left %W%4 %n[%5]\n"), 1);
+	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason */
+	format_add("muc_left",		_("%> %c%2%n [%c%3%n] has left %W%4 %n[%m%5%n]\n"), 1);
+	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason %6 - actor */
+	format_add("muc_kicked",	_("%> %c%2%n was kicked from %W%4 by %R%6 %n[%m%5%n]\n"), 1);
+	format_add("muc_banned",	_("%> %c%2%n was banned from %W%4 by %R%6 %n[%m%5%n]\n"), 1);
 
 	format_add("gmail_new_mail",	  _("%> (%1) Content of your mailbox have changed or new mail arrived."), 1);	/* sesja */
 	format_add("gmail_count",	  _("%> (%1) You have %T%2%n new thread(s) on your gmail account."), 1);	/* sesja, mail count */
@@ -1406,7 +1409,7 @@ static int jabber_theme_init() {
 	format_add("jabber_ctcp_request",		_("%> (%1) %T%2%n requested IQ %g%4%n"), 1);
 
 /* common errors */
-	format_add("jabber_generic_error",	_("%! Error from %c%1%n: %R(%2) %r%3"), 1);
+	format_add("jabber_generic_error",	_("%! Error from %m%1%n: %R(%2) %r%3"), 1);
 
 #endif	/* !NO_DEFAULT_THEME */
 	return 0;

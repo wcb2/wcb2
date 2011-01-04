@@ -1319,11 +1319,11 @@ JABBER_HANDLER(jabber_handle_iq) {
 						if ((q = xmlnode_find_child_xmlns(n, st->type, st->xmlns))) {
 							debug("[jabber] Executing handler id: %s <%s xmlns='%s' 0x%x\n", st->id, st->type, st->xmlns, st->handler);
 							st->handler(s, q, from, id);
-						} else {
+						}/* else {
 							debug_error("[jabber] Warning, [<%s xmlns='%s'] Not found, calling st->error: %x\n", st->type, st->xmlns, st->error);
 
 							st->error(s, NULL, from, id);
-						}
+						}*/
 					} else {
 						q = xmlnode_find_child(n, "error");	/* WARN: IT CAN BE NULL, jabber_iq_error_string() handles it. */
 
@@ -1541,9 +1541,13 @@ JABBER_HANDLER(jabber_handle_presence) {
 						char *affiliation = jabber_unescape(jabber_attr(child->atts, "affiliation"));	/* afilliation */
 						char *nickname	  = NULL;
 						char *resource    = NULL;
+						char *errcode     = NULL;
+						char *reason      = NULL;
+						char *actor       = NULL;
 
 						int prio = 10;
-
+						
+						xmlnode_t       *qstatus, *qreason, *qactor;
 						newconference_t *c;
 						userlist_t      *ulist;
 						ekg_resource_t  *res;
@@ -1562,10 +1566,30 @@ JABBER_HANDLER(jabber_handle_presence) {
 							xfree(jid); jid = xstrndup(tmp, resource ? resource - tmp : -1);
 						}
 
-						ulist = newconference_member_find(c, nickname);
+						ulist   = newconference_member_find(c, nickname);
 						if (resource) res = userlist_resource_find(ulist, resource + 1);
 						
-						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, "");
+						qstatus = xmlnode_find_child(q,     "status"); 
+						errcode = qstatus ? jabber_attr(qstatus->atts,   "code") : NULL;
+						
+						qreason = xmlnode_find_child(child, "reason"); 
+						reason  = qreason ? jabber_unescape(qreason->data) : NULL;
+						
+						qactor  = xmlnode_find_child(child, "actor"); 
+						actor   = qactor ? jabber_attr(qactor->atts, "jid") : NULL;
+						
+						if (!xstrcmp(errcode, "307"))
+						{
+							print_info(mucuid, s, "muc_kicked", session_name(s), nickname, jid, mucuid + 5, reason, actor ? actor : "forces uknown");
+						}
+						else if (!xstrcmp(errcode, "301"))
+						{
+							print_info(mucuid, s, "muc_banned", session_name(s), nickname, jid, mucuid + 5, reason, actor ? actor : "forces uknown");
+						}
+						else if (na)
+						{
+							print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, reason);
+						}
 
 						if (ulist) {
 							if (na) {
@@ -1616,7 +1640,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 		xfree(mucuid);
 	}
 	if (!ismuc && (!type || ( na || !xstrcmp(type, "error") || !xstrcmp(type, "available")))) {
-		xmlnode_t *nshow, *nstatus, *nerr, *ntext, *temp;
+		xmlnode_t *nshow, *nstatus, *nerr, *temp;
 		userlist_t *u = userlist_find(s, uid);
 		char *descr = /*u ? xstrdup(u->descr) :*/ NULL;
 		int status = /*u ? u->status :*/ 0;		/* it'll probably always get replaced */
@@ -1654,14 +1678,12 @@ JABBER_HANDLER(jabber_handle_presence) {
 				/* replace any status with error, if we've got one, XXX: or maybe not? */
 		if ((nerr = xmlnode_find_child(n, "error"))) { /* bledny */
 			char *ecode = jabber_attr(nerr->atts, "code");
+			char *etext = jabber_iq_error_string(nerr);
 
-			ntext = xmlnode_find_child(nerr, "text");
-			char *etext = ntext ? jabber_unescape(ntext->data) : NULL;
-			
 			print("jabber_generic_error", from, ecode, etext);
 			
 			xfree(descr);
-			descr = saprintf("(%s) %s", ecode, __(etext));
+			descr = saprintf("(%s) %s", ecode, etext);
 			xfree(etext);
 
 			if (!istlen && ecode && (atoi(ecode) == 403 || atoi(ecode) == 401)) /* we lack auth */
