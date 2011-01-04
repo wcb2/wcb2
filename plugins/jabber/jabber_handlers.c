@@ -1536,13 +1536,17 @@ JABBER_HANDLER(jabber_handle_presence) {
 							default : debug_error("[jabber, iq, muc#user] XXX codenr: %d code: %s\n", codenr, code);
 						}
 					} else if (!xstrcmp(child->name, "item")) { /* lista userow */
-						char *jid	  = jabber_unescape(jabber_attr(child->atts, "jid"));		/* jid */
-						char *role	  = jabber_unescape(jabber_attr(child->atts, "role"));		/* role */
+						char *jid	      = jabber_unescape(jabber_attr(child->atts, "jid"));		    /* jid */
+						char *role	      = jabber_unescape(jabber_attr(child->atts, "role"));		    /* role */
 						char *affiliation = jabber_unescape(jabber_attr(child->atts, "affiliation"));	/* afilliation */
 						char *nickname	  = NULL;
+						char *resource    = NULL;
+
+						int prio = 10;
 
 						newconference_t *c;
-						userlist_t *ulist;
+						userlist_t      *ulist;
+						ekg_resource_t  *res;
 
 						if (!(c = newconference_find(s, mucuid))) {
 							debug("[jabber,muc] recved muc#user but conference: %s not found ?\n", mucuid);
@@ -1552,15 +1556,26 @@ JABBER_HANDLER(jabber_handle_presence) {
 
 						if (tmp) nickname = xstrdup(tmp + 1);
 						else	 nickname = xstrdup(uid);
-
-						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, "");
+						
+						if (tmp = xstrdup(jid)) {
+							resource = xstrchr(tmp, '/');
+							xfree(jid); jid = xstrndup(tmp, resource ? resource - tmp : -1);
+						}
 
 						ulist = newconference_member_find(c, nickname);
-						if (ulist && na) { 
-							newconference_member_remove(c, ulist); 
-							ulist = NULL; 
+						if (resource) res = userlist_resource_find(ulist, resource + 1);
+						
+						if (na)		print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, "");
+
+						if (ulist) {
+							if (na) {
+								userlist_resource_remove(ulist, ulist->resources); ulist->resources = NULL; 
+								newconference_member_remove(c, ulist);             ulist            = NULL; 
+							} else if (!res) 
+								res = userlist_resource_add(ulist, resource + 1, prio);	
 						} else if (!ulist) {
-							ulist = newconference_member_add(c, xmpp_uid(jid), nickname);
+							ulist = newconference_member_add(c, jid ? xmpp_uid(jid) : uid, nickname);
+							if (resource && ulist) res = userlist_resource_add(ulist, resource + 1, prio);
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
@@ -1575,8 +1590,8 @@ JABBER_HANDLER(jabber_handle_presence) {
 						}
 						query_emit_id(NULL, USERLIST_REFRESH);
 						debug("[MUC, PRESENCE] NEWITEM: %s (%s) ROLE:%s AFF:%s\n", nickname, __(jid), role, affiliation);
-						xfree(nickname);
-						xfree(jid); xfree(role); xfree(affiliation);
+						xfree(nickname); 
+						xfree(jid); xfree(role); xfree(affiliation); xfree(tmp); 
 					} else {
 						debug_error("[MUC, PRESENCE] wtf? child->name: %s\n", child->name);
 					}

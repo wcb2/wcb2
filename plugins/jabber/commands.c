@@ -985,7 +985,7 @@ static COMMAND(jabber_command_ver)
 	
 	if (c && (u = newconference_member_find(c, params[0])))
 	{	
-		uid = saprintf("%s/%s", c->name + 5, u->nickname);
+		uid = xstrdup(u->uid + 5);	
 	} 
 	else if (u = userlist_find_u(&session->userlist, params[0]))
 	{
@@ -993,20 +993,18 @@ static COMMAND(jabber_command_ver)
 	}
 	else
 	{
-		if (!xstrncmp("xmpp:", params[0], 5))
-			uid = xstrdup(params[0] + 5);
-		else
-			uid = xstrdup(params[0]);
+		printq("generic_error", "User not found");
+		return -1;
 	}
 
-	if (u && u->status == EKG_STATUS_NA) 
+	if (u->status == EKG_STATUS_NA) 
 	{
 		print("jabber_status_notavail", session_name(session), u->uid);
 		error = 1;
 	}
 	else
 	{
-		if ((!u || (c && !(u->resources))))
+		if (!(u->resources))
 		{
 			if (!jabber_iq_send(session, "versionreq_", JABBER_IQ_TYPE_GET, uid, "query", "jabber:iq:version")) 
 			{
@@ -1042,7 +1040,7 @@ static COMMAND(jabber_command_userinfo)
 
 	if (c && (u = newconference_member_find(c, target)))
 	{
-		uid = saprintf("%s/%s", c->name, u->nickname);
+		uid = xstrdup(u->uid);
 	}
 	else if (!(uid = xstrdup(jid_target2uid(session, target, 1)))) 
 	{
