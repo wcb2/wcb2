@@ -51,8 +51,9 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_disco_info) {
 	watch_write(j->send_watch, "<iq to=\"%s\" type=\"result\" id=\"%s\">"
 			"<query xmlns=\"http://jabber.org/protocol/disco#info\">"
 				"<feature var=\"jabber:iq:last\"/>"						/* jabber_handle_iq_get_last() */
-				"<feature var=\"jabber:iq:version\"/>"						/* jabber_handle_iq_get_version() */
+				"<feature var=\"jabber:iq:version\"/>"					/* jabber_handle_iq_get_version() */
 				"<feature var=\"urn:xmpp:ping\"/>"						/* jabber_handle_iq_ping() */
+				"<feature var=\"urn:xmpp:time\"/>"                      /* jabber_handle_iq_time() */
 				"<feature var=\"http://jabber.org/protocol/chatstates\"/>"
 			"</query></iq>", from, id);
 #if 0
@@ -157,15 +158,42 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_ping) {
 			from, id);
 }
 
+
+JABBER_HANDLER_GET_REPLY(jabber_handle_iq_time) {
+	jabber_private_t *j = s->priv;
+
+	time_t   t = time(NULL);
+	char     time_str[50];
+	char     tz_str[7];
+	char     *hours;
+
+	if (!t)
+		return;
+	
+	strftime(time_str, sizeof(time_str), "%Y-%m-%dT%H:%M:%SZ", gmtime(&t));
+	strftime(tz_str, sizeof(tz_str), "%z", localtime(&t));
+
+	hours = xstrndup(tz_str, 3);
+
+	watch_write(j->send_watch, "<iq type=\"result\" to=\"%s\" id=\"%s\">"
+							   		"<time xmlns='urn:xmpp:time'>"
+							   			"<tzo>%s:%s</tzo>"
+							   			"<utc>%s</utc>"
+							   		"</time>"
+								"</iq>", from, id, hours, tz_str + 3, time_str);
+	xfree(hours);
+}
+
 static const struct jabber_iq_generic_handler jabber_iq_get_handlers[] = {
-	{ "query",		"jabber:iq:last",				jabber_handle_iq_get_last },
-	{ NULL,			"jabber:iq:version",				jabber_handle_iq_get_version },
+	{ "query",		"jabber:iq:last",				            jabber_handle_iq_get_last },
+	{ NULL,			"jabber:iq:version",				        jabber_handle_iq_get_version },
 	{ NULL,			"http://jabber.org/protocol/disco#items",	jabber_handle_iq_get_disco },
 	{ NULL,			"http://jabber.org/protocol/disco#info",	jabber_handle_iq_get_disco_info },
 
-	{ "ping",		"urn:xmpp:ping",				jabber_handle_iq_ping },
+	{ "ping",		"urn:xmpp:ping",				            jabber_handle_iq_ping },
+	{ "time",		"urn:xmpp:time",				            jabber_handle_iq_time },
 
-	{ "",			NULL,						NULL }
+	{ "",			NULL,						                NULL }
 };
 
 // vim:syn=c

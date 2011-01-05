@@ -1319,11 +1319,11 @@ JABBER_HANDLER(jabber_handle_iq) {
 						if ((q = xmlnode_find_child_xmlns(n, st->type, st->xmlns))) {
 							debug("[jabber] Executing handler id: %s <%s xmlns='%s' 0x%x\n", st->id, st->type, st->xmlns, st->handler);
 							st->handler(s, q, from, id);
-						}/* else {
+						} else {
 							debug_error("[jabber] Warning, [<%s xmlns='%s'] Not found, calling st->error: %x\n", st->type, st->xmlns, st->error);
 
 							st->error(s, NULL, from, id);
-						}*/
+						}
 					} else {
 						q = xmlnode_find_child(n, "error");	/* WARN: IT CAN BE NULL, jabber_iq_error_string() handles it. */
 
