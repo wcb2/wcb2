@@ -33,7 +33,6 @@
 #include "dynstuff.h"
 #include "protocol.h"
 #include "stuff.h"
-#include "recode.h"
 #include "themes.h"
 #include "xmalloc.h"
 #include "windows.h"
