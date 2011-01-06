@@ -607,11 +607,19 @@ static COMMAND(jabber_muc_command_invite)
 static COMMAND(jabber_muc_command_pm) 
 {
 	newconference_t *c;
-	
+
+	char *nick = params[0];
+	char *text = params[1];
+
 	c = newconference_find(session, window_current->target);
-	if (c && newconference_member_find(c, params[0]))
-	{
-		command_exec_format(NULL, session, 0, "/chat %s/%s %s", window_current->target, params[0], params[1]);
+	
+	if (!c) {
+		printq("generic_error", "/xmpp:pm only valid in MUC");
+		return -1;
+	}
+	
+	if (newconference_member_find(c, nick)) {
+		command_exec_format(NULL, session, 0, "/chat \"%s/%s\" %s", c->name, nick, text);
 		return 0;
 	}
 	
