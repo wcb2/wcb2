@@ -570,6 +570,35 @@ static COMMAND(jabber_command_passwd)
 	return 0;
 }
 
+/* This function sends invitation to join MUC to some guy
+ *	
+ *  Syntax: /invite <conference> <jid/alias> [reason]
+ *
+ */
+static COMMAND(jabber_muc_command_invite) 
+{
+	jabber_private_t *j = session_private_get(session);
+	userlist_t *u;
+
+	char *jid;
+	char *conf    = !xstrncmp(params[0], "xmpp:", 5) ? params[0] + 5 : params[0];
+	char *alias   = params[1];
+	char *reason  = params[2] ? params[2] : "";
+
+	if (u = userlist_find(session, alias))
+		jid = u->uid + 5;
+	else
+		jid = alias;
+
+	watch_write(j->send_watch, "<message to=\"%s\">"
+									"<x xmlns='http://jabber.org/protocol/muc#user'>"
+										"<invite to=\"%s\">"
+											"<reason>%s</reason>"
+										"</invite>"
+									"</x>"
+							   "</message>", conf, jid, reason);
+}
+
 /* This function sends private messages in MUC
  *	
  *  Syntax: /pm <nick> <message>
@@ -2756,6 +2785,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:ffc", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:find", "?", jabber_command_find, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:invisible", "r", jabber_command_away,		JABBER_ONLY, NULL);
+	command_add(&jabber_plugin, "xmpp:invite", "!C !u ?", jabber_muc_command_invite, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:join", "!C ? ?", jabber_muc_command_join, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:lastseen", "!u", jabber_command_lastseen, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 

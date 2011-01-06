@@ -209,6 +209,10 @@ invisible
 	If description wasn't given, random description will be looked for.
 	Giving ,,%T-%n'' instead of description will clear description.
 
+invite
+	parameters: <conference> <jid/alias> [reason]
+	short description: sends invitation to join MUC to some guy.
+
 join
 	parameters: <conference> [nick]
 	short description: join conference
