@@ -1758,25 +1758,19 @@ static COMMAND(jabber_command_private) {
 			struct list *bookmarks = j->bookmarks;
 			jabber_bookmark_t *book = NULL;
 			
-			while (book = bookmarks->data)
-			{
-				if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->name,params[1]))
-				{
+			while (bookmarks && (book = bookmarks->data)) {
+				if ((book->type == JABBER_BOOKMARK_CONFERENCE) && !xstrcmp(book->priv_data.conf->name,params[1])) {
 					command_exec_format(NULL, session, 2, "/join %s \"%s\" \"%s\"", 
 										book->priv_data.conf->jid, 
 										book->priv_data.conf->nick ? book->priv_data.conf->nick : session_get(session, "default_nickname"),
 										book->priv_data.conf->pass);
 					return 0;
 				}
-
-				if (bookmarks->next)
-					bookmarks = bookmarks->next;
-				else
-				{
-					printq("generic_error", "No such bookmark");
-					return -1;
-				}
+				bookmarks = bookmarks->next;
 			}
+			
+			printq("generic_error", "No such bookmark");
+			return -1;
 		}
 
 		if (bookmark_sync) 
