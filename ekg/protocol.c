@@ -1006,14 +1006,13 @@ int protocol_xstate_emit(const session_t *s, const char *uid, int state, int off
 /*
  * protocol_uid()
  *
- * return saprintf("%s:%s", proto, target);
+ * return saprintf("%s:%s", proto, target) or xstrdup(target)
+ *
  */
 char *protocol_uid(const char *proto, const char *target) {
-/* XXX, simplify some code inside plugins?
- *
- *	if (!xstrncmp(target, proto, xstrlen(proto)))
- *		return xstrdup(target);
- */
+ 	if (!xstrncmp(target, proto, xstrlen(proto)))
+ 		return xstrdup(target);
+
 	return saprintf("%s:%s", proto, target);
 }
 

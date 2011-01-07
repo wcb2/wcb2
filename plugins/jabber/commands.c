@@ -570,6 +570,72 @@ static COMMAND(jabber_command_passwd)
 	return 0;
 }
 
+
+/* This function destroys MUC
+ *	
+ *  Syntax: /destroy <conference> [params]
+ *  Params: --jid <new_jid>, --password <pass>, --reason <reason>
+ *
+ */
+static COMMAND(jabber_muc_command_destroy) 
+{
+	jabber_private_t *j = session_private_get(session);
+	newconference_t *c;
+
+	char *conf     = xmpp_uid(params[0]);
+	char *id       = NULL;
+	char *jid      = NULL;
+	char *password = NULL;
+	char *reason   = NULL;
+
+	int i     = 0;
+	int error = 0;
+	
+	if (!(c = newconference_find(session, conf))) {
+		printq("generic_error", "/xmpp:destroy only valid in MUC");
+		xfree(conf);
+		return 1;
+	}
+
+	for (i = 0; params[i]; i++) {
+		if (match_arg(params[i], 'j', ("jid"), 2) && params[i + 1]) 
+		{
+			jid = saprintf(" jid=\"%s\"", params[++i]);
+		} 
+		else if (match_arg(params[i], 'p', ("password"), 2) && params[i + 1]) 
+		{
+			password = saprintf("<password>%s</password>", params[++i]);
+		} 
+		else if (match_arg(params[i], 'r', ("reason"), 2) && params[i + 1]) 
+		{
+			reason = saprintf("<reason>%s</reason>", params[++i]);
+		}
+	}
+	
+	if (!jid)      jid      = xstrdup("");
+	if (!password) password = xstrdup("");
+	if (!reason)   reason   = xstrdup("");
+
+	if (!(id = jabber_iq_reg(session, "muconwer_", c->name + 5, "query", "http://jabber.org/protocol/muc#owner"))) {
+		printq("generic_error", "Error in getting id for request, check debug window");
+		error = 1;
+	}
+
+	if (!error) {
+		watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type='set'>"
+								   		"<query xmlns='http://jabber.org/protocol/muc#owner'>"
+								   			"<destroy%s>"
+								   				"%s"
+								   				"%s"
+											"</destroy>"
+										"</query>"
+									"</iq>", id, c->name + 5, jid, password, reason);
+	}
+
+	xfree(conf); xfree(jid); 
+	xfree(password); xfree(reason);
+}
+
 /* This function sends invitation to join MUC to some guy
  *	
  *  Syntax: /invite <conference> <jid/alias> [reason]
@@ -2788,6 +2854,8 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:connect", NULL, jabber_command_connect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:conversations", NULL, jabber_command_conversations,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:del", "!u", jabber_command_del,	JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:destroy", "!C ?p ? ?p ? ?p ?", jabber_muc_command_destroy, JABBER_FLAGS_REQ,
+			"-j -p -r --jid --password --reason");
 	command_add(&jabber_plugin, "xmpp:disconnect", "r", jabber_command_disconnect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:dnd", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:ffc", "r", jabber_command_away,	JABBER_ONLY, NULL);

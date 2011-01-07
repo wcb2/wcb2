@@ -1238,13 +1238,15 @@ static int jabber_theme_init() {
 	format_add("jabber_recv_chan", _("%b<%w%2%b>%n %5"), 1);
 	format_add("jabber_recv_chan_n", _("%b<%w%2%b>%n %5"), 1);
 #endif
-	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason %6 - role %7 - affiliation */
+	/* %1 - session %2 - nick %3 - jid %4 - room %5 - reason %6 - role %7 - affiliation */
 	format_add("muc_joined",	_("%> %C%2%n %B[%c%3%B]%n has joined %W%4%n as a %g%6%n and a %g%7%n"), 1);
-	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason */
+	/* %1 - session %2 - nick %3 - jid %4 - room %5 - reason */
 	format_add("muc_left",		_("%> %c%2%n [%c%3%n] has left %W%4 %n[%m%5%n]\n"), 1);
-	/* %1 seession %2 nick %3 - jid %4 - room %5 - reason %6 - actor */
-	format_add("muc_kicked",	_("%> %c%2%n was kicked from %W%4 by %R%6 %n[%m%5%n]\n"), 1);
-	format_add("muc_banned",	_("%> %c%2%n was banned from %W%4 by %R%6 %n[%m%5%n]\n"), 1);
+	/* %1 - session %2 - nick %3 - action %4 - jid %5 - room %6 - reason %7 - actor */
+	format_add("muc_kb",	    _("%> %c%3%n has been %2 from %W%5 by %R%7 %n[%m%6%n]\n"), 1);
+	/* %1 - session %2 - role/affiliation %3 - nick %4 - old %5 - new */
+	format_add("muc_ar_change", _("%> %c%3's%n %2 has been changed from %g%4%n to %g%5%n\n"), 1);
+	format_add("muc_destroyed",	_("%> %c%2%n has been destroyed %n[%m%3%n]\n%> New jid: %g%4 %R%5\n"), 1);
 
 	format_add("gmail_new_mail",	  _("%> (%1) Content of your mailbox have changed or new mail arrived."), 1);	/* sesja */
 	format_add("gmail_count",	  _("%> (%1) You have %T%2%n new thread(s) on your gmail account."), 1);	/* sesja, mail count */

@@ -177,6 +177,18 @@ del
 	parameters: [name]
 	short description: removes user from roster
 
+destroy
+	parameters: <conference> [params]
+	short description: destroys MUC
+	
+	Possible values:
+	
+	  -j, --jid       <jid>       New jid
+	
+	  -p, --password  <password>  Password for new conference
+	
+	  -r, --reason    <reason>    Reason to destroy
+
 disconnect
 	parameters:  [description/-]
 	short description: rozłącza się od serwera
