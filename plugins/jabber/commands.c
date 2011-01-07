@@ -621,16 +621,15 @@ static COMMAND(jabber_muc_command_destroy)
 		error = 1;
 	}
 
-	if (!error) {
-		watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type='set'>"
-								   		"<query xmlns='http://jabber.org/protocol/muc#owner'>"
-								   			"<destroy%s>"
-								   				"%s"
-								   				"%s"
-											"</destroy>"
-										"</query>"
-									"</iq>", id, c->name + 5, jid, password, reason);
-	}
+	if (!error)
+	watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type='set'>"
+							   		"<query xmlns='http://jabber.org/protocol/muc#owner'>"
+							   			"<destroy%s>"
+							   				"%s"
+							   				"%s"
+										"</destroy>"
+									"</query>"
+								"</iq>", id, c->name + 5, jid, password, reason);
 
 	xfree(conf); xfree(jid); 
 	xfree(password); xfree(reason);
@@ -644,12 +643,19 @@ static COMMAND(jabber_muc_command_destroy)
 static COMMAND(jabber_muc_command_invite) 
 {
 	jabber_private_t *j = session_private_get(session);
+	newconference_t *c;
 	userlist_t *u;
 
 	char *jid;
-	char *conf    = !xstrncmp(params[0], "xmpp:", 5) ? params[0] + 5 : params[0];
+	char *conf    = xmpp_uid(params[0]);
 	char *alias   = params[1];
 	char *reason  = params[2] ? params[2] : "";
+
+	if (!(c = newconference_find(session, conf))) {
+		printq("generic_error", "/xmpp:invite only valid in MUC");
+		xfree(conf);
+		return 1;
+	}
 
 	if (u = userlist_find(session, alias))
 		jid = u->uid + 5;
@@ -662,7 +668,8 @@ static COMMAND(jabber_muc_command_invite)
 											"<reason>%s</reason>"
 										"</invite>"
 									"</x>"
-							   "</message>", conf, jid, reason);
+							   "</message>", c->name + 5, jid, reason);
+	xfree(conf);
 }
 
 /* This function sends private messages in MUC
