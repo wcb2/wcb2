@@ -2398,7 +2398,7 @@ static COMMAND(jabber_muc_command_part) {
 	watch_write(j->send_watch, "<presence to=\"%s/%s\" type=\"unavailable\">%s</presence>", c->name+5, c->priv_data, status ? status : "");
 
 	xfree(status);
-	newconference_destroy(c, 1 /* XXX, dorobic zmienna */);
+	newconference_destroy(c, 1);
 	return 0;
 }
 
@@ -2839,7 +2839,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:_stanzas", "?", jabber_command_stanzas, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:add", "U ?", jabber_command_modify,	JABBER_FLAGS, NULL); 
 	command_add(&jabber_plugin, "xmpp:admin", "!C ?", jabber_muc_command_admin, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:affiliation", "!p !u ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, "outcast none member admin owner");
+	command_add(&jabber_plugin, "xmpp:affiliation", "!p !nN ?", jabber_muc_command_affiliation, JABBER_FLAGS_TARGET, "outcast none member admin owner");
 	command_add(&jabber_plugin, "xmpp:auth", "!p uU", jabber_command_auth,	JABBER_FLAGS_REQ,
 			"-a --accept -d --deny -r --request -c --cancel");
 	command_add(&jabber_plugin, "xmpp:away", "r", jabber_command_away,	JABBER_ONLY, NULL);
@@ -2869,8 +2869,8 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
 	command_add(&jabber_plugin, "xmpp:nick", "!C ?", jabber_muc_command_nick,	JABBER_FLAGS_REQ, NULL);
-	command_add(&jabber_plugin, "xmpp:part", "! ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:pm", "!u !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
+	command_add(&jabber_plugin, "xmpp:part", "!C ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:pm", "!n !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:passwd", "?", jabber_command_passwd,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:privacy", "? ? ?", jabber_command_privacy,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:private", "!p ! ?", jabber_command_private,	JABBER_FLAGS_REQ, 
@@ -2878,7 +2878,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:reconnect", NULL, jabber_command_reconnect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:register", "? ?", jabber_command_register, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:reply", "! !", jabber_command_reply, JABBER_FLAGS_TARGET, NULL);
-	command_add(&jabber_plugin, "xmpp:role", "!p !u ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, "none visitor participant moderator");
+	command_add(&jabber_plugin, "xmpp:role", "!p !nN ?", jabber_muc_command_role, JABBER_FLAGS_TARGET, "none visitor participant moderator");
 	command_add(&jabber_plugin, "xmpp:search", "? ?", jabber_command_search, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:tmsg", "!uU ! !", jabber_command_msg, JABBER_FLAGS_TARGET, NULL); /* threaded msg */
 	command_add(&jabber_plugin, "xmpp:topic", "?C ?", jabber_muc_command_topic, JABBER_FLAGS_REQ, NULL);

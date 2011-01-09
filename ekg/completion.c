@@ -212,6 +212,37 @@ static void conference_generator(const char *text, int len)
 	}
 }
 
+static void conference_nick_generator(const char *text, int len)
+{
+	newconference_t  *c;
+	userlist_t      *ul;
+
+	if (c = newconference_find(window_current->session, window_current->target)) {
+		for (ul = c->participants; ul; ul = ul->next) {
+			userlist_t *u = ul;
+
+			if (u->nickname && !xstrncasecmp(text, u->nickname, len)) {
+				array_add_check(&completions, xstrdup(u->nickname), 1);
+			}
+		}
+	}
+}
+
+static void conference_uid_generator(const char *text, int len)
+{
+	newconference_t  *c;
+	userlist_t      *ul;
+	
+	if (c = newconference_find(window_current->session, window_current->target)) {
+		for (ul = c->participants; ul; ul = ul->next) {
+			userlist_t *u = ul;
+
+			if (u->uid && !xstrncasecmp(text, u->uid, len)) {
+				array_add_check(&completions, xstrdup(u->uid), 1);
+			}
+		}
+	}
+}
 static void plugin_generator(const char *text, int len)
 {
 	plugin_t *p;
@@ -659,6 +690,8 @@ static struct {
 	{ 't', theme_generator },
 	{ 'o', dir_generator },
 	{ 'm', metacontacts_generator }, 
+	{ 'n', conference_nick_generator }, 
+	{ 'N', conference_uid_generator }, 
 	{ 0, NULL }
 };
 
@@ -907,7 +940,10 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 	if (word == 0) {
 		/* dj's fixes... */
 		if (start[0] != '/' && window_current && window_current->target) {
-			known_uin_generator(start, xstrlen(start));
+			if (newconference_find(window_current->session, window_current->target))
+				conference_nick_generator(start, xstrlen(start));
+			else
+				known_uin_generator(start, xstrlen(start));
 			if (completions) {
 				char *completion_char = (config_completion_char && *config_completion_char) ? config_completion_char : NULL;
 				int nick_count = array_count(completions);
