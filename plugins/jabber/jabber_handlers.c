@@ -904,17 +904,20 @@ JABBER_HANDLER(jabber_handle_message) {
 	const int nonthreaded = (!nthread || !nthread->data);
 	const int hassubject = (nsubject && nsubject->data);
 
-	if (hassubject) { /* we need to linearize this earlier */
-		char *tmp = nsubject->data;
-
-		while ((tmp = xstrchr(tmp, '\n'))) {
-			if (*(tmp+1) == '\0') {
-				*tmp = '\0';
-				break; /* we really don't need to search again */
-			} else
-				*tmp = ' ';
+	if ((!xstrcmp(type, "groupchat")) && hassubject) {
+		newconference_t *c;
+		char *mucuid;
+		char *tmp;
+		
+		tmp = xstrchr(uid, '/');
+		mucuid = xstrndup(uid, tmp ? tmp - uid : -1);
+		
+		if (c = newconference_find(s, mucuid)) {
+			xfree(c->subject);
+			c->subject = xstrdup(nsubject->data);
 		}
 	}
+
 	if ((class == EKG_MSGCLASS_MESSAGE) /* conversations only with messages */
 			&& (!nonthreaded /* either if we've got thread */
 				|| ((nbody || nsubject) && (session_int_get(s, "allow_add_reply_id") > 1))
@@ -959,8 +962,11 @@ JABBER_HANDLER(jabber_handle_message) {
 			if (!nthread->name) /* this means we're using above hack */
 				xfree(nthread);
 		}
-		string_append(body, "\n");
-		new_line = 1;
+		
+		if (x_encrypted || nbody) { 
+			string_append(body, "\n");
+			new_line = 1;
+		}
 	}
 
 	if (new_line) string_append(body, "\n");	/* let's seperate headlines from message */

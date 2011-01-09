@@ -2615,8 +2615,7 @@ static COMMAND(jabber_muc_command_topic) {
 	}
 	
 	if (!subject) {
-		/* XXX, display current topic */
-		debug_error("jabber_muc_command_topic: Current topic is ??? -- not implemented yet\n");
+		print_info(c->name, session, "jabber_muc_notice",session_name(session),c->name + 5, c->subject ? c->subject : "No subject");
 	} else {
 		watch_write(j->send_watch, "<message to=\"%s\" type=\"groupchat\"><subject>%s</subject></message>", c->name+5, subject);
 		xfree(subject);

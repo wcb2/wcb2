@@ -123,6 +123,7 @@ typedef struct newconference {
 
 	char		*session;
 	char		*name;
+	char        *subject;
 	struct userlist	*participants;
 	void		*priv_data;
 } newconference_t;
