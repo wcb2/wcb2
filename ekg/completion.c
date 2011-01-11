@@ -140,7 +140,6 @@ static void known_uin_generator(const char *text, int len)
 	session_t *s;
 	char *tmp = NULL, *session_name = NULL;
 	int tmp_len = 0;
-	newconference_t *c; 
 
 	if (!session_current)
 		return;
@@ -182,8 +181,7 @@ static void known_uin_generator(const char *text, int len)
 	if (!window_current) 
 		goto end;
 
-	if ((c = newconference_find(window_current->session, window_current->target)))	ul = c->participants;
-	else										ul = window_current->userlist;
+	ul = window_current->userlist;
 
 	for (; ul; ul = ul->next) {
 		userlist_t *u = ul;
@@ -207,7 +205,7 @@ static void conference_generator(const char *text, int len)
 	newconference_t *c;
 
 	for (c = newconferences; c; c = c->next) {
-		if (!xstrncasecmp(text, c->name, len))
+		if (!xstrncmp(text, c->name, len))
 			array_add_check(&completions, xstrdup(c->name), 1);
 	}
 }
@@ -221,7 +219,7 @@ static void conference_nick_generator(const char *text, int len)
 		for (ul = c->participants; ul; ul = ul->next) {
 			userlist_t *u = ul;
 
-			if (u->nickname && !xstrncasecmp(text, u->nickname, len)) {
+			if (u->nickname && !xstrncmp(text, u->nickname, len)) {
 				array_add_check(&completions, xstrdup(u->nickname), 1);
 			}
 		}
@@ -237,7 +235,7 @@ static void conference_uid_generator(const char *text, int len)
 		for (ul = c->participants; ul; ul = ul->next) {
 			userlist_t *u = ul;
 
-			if (u->uid && !xstrncasecmp(text, u->uid, len)) {
+			if (u->uid && !xstrncmp(text, u->uid, len)) {
 				array_add_check(&completions, xstrdup(u->uid), 1);
 			}
 		}

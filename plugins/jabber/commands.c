@@ -2850,7 +2850,7 @@ void jabber_register_commands()
 			"-c --clear -d --display -g --get -p --put");
 	command_add(&jabber_plugin, "xmpp:change", "!p ? p ? p ? p ? p ? p ?", jabber_command_change, JABBER_FLAGS_REQ, 
 			"-f --fullname -c --city -b --born -d --description -n --nick -C --country");
-	command_add(&jabber_plugin, "xmpp:chat", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
+	command_add(&jabber_plugin, "xmpp:chat", "!uUN !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:connect", NULL, jabber_command_connect, JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:conversations", NULL, jabber_command_conversations,	JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:del", "!u", jabber_command_del,	JABBER_FLAGS_TARGET, NULL);
@@ -2866,7 +2866,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:lastseen", "!u", jabber_command_lastseen, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
 			"-n --nickname -g --group");
-	command_add(&jabber_plugin, "xmpp:msg", "!uU !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
+	command_add(&jabber_plugin, "xmpp:msg", "!uUN !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
 	command_add(&jabber_plugin, "xmpp:nick", "!C ?", jabber_muc_command_nick,	JABBER_FLAGS_REQ, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "!C ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
@@ -2885,11 +2885,11 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:transpinfo", "? ?", jabber_command_transpinfo, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:transports", "? ?", jabber_command_transports, JABBER_FLAGS, NULL);
 	command_add(&jabber_plugin, "xmpp:unregister", "?", jabber_command_register, JABBER_FLAGS, NULL);
-	command_add(&jabber_plugin, "xmpp:userinfo", "!u", jabber_command_userinfo, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:userinfo", "!unN", jabber_command_userinfo, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:userlist", "! ?", jabber_command_userlist, JABBER_FLAGS_REQ,
 			"-g --get -p --put"); /* BFW: it is unlike GG, -g gets userlist from file, -p writes it into it */
 	command_add(&jabber_plugin, "xmpp:vacation", "?", jabber_command_vacation, JABBER_FLAGS, NULL);
-	command_add(&jabber_plugin, "xmpp:ver", "!u", jabber_command_ver,	JABBER_FLAGS_TARGET, NULL); 
+	command_add(&jabber_plugin, "xmpp:ver", "!unN", jabber_command_ver,	JABBER_FLAGS_TARGET, NULL); 
 	command_add(&jabber_plugin, "xmpp:xa", "r", jabber_command_away,	JABBER_ONLY, NULL);
 	command_add(&jabber_plugin, "xmpp:xml", "!", jabber_command_xml,	JABBER_ONLY, NULL);
 
