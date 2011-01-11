@@ -1547,10 +1547,11 @@ JABBER_HANDLER(jabber_handle_presence) {
 						char *affiliation = jabber_unescape(jabber_attr(child->atts, "affiliation"));	/* afilliation */
 						
 						char *nickname	  = NULL; char *resource    = NULL; char *password = NULL;
-						char *errcode     = NULL; char *reason      = NULL;
+						char *errcode     = NULL; char *reason      = NULL; char *new_nick = NULL;
 						char *actor       = NULL; char *new_jid     = NULL;
 
 						int prio = 10;
+						int nc = 0;
 						
 						xmlnode_t       *qtmp, *qtmp2;
 						newconference_t *c;
@@ -1580,13 +1581,17 @@ JABBER_HANDLER(jabber_handle_presence) {
 						qtmp  = xmlnode_find_child(child, "actor"); 
 						actor   = qtmp  ? jabber_unescape(jabber_attr(qtmp->atts, "jid")) : NULL;
 						
-						if (!xstrcmp(errcode, "307"))
-							print_info(mucuid, s, "muc_kb", session_name(s), "kicked", nickname, jid, 
-										mucuid + 5, reason, actor ? actor : "forces unknown");
-						else if (!xstrcmp(errcode, "301"))
+						if (!xstrcmp(errcode, "301")) {
 							print_info(mucuid, s, "muc_kb", session_name(s), "banned", nickname, jid, 
 										mucuid + 5, reason, actor ? actor : "forces unknown");
-						else if (qtmp = xmlnode_find_child(q, "destroy")) {
+						} else if (!xstrcmp(errcode, "303")) {
+							nc = 1; 
+							new_nick = jabber_attr(child->atts, "nick");
+							print_info(mucuid, s, "jabber_muc_nick_changed", session_name(s), nickname, new_nick);
+					    } else if (!xstrcmp(errcode, "307")) {
+							print_info(mucuid, s, "muc_kb", session_name(s), "kicked", nickname, jid, 
+										mucuid + 5, reason, actor ? actor : "forces unknown");
+						} else if (qtmp = xmlnode_find_child(q, "destroy")) {
 							new_jid = jabber_unescape(jabber_attr(qtmp->atts, "jid"));
 							if (!new_jid) new_jid = xstrdup("none");
 
@@ -1604,15 +1609,21 @@ JABBER_HANDLER(jabber_handle_presence) {
 						if (resource) res = userlist_resource_find(ulist, resource + 1);
 							
 						if (ulist) {
-							if (na) {
+							if (nc) {
+								if (!xstrcmp(c->priv_data, nickname)) {
+									xfree(c->priv_data);
+									c->priv_data = xstrdup(new_nick); 
+								}
+								xfree(ulist->nickname);	
+								ulist->nickname = xstrdup(new_nick);
+							} else if (na) {
 								userlist_resource_remove(ulist, ulist->resources); ulist->resources = NULL; 
 								newconference_member_remove(c, ulist);             ulist            = NULL; 
 							} else if (role && affiliation) {
 								jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
-								
 								if (xstrcmp(up->role, role))
 									print_info(mucuid, s, "muc_ar_change", session_name(s), "role", nickname, up->role, role);
-								else if (xstrcmp(up->aff, affiliation)) 
+								if (xstrcmp(up->aff, affiliation)) 
 									print_info(mucuid, s, "muc_ar_change", session_name(s), "affiliation", nickname, up->aff, affiliation);
 							} else if (!res) 
 								res = userlist_resource_add(ulist, resource + 1, prio);	
@@ -1622,7 +1633,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
-						if (ulist) {
+						if (ulist && !nc) {
 							jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
 							ulist->status = role_and_affiliation_to_ekg2_status(role, affiliation);
 							
@@ -1631,6 +1642,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 								up->aff		= xstrdup(affiliation);
 							}
 						}
+
 						query_emit_id(NULL, USERLIST_REFRESH);
 						debug("[MUC, PRESENCE] NEWITEM: %s (%s) ROLE:%s AFF:%s\n", nickname, __(jid), role, affiliation);
 						xfree(nickname); 

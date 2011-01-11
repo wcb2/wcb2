@@ -1222,6 +1222,9 @@ static int jabber_theme_init() {
 	format_add("jabber_muc_me",	"%y*%X%5%3%B%n %4", 1);
 	format_add("jabber_muc_me_sent","%Y*%X%5%3%B%n %4", 1);
 
+	/* %1 - session %2 - old_nick %3 new_nick */
+	format_add("jabber_muc_nick_changed", "%> %c%2%n has changed his nick to %C%3%n", 1);
+	
 	/* %1 - sessionname, %2 - mucjid %3 - text */
 	format_add("jabber_muc_notice", "%n-%P%2%n- %3", 1);
 
@@ -1229,7 +1232,7 @@ static int jabber_theme_init() {
 		_("%> Room %W%2%n created, now to configure it: type %W/admin %g%2%n to get configuration form, or type %W/admin %g%2%n --instant to create instant one"), 1);
 	format_add("jabber_muc_list_title",	"%g,+=%G------------ MUC %1s list", 1);
 	format_add("jabber_muc_list_affil", "%g|| %c%3 %m%5", 1);	                                          /* %1 - sessions  %2 - from %3 - jid %4 - aff %5 - reason           */
-	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmaoyggg}X%(6)5 %n] %c%(,25)4 %m%3", 1);	              /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
+	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmaoyggg}X%(6)5 %n] %c%(,25)4 %m%3", 1);	          /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
 	format_add("jabber_muc_list_end",   "%g`+=%G------------ End of the list (%nTotal: %y%1%n)", 1);
 #if 0
 	format_add("jabber_send_chan", _("%B<%W%2%B>%n %5"), 1);
