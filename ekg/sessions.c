@@ -192,7 +192,7 @@ session_t *session_add(const char *uid) {
 		}
 	}
 
-	query_emit_id(NULL, SESSION_ADDED, &(s->uid));		/* It's read-only query, XXX */
+	new_guery_emit(NULL, "session_added", &(s->uid));		/* It's read-only query, XXX */
 
 	for (w = windows; w; w = w->next) {
 /* previous version was unacceptable. So we do now this trick:
@@ -280,7 +280,7 @@ int session_remove(const char *uid)
 
 	if (s == session_current) {		/* shouldn't happen */
 		session_current = NULL;
-		query_emit_id(NULL, SESSION_CHANGED);
+		new_guery_emit(NULL, "session_changed");
 	}
 	
 	if (s->connected)
@@ -312,7 +312,8 @@ int session_remove(const char *uid)
 	}
 
 	tmp = xstrdup(uid);
-	query_emit_id(NULL, SESSION_REMOVED, &tmp);
+	new_guery_emit(NULL, "session_changed");
+	new_guery_emit(NULL, "session_removed", &tmp);
 	xfree(tmp);
 
 	sessions_remove(s);
@@ -334,7 +335,7 @@ int session_status_set(session_t *s, status_t status)
 		char *__session = xstrdup(s->uid);
 		int __status = status;
 
-		query_emit_id(NULL, SESSION_STATUS, &__session, &__status);
+		new_guery_emit(NULL, "session_status", &__session, &__status);
 
 		xfree(__session);
 	}
@@ -753,7 +754,7 @@ int session_set(session_t *s, const char *key, const char *value) {
 		 */
 
 		tmp = xstrdup((value) ? value : s->uid);
-		query_emit_id(NULL, SESSION_RENAMED, &tmp);
+		new_guery_emit(NULL, "session_renamed", &tmp);
 		xfree(tmp);
 
 		goto notify;
@@ -1563,7 +1564,7 @@ void sessions_free() {
 /* mg: I modified it so it'll first emit all the events, and then start to free everything
  * That shouldn't be a problem, should it? */
 	for (s = sessions; s; s = s->next) {
-		query_emit_id(s->plugin, SESSION_REMOVED, &(s->uid));	/* it notify only that plugin here, to free internal data. 
+		new_guery_emit(s->plugin, "session_removed", &(s->uid));	/* it notify only that plugin here, to free internal data. 
 									 * ui-plugin already removed.. other plugins @ quit.
 									 * shouldn't be aware about it. too...
 									 * XXX, think about it?
