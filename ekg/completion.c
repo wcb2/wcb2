@@ -567,7 +567,6 @@ static void theme_generator(const char *text, int len)
 {
 
 	theme_generator_adding(text, len, DATADIR "/themes", 0);
-	theme_generator_adding(text, len, prepare_path("", 0), 1);
 	theme_generator_adding(text, len, prepare_path("themes", 0), 0);
 }
 

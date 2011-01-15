@@ -299,7 +299,7 @@ part
 	short description: leaves conference
 
 pm
-	parameters: [conference] <nick> <message>
+	parameters: <nick> <message>
 	short description: Sends a private message to a conference member
 
 reconnect
@@ -397,7 +397,7 @@ vacation
 	short description: function is not implemented yet
 
 ver
-	parameters: <uid/nick> 
+	parameters: [uid/nick]
 	short description: retrieves information about OS and client of given uid/nick
 
 voice

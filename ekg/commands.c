@@ -4403,7 +4403,7 @@ void command_init()
 	command_add(NULL, ("session"), "psS psS sS ?", session_command, 0,
 	  "-a --add -d --del -l --list -g --get -s --set -w --sw");
 
-	command_add(NULL, ("set"), "pv v ?", cmd_set, 0, "-a --all -q --quiet");
+	command_add(NULL, ("set"), "pv ? ?", cmd_set, 0, "-a --all -q --quiet");
 
 	command_add(NULL, ("status"), "s", cmd_status, 0, NULL);
 

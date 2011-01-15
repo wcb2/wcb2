@@ -1101,6 +1101,10 @@ static COMMAND(jabber_command_ver)
 	{
 		uid = xstrdup(u->uid + 5);	
 	}
+	else if (u = userlist_find_u(&session->userlist, target))
+	{
+		uid = xstrdup(u->uid + 5);	
+	}
 	else
 	{
 		printq("generic_error", "User not found");
