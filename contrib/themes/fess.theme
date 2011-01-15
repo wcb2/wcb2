@@ -33,6 +33,9 @@ contacts_member_header %C    -- Member --
 contacts_visitor_header %C    -- Visitor --
 contacts_ne_header %C     -- None --
 
+# MUC notice
+jabber_muc_notice \n%g-- %gMessage from: %P%2%n %g--\n%3\n%g----%n\n 
+
 # Contact's colors and formatting
 header 
 contacts_header
@@ -40,8 +43,17 @@ contacts_header_group %G%1%n
 contacts_metacontacts_header 
 contacts_vertical_line_char 
 
+# Free for chat
+contacts_chat_header %C     -- Chat --
+contacts_chat   %G%1%n
+contacts_chat_descr  %Ci%n%G%1%n
+contacts_chat_descr_full  %Ci%n%G%1%n %2
+contacts_chat_blink  %G%U%1%n
+contacts_chat_descr_blink  %Ci%n%G%U%1%n
+contacts_chat_descr_full_blink  %Ci%n%G%U%1%n %2
+
 # Avail
-contacts_avail_header %C  -- Availble --
+contacts_avail_header %C   -- Availble --
 contacts_avail   %g%1%n
 contacts_avail_descr  %Ci%n%g%1%n
 contacts_avail_descr_full  %Ci%n%g%1%n %2
@@ -50,7 +62,7 @@ contacts_avail_descr_blink  %Ci%n%g%U%1%n
 contacts_avail_descr_full_blink  %Ci%n%g%U%1%n %2
 
 # Away
-contacts_away_header %C    -- Away --
+contacts_away_header %C     -- Away --
 contacts_away   %y%1%n
 contacts_away_descr  %Ci%n%y%1%n
 contacts_away_descr_full  %Ci%n%y%1%n %2
@@ -58,17 +70,8 @@ contacts_away_blink   %y%U%1%n
 contacts_away_descr_blink  %Ci%n%y%U%1%n
 contacts_away_descr_full_blink  %Ci%n%y%U%1%n %2
 
-# Do not disturb
-contacts_dnd_header %C   -- DoNotD --
-contacts_dnd   %B%1%n
-contacts_dnd_descr  %Ci%n%B%1%n
-contacts_dnd_descr_full  %Ci%n%B%1%n %2
-contacts_dnd_blink  %B%U%1%n
-contacts_dnd_descr_blink  %Ci%n%B%U%1%n
-contacts_dnd_descr_full_blink  %Ci%n%B%U%1%n %2
-
 # Extended away
-contacts_xa_header %C     -- XA --
+contacts_xa_header %C      -- XA --
 contacts_xa   %B%1%n
 contacts_xa_descr  %Ci%n%B%1%n
 contacts_xa_descr_full  %Ci%n%B%1%n %2
@@ -76,8 +79,17 @@ contacts_xa_blink  %B%U%1%n
 contacts_xa_descr_blink  %Ci%n%B%U%1%n
 contacts_xa_descr_full_blink  %Ci%n%B%U%1%n %2
 
+# Do not disturb
+contacts_dnd_header %C    -- DoNotD --
+contacts_dnd   %B%1%n
+contacts_dnd_descr  %Ci%n%B%1%n
+contacts_dnd_descr_full  %Ci%n%B%1%n %2
+contacts_dnd_blink  %B%U%1%n
+contacts_dnd_descr_blink  %Ci%n%B%U%1%n
+contacts_dnd_descr_full_blink  %Ci%n%B%U%1%n %2
+
 # Not available
-contacts_notavail_header %C     -- NA --
+contacts_notavail_header %C      -- NA --
 contacts_notavail   %r%1%n
 contacts_notavail_descr  %Ci%n%r%1%n
 contacts_notavail_descr_full  %Ci%n%r%1%n %2
@@ -86,7 +98,7 @@ contacts_notavail_descr_blink  %Ci%n%r%U%1%n
 contacts_notavail_descr_full_blink  %Ci%n%r%U%1%n %2
 
 # Invisible
-contacts_invisible_header %C    -- Invis --
+contacts_invisible_header %C     -- Invis --
 contacts_invisible   %B%1%n
 contacts_invisible_descr  %Ci%n%B%1%n
 contacts_invisible_descr_full  %Ci%n%B%1%n %2
@@ -94,19 +106,17 @@ contacts_invisible_blink  %B%U%1%n
 contacts_invisible_descr_blink  %Ci%n%B%U%1%n
 contacts_invisible_descr_full_blink  %Ci%n%B%U%1%n %2
 
-# Free for chat
-contacts_chat_header %C    -- Chat --
-contacts_chat   %G%1%n
-contacts_chat_descr  %Ci%n%G%1%n
-contacts_chat_descr_full  %Ci%n%G%1%n %2
-contacts_chat_blink  %G%U%1%n
-contacts_chat_descr_blink  %Ci%n%G%U%1%n
-contacts_chat_descr_full_blink  %Ci%n%G%U%1%n %2
+# Unknown users
+contacts_unknown_header %C   -- %Y!%CUnknown --
+contacts_unknown   %M%1%n
+contacts_unknown_footer %n
 
 # Blocking users
-contacts_blocking_header %C  -- Blocking --
+contacts_blocking_header %C   -- Blocking --
 contacts_blocking   %B%1%n
 contacts_blocking_footer %n
+
+# Footers
 contacts_footer 
 contacts_footer_group %n 
 contacts_metacontacts_footer
