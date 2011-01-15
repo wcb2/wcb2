@@ -102,6 +102,7 @@ extern int gueries_registered_count;
 #ifdef __DECLARE_QUERIES_STUFF
 #undef __DECLARE_QUERIES_STUFF
 
+#if 0
 /* list of known queries. keep it sorted with enum. */
 
 const struct query_def query_list[] = {
@@ -491,6 +492,8 @@ const struct query_def query_list[] = {
 		QUERY_ARG_CHARP,		/* uid */
 		QUERY_ARG_END } },
 };
+#endif
+
 
 /* Plugin developers may use query_connect() and query_emit() for creating and
  * using other types of queries without defining them in `query_list'. This may
