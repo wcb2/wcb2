@@ -127,7 +127,7 @@ static void unknown_uin_generator(const char *text, int len)
 	int i;
 	
 	for (i = 0; i < send_nicks_count; i++) {
-		if (send_nicks[i] && xstrchr(send_nicks[i], ':') && xisdigit(xstrchr(send_nicks[i], ':')[1]) && !xstrncasecmp(text, send_nicks[i], len)) {
+		if (send_nicks[i] && xstrchr(send_nicks[i], ':') && xisdigit(xstrchr(send_nicks[i], ':')[1]) && !xstrncmp(text, send_nicks[i], len)) {
 			array_add_check(&completions, xstrdup(send_nicks[i]), 1);
 		}
 	}
@@ -157,12 +157,12 @@ static void known_uin_generator(const char *text, int len)
 
 	for (ul = s->userlist; ul; ul = ul->next) {
 		userlist_t *u = ul;
-		if (u->nickname && !xstrncasecmp(text, u->nickname, len)) {
+		if (u->nickname && !xstrncmp(text, u->nickname, len)) {
 			array_add_check(&completions, xstrdup(u->nickname), 1);
 			done = 1;
 		}
 		
-		if (u->nickname && tmp && !xstrncasecmp(tmp, u->nickname, tmp_len)) { 
+		if (u->nickname && tmp && !xstrncmp(tmp, u->nickname, tmp_len)) { 
 			array_add_check(&completions, saprintf(("%s/%s"), session_name, u->nickname), 1);
 			done = 1;
 		}
@@ -171,10 +171,10 @@ static void known_uin_generator(const char *text, int len)
 	for (ul = s->userlist; ul; ul = ul->next) {
 		userlist_t *u = ul;
 
-		if (!done && !xstrncasecmp(text, u->uid, len)) {
+		if (!done && !xstrncmp(text, u->uid, len)) {
 			array_add_check(&completions, xstrdup(u->uid), 1);
 		}
-		if (!done && tmp && !xstrncasecmp(tmp, u->uid, tmp_len)) 
+		if (!done && tmp && !xstrncmp(tmp, u->uid, tmp_len)) 
 		       array_add_check(&completions, saprintf(("%s/%s"), session_name, u->uid), 1);
 	}
 
@@ -186,11 +186,11 @@ static void known_uin_generator(const char *text, int len)
 	for (; ul; ul = ul->next) {
 		userlist_t *u = ul;
 
-		if (u->uid && !xstrncasecmp(text, u->uid, len)) {
+		if (u->uid && !xstrncmp(text, u->uid, len)) {
 			array_add_check(&completions, xstrdup(u->uid), 1);
 		}
 
-		if (u->nickname && !xstrncasecmp(text, u->nickname, len)) {
+		if (u->nickname && !xstrncmp(text, u->nickname, len)) {
 			array_add_check(&completions, xstrdup(u->nickname), 1);
 		}
 	} 
@@ -291,10 +291,10 @@ static void ignored_uin_generator(const char *text, int len)
 			continue;
 
 		if (!u->nickname) {
-			if (!xstrncasecmp(text, u->uid, len))
+			if (!xstrncmp(text, u->uid, len))
 				array_add_check(&completions, xstrdup(u->uid), 1);
 		} else {
-			if (u->nickname && !xstrncasecmp(text, u->nickname, len))
+			if (u->nickname && !xstrncmp(text, u->nickname, len))
 				array_add_check(&completions, xstrdup(u->nickname), 1);
 		}
 	}
@@ -317,10 +317,10 @@ static void blocked_uin_generator(const char *text, int len)
 			continue;
 
 		if (!u->nickname) {
-			if (!xstrncasecmp(text, u->uid, len))
+			if (!xstrncmp(text, u->uid, len))
 				array_add_check(&completions, xstrdup(u->uid), 1);
 		} else {
-			if (u->nickname && !xstrncasecmp(text, u->nickname, len))
+			if (u->nickname && !xstrncmp(text, u->nickname, len))
 				array_add_check(&completions, xstrdup(u->nickname), 1);
 		}
 	}
@@ -620,7 +620,7 @@ static void metacontacts_generator(const char *text, int len)
 	metacontact_t *m;
 
 	for (m = metacontacts; m; m = m->next) {
-		if (!xstrncasecmp(text, m->name, len)) 
+		if (!xstrncmp(text, m->name, len)) 
 			array_add_check(&completions, xstrdup(m->name), 1);
 	}
 }
@@ -1131,7 +1131,7 @@ exact_match:
 					quotes = 1;
 					s2++;
 				}
-				tmp = xstrncasecmp(s1, s2, i);
+				tmp = xstrncmp(s1, s2, i);
 				/* debug("xstrncasecmp(\"%s\", \"%s\", %d) = %d\n", s1, s2, i, xstrncasecmp(s1, s2, i)); */
 				if (tmp)
 					break;
