@@ -26,12 +26,15 @@ back_descr %> (%3) Status changed to %Havailable%n: %T%1%n%2%n
 # Prompt
 prompt %T--%g>%n
 
-# Conference headers
-contacts_owner_header %C    -- Owners --
-contacts_admin_header %C    -- Admins --
-contacts_member_header %C    -- Member --
-contacts_visitor_header %C    -- Visitor --
-contacts_ne_header %C     -- None --
+# Conference headers and footers
+contacts_moderator_header %C  -- Moderators --
+contacts_moderator_footer  
+
+contacts_participant_header %C -- Participants --
+contacts_participant_footer  
+
+contacts_visitor_header %C   -- Visitors --
+contacts_visitor_footer  
 
 # MUC notice
 jabber_muc_notice \n%g-- %gMessage from: %P%2%n %g--\n%3\n%g----%n\n 
@@ -96,6 +99,7 @@ contacts_notavail_descr_full  %Ci%n%r%1%n %2
 contacts_notavail_blink  %r%U%1%n
 contacts_notavail_descr_blink  %Ci%n%r%U%1%n
 contacts_notavail_descr_full_blink  %Ci%n%r%U%1%n %2
+contacts_notavail_footer  
 
 # Invisible
 contacts_invisible_header %C     -- Invis --
@@ -109,17 +113,23 @@ contacts_invisible_descr_full_blink  %Ci%n%B%U%1%n %2
 # Unknown users
 contacts_unknown_header %C   -- %Y!%CUnknown --
 contacts_unknown   %M%1%n
-contacts_unknown_footer %n
+contacts_unknown_footer  
 
 # Blocking users
 contacts_blocking_header %C   -- Blocking --
 contacts_blocking   %B%1%n
-contacts_blocking_footer %n
+contacts_blocking_footer  
+
+# Error'd users
+contacts_error_header %C    -- %r!%CError --
+contacts_error   %M%1%n
+contacts_error_descr   %Ki%M%1%n
+contacts_error_footer  
 
 # Footers
 contacts_footer 
-contacts_footer_group %n 
-contacts_metacontacts_footer
+contacts_footer_group  
+contacts_metacontacts_footer  
 
 # Colors and so on
 statusbar_act_important %G
