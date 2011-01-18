@@ -773,17 +773,20 @@ static COMMAND(jabber_muc_command_muc_info)
 	
 	char *role         = up->role;
 	char *affil        = up->aff;
+	char *resources    = NULL;
+
+	for (res = u->resources; res;  res = res->next) {
+		if (!resources) resources = string_init(res->name);
+		else resources = string_append_format(", %s", res->name);
+	}
 
 	print("jabber_muc_info_beg", u->uid + 5);
-	for (res = u->resources; res;  res = res->next) {
-		print("jabber_muc_info_item_beg", res->name);
-		print("jabber_muc_info_item_val_s", "Status:     ", ekg_status_string(res->status, 1), ekg_status_string(res->status, 0));
-		print("jabber_muc_info_item_val_d", "Description:", res->descr ? res->descr : "None");
-		print("jabber_muc_info_item_val_a", "Affiliation:", affil);
-		print("jabber_muc_info_item_val_r", "Role:       ", role);
-		print("jabber_muc_info_item_end");
-		print("jabber_muc_info_end");
-	}
+	print("jabber_muc_info_val_s", "Status:     ", ekg_status_string(u->status, 1), ekg_status_string(u->status, 0));
+	print("jabber_muc_info_val",   "Description:", u->descr ? u->descr : "None");
+	print("jabber_muc_info_val",   "Resources:  ", resources ? resources : "None");
+	print("jabber_muc_info_val",   "Affiliation:", affil);
+	print("jabber_muc_info_val",   "Role:       ", role);
+	print("jabber_muc_info_end");
 
 	return 0;
 }

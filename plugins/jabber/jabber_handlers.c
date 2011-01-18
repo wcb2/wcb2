@@ -1605,45 +1605,33 @@ JABBER_HANDLER(jabber_handle_presence) {
 								ulist->nickname = xstrdup(new_nick);
 							} else if (na) {
 								userlist_resource_remove(ulist, ulist->resources); ulist->resources = NULL; 
-								newconference_member_remove(c, ulist);             ulist            = NULL; 
+								newconference_member_remove(c,  ulist);            ulist            = NULL; 
 							} else if (role && affiliation) {
 								jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
 								if (xstrcmp(up->role, role))
 									print_info(mucuid, s, "muc_ar_change", session_name(s), "role", nickname, up->role, role);
 								if (xstrcmp(up->aff, affiliation)) 
 									print_info(mucuid, s, "muc_ar_change", session_name(s), "affiliation", nickname, up->aff, affiliation);
-							} else if (!res) 
-								res = userlist_resource_add(ulist, resource + 1, prio);	
+							}
 						} else {
 							ulist = newconference_member_add(c, jid ? xmpp_uid(jid) : uid, nickname);
 							if (resource && ulist) res = userlist_resource_add(ulist, resource + 1, prio);
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
-						if (ulist) {
-							ekg_resource_t *tmp_res = NULL;
-							
+						if (ulist && !nc) {
 							jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
 							if (up && !na) {
 								up->role	= xstrdup(role);
 								up->aff		= xstrdup(affiliation);
 							}
 								
-							if (res) {
-								qtmp = xmlnode_find_child(n, "show"); 
-								if (qtmp) res->status = jabber_status_int(j->istlen, qtmp->data);
-								else      res->status = EKG_STATUS_AVAIL;
+							qtmp = xmlnode_find_child(n, "show"); 
+							if (qtmp) ulist->status = jabber_status_int(j->istlen, qtmp->data);
+							else      ulist->status = EKG_STATUS_AVAIL;
 							
-								qtmp = xmlnode_find_child(n, "status"); 
-								if (qtmp) res->descr = jabber_unescape(qtmp->data);
-							}
-
-							if (!res && (res = ulist->resources))
-							for (tmp_res = ulist->resources; tmp_res; tmp_res = tmp_res->next)
-								if (res->prio < tmp_res->prio) res = tmp_res;
-
-							ulist->status = res->status;
-							ulist->descr  = xstrdup(res->descr);
+							qtmp = xmlnode_find_child(n, "status"); 
+							if (qtmp) ulist->descr = jabber_unescape(qtmp->data);
 						}
 
 						query_emit(NULL, "userlist-refresh");

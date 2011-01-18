@@ -1237,12 +1237,8 @@ static int jabber_theme_init() {
 
 	/* Formats for muc_info function */
 	format_add("jabber_muc_info_beg",        "%g,+=%G---- Information about %c%1%n", 1);
-	format_add("jabber_muc_info_item_beg",   "%g|| ,+=%G---- Resource: %m%1", 1);
-	format_add("jabber_muc_info_item_val_s", "%g|| || %c%1 %{2badfxGYBWg}X%3", 1);
-	format_add("jabber_muc_info_item_val_d", "%g|| || %c%1 %n%2", 1);
-	format_add("jabber_muc_info_item_val_a", "%g|| || %c%1 %n%2", 1);
-	format_add("jabber_muc_info_item_val_r", "%g|| || %c%1 %n%2", 1);
-	format_add("jabber_muc_info_item_end",   "%g|| `+=%G----%n", 1);
+	format_add("jabber_muc_info_val_s",      "%g|| %c%1 %{2bafdxGYMBg}X%3", 1);
+	format_add("jabber_muc_info_val",        "%g|| %c%1 %n%2", 1);
 	format_add("jabber_muc_info_end",        "%g`+=%G---- End of form%n", 1);
 
 #if 0
