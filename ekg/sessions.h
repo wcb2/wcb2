@@ -39,13 +39,6 @@ extern "C" {
 typedef enum {
 	EKG_STATUS_NULL		= 0x00, /* special value */
 
-	/* These statuses should be used in conferences*/
-	EKG_STATUS_VISITOR,
-	EKG_STATUS_NONE,
-	EKG_STATUS_MEMBER,
-	EKG_STATUS_ADMIN,
-	EKG_STATUS_OWNER,
-
 	/* These statuses should be considered as no-delivery */
 	EKG_STATUS_ERROR,		/* used in Jabber */
 	EKG_STATUS_BLOCKED,		/* used in GG */

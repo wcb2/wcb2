@@ -735,6 +735,55 @@ static COMMAND(jabber_muc_command_muc_list)
 	return 0;
 }
 
+/* This function retrieves info from MUC user
+ *	
+ *  Syntax: /muc_info <nick>
+ *
+ */
+static COMMAND(jabber_muc_command_muc_info) 
+{
+	newconference_t  *c  = NULL;
+	userlist_t       *u  = NULL;
+
+	char *nick = params[0];
+
+	if (nick == NULL){
+		printq("invalid_params", name);
+		return -1;
+	}
+	
+	c = newconference_find(session, window_current->target);
+	if (c == NULL) {
+		printq("generic_error", "/xmpp:muc_info only valid in MUC");
+		return 1;
+	}
+	
+	u = newconference_member_find(c, nick);
+	if (u == NULL) {
+		printq("generic_error", "User not found");
+		return 1;
+	}
+	
+	jabber_userlist_private_t *up = jabber_userlist_priv_get(u);
+	ekg_resource_t *res;
+	
+	char *role         = up->role;
+	char *affil        = up->aff;
+
+	print("jabber_muc_info_beg", u->uid + 5);
+	for (res = u->resources; res;  res = res->next) {
+		print("jabber_muc_info_item_beg", res->name);
+		print("jabber_muc_info_item_val_s", "Status:     ", ekg_status_string(res->status, 1), ekg_status_string(res->status, 0));
+		print("jabber_muc_info_item_val_d", "Description:", res->descr ? res->descr : "None");
+		print("jabber_muc_info_item_val_a", "Affiliation:", affil);
+		print("jabber_muc_info_item_val_r", "Role:       ", role);
+		print("jabber_muc_info_item_end");
+		print("jabber_muc_info_end");
+	}
+
+	return 0;
+}
+
 /* This function changes nick in MUC 
  *	
  *  Syntax: /nick [conference] <new_nick>
@@ -2872,6 +2921,7 @@ void jabber_register_commands()
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uUN !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
 	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
+	command_add(&jabber_plugin, "xmpp:muc_info", "!n", jabber_muc_command_muc_info, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:nick", "!C ?", jabber_muc_command_nick,	JABBER_FLAGS_REQ, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "!C ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:pm", "!n !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);

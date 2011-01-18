@@ -1425,19 +1425,6 @@ static inline int jabber_status_int(int tlen, const char *text) {
 	return ekg_status_int(text);
 }
 
-static status_t role_and_affiliation_to_ekg2_status(char *role, char * affiliation) {
-	if(!xstrcmp(affiliation, "owner"))
-		return EKG_STATUS_OWNER;
-	else if(!xstrcmp(affiliation, "admin"))
-		return EKG_STATUS_ADMIN;
-	else if(!xstrcmp(affiliation, "member"))
-		return EKG_STATUS_MEMBER;
-	else if (!xstrcmp(role, "visitor"))
-		return EKG_STATUS_VISITOR;
-	else 
-		return EKG_STATUS_NONE;
-}
-									    
 JABBER_HANDLER(jabber_handle_presence) {
 	jabber_private_t *j = s->priv;
 
@@ -1550,8 +1537,8 @@ JABBER_HANDLER(jabber_handle_presence) {
 						char *errcode     = NULL; char *reason      = NULL; char *new_nick = NULL;
 						char *actor       = NULL; char *new_jid     = NULL;
 
-						int prio = 10;
-						int nc = 0;
+						int prio = 10; 
+						int nc = 0;    /* Nick changed */
 						
 						xmlnode_t       *qtmp, *qtmp2;
 						newconference_t *c;
@@ -1627,20 +1614,36 @@ JABBER_HANDLER(jabber_handle_presence) {
 									print_info(mucuid, s, "muc_ar_change", session_name(s), "affiliation", nickname, up->aff, affiliation);
 							} else if (!res) 
 								res = userlist_resource_add(ulist, resource + 1, prio);	
-						} else if (!ulist) {
+						} else {
 							ulist = newconference_member_add(c, jid ? xmpp_uid(jid) : uid, nickname);
 							if (resource && ulist) res = userlist_resource_add(ulist, resource + 1, prio);
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
-						if (ulist && !nc) {
-							jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
-							ulist->status = role_and_affiliation_to_ekg2_status(role, affiliation);
+						if (ulist) {
+							ekg_resource_t *tmp_res = NULL;
 							
-							if (up) {
+							jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
+							if (up && !na) {
 								up->role	= xstrdup(role);
 								up->aff		= xstrdup(affiliation);
 							}
+								
+							if (res) {
+								qtmp = xmlnode_find_child(n, "show"); 
+								if (qtmp) res->status = jabber_status_int(j->istlen, qtmp->data);
+								else      res->status = EKG_STATUS_AVAIL;
+							
+								qtmp = xmlnode_find_child(n, "status"); 
+								if (qtmp) res->descr = jabber_unescape(qtmp->data);
+							}
+
+							if (!res && (res = ulist->resources))
+							for (tmp_res = ulist->resources; tmp_res; tmp_res = tmp_res->next)
+								if (res->prio < tmp_res->prio) res = tmp_res;
+
+							ulist->status = res->status;
+							ulist->descr  = xstrdup(res->descr);
 						}
 
 						query_emit(NULL, "userlist-refresh");

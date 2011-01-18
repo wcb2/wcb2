@@ -2399,11 +2399,6 @@ struct ekg_status_info {
 
 /* please, keep it sorted with status_t */
 const struct ekg_status_info ekg_statuses[] = {
-		{ EKG_STATUS_VISITOR,  "visitor"	},
-		{ EKG_STATUS_NONE,     "ne"	        },
-		{ EKG_STATUS_MEMBER,   "member"		},
-		{ EKG_STATUS_ADMIN,    "admin"		},
-		{ EKG_STATUS_OWNER,    "owner"		},
 		{ EKG_STATUS_ERROR,    "error"		},
 		{ EKG_STATUS_BLOCKED,  "blocking"	},
 		{ EKG_STATUS_UNKNOWN,  "unknown"	},

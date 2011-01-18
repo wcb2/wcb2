@@ -31,6 +31,7 @@
 #include <ekg/userlist.h>
 #include <ekg/metacontacts.h>
 #include <ekg/xmalloc.h>
+#include <plugins/jabber/jabber.h>
 
 #include "backlog.h"
 #include "bindings.h"
@@ -42,8 +43,8 @@ int contacts_group_index = 0;
 
 static int contacts_edge = WF_RIGHT;
 static int contacts_frame = WF_LEFT;
-#define CONTACTS_ORDER_DEFAULT "owadmenevichavawxadninnouner"			/* if you modify it, please modify also CONTACTS_ORDER_DEFAULT_LEN */
-#define CONTACTS_ORDER_DEFAULT_LEN 28					                /* CONTACTS_ORDER_DEFAULT_LEN == strlen(CONTACTS_ORDER_DEFAULT) */
+#define CONTACTS_ORDER_DEFAULT "mopavichavawxadninnouner"			    /* if you modify it, please modify also CONTACTS_ORDER_DEFAULT_LEN */
+#define CONTACTS_ORDER_DEFAULT_LEN 24					                /* CONTACTS_ORDER_DEFAULT_LEN == strlen(CONTACTS_ORDER_DEFAULT) */
 static char contacts_order[32] = CONTACTS_ORDER_DEFAULT;
 static size_t corderlen	= CONTACTS_ORDER_DEFAULT_LEN;			/* it must be always equal xstrlen(contacts_order) XXX please note if you add somewhere code which modify contacts_order */
 
@@ -305,13 +306,18 @@ int ncurses_contacts_update(window_t *w, int save_pos) {
 			userlist_t *u = ul;
 
 			const char *status_t;
+			const char *affil;
 			const char *format;
 			fstring_t *string;
 
 			if (!u->nickname || !u->status)
 				continue;
 
-			status_t = ekg_status_string(u->status, 0);
+			if (c && newconference_member_find(c, u->nickname) && !all) {
+				status_t = ((jabber_userlist_private_t *)u->priv)->role;
+				affil    = ((jabber_userlist_private_t *)u->priv)->aff;
+			} else
+				status_t = ekg_status_string(u->status, 0);
 
 			if (config_contacts_orderbystate ?
 				xstrncmp(contacts_order + j, status_t, 2) :		/* when config_contacts_orderbystate, we need to have got this status in contacts_order now. */
@@ -325,7 +331,7 @@ int ncurses_contacts_update(window_t *w, int save_pos) {
 					continue;
 			}
 
-			if (!count) {
+			if (!count && config_contacts_orderbystate) {
 				snprintf(tmp, sizeof(tmp), "contacts_%s_header", status_t);
 				format = format_find(tmp);
 				if (format_ok(format))
@@ -333,7 +339,9 @@ int ncurses_contacts_update(window_t *w, int save_pos) {
 				footer_status = status_t;
 			}
 
-			if (u->descr && config_contacts_descr)
+			if (c && newconference_member_find(c, u->nickname)  && !all)
+				snprintf(tmp, sizeof(tmp), "contacts_%s_%s", status_t, affil);
+			else if (u->descr && config_contacts_descr)
 				snprintf(tmp, sizeof(tmp), "contacts_%s_descr_full", status_t);
 			else if (u->descr && !config_contacts_descr)
 				snprintf(tmp, sizeof(tmp), "contacts_%s_descr", status_t);

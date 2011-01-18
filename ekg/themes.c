@@ -1486,13 +1486,22 @@ void theme_init()
 	theme_init_contact_status("notavail", 'r', 0);
 	theme_init_contact_status("invisible", 'c', 1);
 
-	/* This will be used for statuses */
-	theme_init_contact_status("owner", 'Y', 1);
-	theme_init_contact_status("admin", 'y', 1);
-	theme_init_contact_status("member", 'g', 1);
-	theme_init_contact_status("ne", 'b', 1);
-	theme_init_contact_status("visitor", 'r', 1);
+	/* This will be used for conferences */
+	theme_init_contact_status("moderator_owner", 'Y', 1);
+	theme_init_contact_status("moderator_admin", 'y', 1);
+	theme_init_contact_status("moderator_member",'g', 1);
+	theme_init_contact_status("moderator_none",  'b', 1);
 
+	theme_init_contact_status("participant_owner", 'Y', 1);
+	theme_init_contact_status("participant_admin", 'y', 1);
+	theme_init_contact_status("participant_member", 'g', 1);
+	theme_init_contact_status("participant_none", 'b', 1);
+
+	theme_init_contact_status("visitor_owner", 'Y', 1);
+	theme_init_contact_status("visitor_admin", 'y', 1);
+	theme_init_contact_status("visitor_member", 'g', 1);
+	theme_init_contact_status("visitor_none", 'r', 1);
+	
 	format_add("contacts_blocking_header", "", 1);
 	format_add("contacts_blocking", " %m%1%n", 1);
 	format_add("contacts_blocking_footer", "", 1);

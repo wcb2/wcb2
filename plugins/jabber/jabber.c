@@ -1193,7 +1193,7 @@ static int jabber_theme_init() {
 		/* %3 - command+params %4 - sessionname %5 - target %6 - quiet */
 	format_add("jabber_remotecontrols_commited_command",_("%> (%1) RC %W%2%n: requested command: %W%3%n @ session: %4 window: %5 quiet: %6"), 1);	
 
-	format_add("jabber_form_title",		  "%g,+=%G----- %3 %n(%T%2%n)", 1);
+	format_add("jabber_form_title",		  "%g,+=%G----- %3 %n(%c%2%n)", 1);
 	format_add("jabber_form_item",		  "%g|| %n%(21)3 (%6) %K|%n --%4 %(20)5", 1);	/* %3 - label %4 - keyname %5 - value %6 - req; optional */
 
 	format_add("jabber_form_item_beg",	  "%g|| ,+=%G-----%n", 1);
@@ -1232,8 +1232,19 @@ static int jabber_theme_init() {
 		_("%> Room %W%2%n created, now to configure it: type %W/admin %g%2%n to get configuration form, or type %W/admin %g%2%n --instant to create instant one"), 1);
 	format_add("jabber_muc_list_title",	"%g,+=%G------------ MUC %1s list", 1);
 	format_add("jabber_muc_list_affil", "%g|| %c%3 %m%5", 1);	                                          /* %1 - sessions  %2 - from %3 - jid %4 - aff %5 - reason           */
-	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmaoyggg}X%(6)5 %n] %c%(,25)4 %m%3", 1);	          /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
+	format_add("jabber_muc_list_role",  "%g|| %n[ %{5nmaobgyY}X%(6)5 %n] %c%(,25)4 %m%3", 1);	          /* %1 - sessions  %2 - from %3 - jid %4 - nick %5 - affil %6 - role */
 	format_add("jabber_muc_list_end",   "%g`+=%G------------ End of the list (%nTotal: %y%1%n)", 1);
+
+	/* Formats for muc_info function */
+	format_add("jabber_muc_info_beg",        "%g,+=%G---- Information about %c%1%n", 1);
+	format_add("jabber_muc_info_item_beg",   "%g|| ,+=%G---- Resource: %m%1", 1);
+	format_add("jabber_muc_info_item_val_s", "%g|| || %c%1 %{2badfxGYBWg}X%3", 1);
+	format_add("jabber_muc_info_item_val_d", "%g|| || %c%1 %n%2", 1);
+	format_add("jabber_muc_info_item_val_a", "%g|| || %c%1 %n%2", 1);
+	format_add("jabber_muc_info_item_val_r", "%g|| || %c%1 %n%2", 1);
+	format_add("jabber_muc_info_item_end",   "%g|| `+=%G----%n", 1);
+	format_add("jabber_muc_info_end",        "%g`+=%G---- End of form%n", 1);
+
 #if 0
 	format_add("jabber_send_chan", _("%B<%W%2%B>%n %5"), 1);
 	format_add("jabber_send_chan_n", _("%B<%W%2%B>%n %5"), 1);
