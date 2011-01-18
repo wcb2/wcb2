@@ -255,6 +255,10 @@ modify
 	
 	-n, --nickname <nickname>     contact nickname
 
+muc_info
+	parameters: <nick>
+	short description: shows information(jid, status, status descr, affiliation, role) about MUC user
+
 muc_list
 	parameters: <type> <list>
 	short description: retrieves choosen MUC list from server (You must have enough permissions)
