@@ -285,9 +285,6 @@ static COMMAND(jabber_command_msg)
 	if (!(uid = jid_target2uid(session, target, quiet)))
 		return -1;
 
-	if (!(res = xstrchr(target, '/')))
-		res = "";
-
 		/* threaded messages */
 	if (!xstrcmp(name, "tmsg")) {
 			/* just make it compatible with /msg */
@@ -368,10 +365,10 @@ static COMMAND(jabber_command_msg)
 	if (ismuc)
 		watch_write(j->send_watch, "<message type=\"groupchat\" to=\"%s\" id=\"%d\">", uid+5, time(NULL));
 	else
-		watch_write(j->send_watch, "<message %sto=\"%s%s\" id=\"%d\">", 
+		watch_write(j->send_watch, "<message %sto=\"%s\" id=\"%d\">", 
 			chat ? "type=\"chat\" " : "",
 /*				j->istlen ? "type=\"normal\" " : "",  */
-			uid+5, res, time(NULL));
+			uid+5, time(NULL));
 
 	if (subject) {
 		watch_write(j->send_watch, "<subject>%s</subject>", subject); 
