@@ -1237,7 +1237,7 @@ static int jabber_theme_init() {
 
 	/* Formats for muc_info function */
 	format_add("jabber_muc_info_beg",        "%g,+=%G---- Information about %c%1%n", 1);
-	format_add("jabber_muc_info_val_s",      "%g|| %c%1 %{2bafdxGYMBg}X%3", 1);
+	format_add("jabber_muc_info_val_s",      "%g|| %c%1 %{2bafdxGYMBg}X%3 %K(%n%4%K)", 1);
 	format_add("jabber_muc_info_val",        "%g|| %c%1 %n%2", 1);
 	format_add("jabber_muc_info_end",        "%g`+=%G---- End of form%n", 1);
 

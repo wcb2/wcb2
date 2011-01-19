@@ -766,24 +766,35 @@ static COMMAND(jabber_muc_command_muc_info)
 	}
 	
 	jabber_userlist_private_t *up = jabber_userlist_priv_get(u);
-	ekg_resource_t *res;
 	
 	char *role         = up->role;
 	char *affil        = up->aff;
-	char *resources    = NULL;
+	char *status       = NULL;
+	char *resource     = NULL;
 
-	for (res = u->resources; res;  res = res->next) {
-		if (!resources) resources = string_init(res->name);
-		else resources = string_append_format(", %s", res->name);
+	resource = u->resources ? u->resources->name : "Not present";
+
+	switch(u->status) {
+		case EKG_STATUS_FFC:  status = xstrdup("Chat");
+								break;
+		case EKG_STATUS_AWAY: status = xstrdup("Away");
+								break;
+		case EKG_STATUS_XA:   status = xstrdup("Extended Away");
+								break;
+		case EKG_STATUS_DND:  status = xstrdup("Do not disturb");
+								break;
+		default: status = xstrdup("Available");
+								break;
 	}
 
-	print("jabber_muc_info_beg", u->uid + 5);
-	print("jabber_muc_info_val_s", "Status:     ", ekg_status_string(u->status, 1), ekg_status_string(u->status, 0));
-	print("jabber_muc_info_val",   "Description:", u->descr ? u->descr : "None");
-	print("jabber_muc_info_val",   "Resources:  ", resources ? resources : "None");
+	print("jabber_muc_info_beg",    u->uid + 5);
+	print("jabber_muc_info_val_s", "Status:     ", ekg_status_string(u->status, 1), status, u->descr);
+	print("jabber_muc_info_val",   "Resource:   ", resource);
 	print("jabber_muc_info_val",   "Affiliation:", affil);
 	print("jabber_muc_info_val",   "Role:       ", role);
 	print("jabber_muc_info_end");
+
+	xfree(status);
 
 	return 0;
 }
