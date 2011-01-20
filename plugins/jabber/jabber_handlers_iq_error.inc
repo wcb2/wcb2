@@ -131,3 +131,4 @@ JABBER_HANDLER_ERROR(jabber_handle_iq_error_generic_old) {
 }
 
 // vim:syn=c
+// vim:filetype=c

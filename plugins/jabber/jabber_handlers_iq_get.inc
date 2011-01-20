@@ -1,5 +1,21 @@
 #define JABBER_HANDLER_GET_REPLY(x) 	static void x(session_t *s, xmlnode_t *n, const char *from, const char *id)
 
+
+/**
+ * send_error()
+ *
+ * Sends <service-unavailable/> when we don't want to answer
+ *
+ */
+
+static void send_error( jabber_private_t * j, char *id, char *to) {
+	watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type=\"error\">"
+									"<error type='cancel'>"
+										"<service-unavailable xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>"
+									"</error>"
+								"</iq>", id, to);
+}
+
 /**
  * jabber_handle_iq_get_disco()
  *
@@ -41,7 +57,6 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_disco) {
  * jabber_handle_iq_get_disco_info()
  *
  * Handler for IQ GET QUERY xmlns="http://jabber.org/protocol/disco#info"<br>
- * XXX
  *
  */
 
@@ -68,16 +83,19 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_disco_info) {
 /**
  * jabber_handle_iq_get_last()
  *
- * <b>XEP-0012: Last Activity</b> (http://www.xmpp.org/extensions/xep-0012.html) <i>[1.2 2007-02-15]</i> (<b><i>iq:type='get' iq::query:xmlns='jabber:iq:last'</i></b>)<br>
+ * Sends reply about our last activity.<br>
  *
- * Send reply about our last activity.<br>
- *
- * @todo From XEP-0012:
- * 	 - 8. A client MUST provide a way for a human user to disable sending of Last Activity responses from the client's full JID (<node@domain.tld/resource>).
  */
 
 JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_last) {
 	jabber_private_t *j = s->priv;
+
+	int sent = session_int_get(s, "iq_last");
+	
+	if (!sent) {
+		send_error(j, id, from);
+		return;
+	}
 
 	watch_write(j->send_watch, 
 			"<iq to=\"%s\" type=\"result\" id=\"%s\">"
@@ -88,19 +106,8 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_last) {
 /**
  * jabber_handle_iq_get_version()
  *
- * <b>XEP-0092: Software Version</b> (http://www.xmpp.org/extensions/xep-0092.html) <i>[1.1 2007-02-15]</i> (<b><i>iq:type='get' iq::query:xmlns='jabber:iq:version'</i></b>)<br>
- *
- * Send info about our program and system<br>
- *
- * @note 
- * 	<b>PRIVACY WARNING:</b> It'll send potential useful information like: what version of kernel you use.<br>
- * 	If you don't want to send this information set session variables:<br>
- * 		- <i>ver_client_name</i> - If you want spoof program name. [Although I think it's good to send info about ekg2. Because it's good program.]<br>
- * 		- <i>ver_client_version</i> - If you want to spoof program version.<br>
- * 		- <i>ver_os</i> - The most useful, to spoof OS name, version and stuff.<br>
- *
- * @todo From XEP-0092:
- * 	 - 5. an application MUST provide a way for a human user or administrator to disable sharing of information about the operating system.
+ * Sends info about our program and system 
+ * 
  */
 
 JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_version) {
@@ -108,6 +115,13 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_version) {
 
 	const char *ver_os;
 	const char *tmp;
+
+	int sent = session_int_get(s, "iq_version");
+	
+	if (!sent) {
+		send_error(j, id, from);
+		return;
+	}
 
 	char *escaped_client_name	= jabber_escape(jabberfix((tmp = session_get(s, "ver_client_name")), DEFAULT_CLIENT_NAME));
 	char *escaped_client_version	= jabber_escape(jabberfix((tmp = session_get(s, "ver_client_version")), VERSION));
@@ -141,25 +155,33 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_version) {
 }
 
 /**
- * jabber_handle_iq_ping()
+ * jabber_handle_iq_get_ping()
  *
- * <b>XEP-0199: XMPP Ping</b> (http://www.xmpp.org/extensions/xep-0199.html) <i>[1.0 2007-06-12]</i> (<b><i>iq:type='get' iq::ping:xmlns='urn:xmpp:ping'</i></b>)<br>
+ * Sends answer to ping
  *
- * @note From XEP-0199:
- * 	 - 6. If a connected resource receives a ping request but it does not want to reveal its network availability to the sender for any reason 
- * 	 (e.g., because the sender is not authorized to know the connected resource's availability),
- * 	 then it too MUST reply with a <service-unavailable/> error.
  */
 
-JABBER_HANDLER_GET_REPLY(jabber_handle_iq_ping) {
+JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_ping) {
 	jabber_private_t *j = s->priv;
+
+	int sent = session_int_get(s, "iq_ping");
+	
+	if (!sent) { 
+		send_error(j, id, from);
+		return;
+	}
 
 	watch_write(j->send_watch, "<iq to=\"%s\" id=\"%s\" type=\"result\"/>\n",
 			from, id);
 }
 
+/**
+ * jabber_handle_iq_get_ping()
+ *
+ * Sends curent time in UTC format
+ */
 
-JABBER_HANDLER_GET_REPLY(jabber_handle_iq_time) {
+JABBER_HANDLER_GET_REPLY(jabber_handle_iq_get_time) {
 	jabber_private_t *j = s->priv;
 
 	time_t   t = time(NULL);
@@ -167,9 +189,13 @@ JABBER_HANDLER_GET_REPLY(jabber_handle_iq_time) {
 	char     tz_str[7];
 	char     *hours;
 
-	if (!t)
-		return;
+	int sent = session_int_get(s, "iq_time");
 	
+	if (!t || !sent) { 
+		send_error(j, id, from);
+		return;
+	}
+
 	strftime(time_str, sizeof(time_str), "%Y-%m-%dT%H:%M:%SZ", gmtime(&t));
 	strftime(tz_str, sizeof(tz_str), "%z", localtime(&t));
 
@@ -190,10 +216,11 @@ static const struct jabber_iq_generic_handler jabber_iq_get_handlers[] = {
 	{ NULL,			"http://jabber.org/protocol/disco#items",	jabber_handle_iq_get_disco },
 	{ NULL,			"http://jabber.org/protocol/disco#info",	jabber_handle_iq_get_disco_info },
 
-	{ "ping",		"urn:xmpp:ping",				            jabber_handle_iq_ping },
-	{ "time",		"urn:xmpp:time",				            jabber_handle_iq_time },
+	{ "ping",		"urn:xmpp:ping",				            jabber_handle_iq_get_ping },
+	{ "time",		"urn:xmpp:time",				            jabber_handle_iq_get_time },
 
 	{ "",			NULL,						                NULL }
 };
 
 // vim:syn=c
+// vim:filetype=c

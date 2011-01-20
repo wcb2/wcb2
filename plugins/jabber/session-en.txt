@@ -135,6 +135,50 @@ display_server_features
 	
 		2 - always
 
+iq_last
+	type: bool
+	default value: 1
+	
+	Defines whether the answer will be sent
+	
+	
+	1 - we will response to this iq
+	
+	0 - <service-unavailable/> will be sent instead of requested information
+
+iq_ping
+	type: bool
+	default value: 1
+	
+	Defines whether the answer will be sent
+	
+	
+	1 - we will response to this iq
+	
+	0 - <service-unavailable/> will be sent instead of requested information
+
+iq_time
+	type: bool
+	default value: 1
+	
+	Defines whether the answer will be sent
+	
+	
+	1 - we will response to this iq
+	
+	0 - <service-unavailable/> will be sent instead of requested information
+
+iq_version
+	type: bool
+	default value: 1
+	
+	Defines whether the answer will be sent
+	
+	
+	1 - we will response to this iq
+	
+	0 - <service-unavailable/> will be sent instead of requested information
+
 log_formats
 	type: string
 	default value: xml,simple
