@@ -772,7 +772,7 @@ static COMMAND(jabber_muc_command_muc_info)
 	char *status       = NULL;
 	char *resource     = NULL;
 
-	resource = u->resources ? u->resources->name : "Not present";
+	resource = u->resources ? xstrdup(u->resources->name) : xstrdup("Not present");
 
 	switch(u->status) {
 		case EKG_STATUS_FFC:  status = xstrdup("Chat");
@@ -783,7 +783,7 @@ static COMMAND(jabber_muc_command_muc_info)
 								break;
 		case EKG_STATUS_DND:  status = xstrdup("Do not disturb");
 								break;
-		default: status = xstrdup("Available");
+		default:              status = xstrdup("Available");
 								break;
 	}
 
@@ -795,6 +795,7 @@ static COMMAND(jabber_muc_command_muc_info)
 	print("jabber_muc_info_end");
 
 	xfree(status);
+	xfree(resource);
 
 	return 0;
 }
