@@ -31,7 +31,10 @@
 #include <ekg/userlist.h>
 #include <ekg/metacontacts.h>
 #include <ekg/xmalloc.h>
-#include <plugins/jabber/jabber.h>
+
+#ifdef HAVE_EXPAT_H
+#	include <plugins/jabber/jabber.h>
+#endif
 
 #include "backlog.h"
 #include "bindings.h"
@@ -313,11 +316,14 @@ int ncurses_contacts_update(window_t *w, int save_pos) {
 			if (!u->nickname || !u->status)
 				continue;
 
+#ifdef HAVE_EXPAT_H
 			if (c && newconference_member_find(c, u->nickname) && !all) {
 				status_t = ((jabber_userlist_private_t *)u->priv)->role;
 				affil    = ((jabber_userlist_private_t *)u->priv)->aff;
 			} else
-				status_t = ekg_status_string(u->status, 0);
+#endif
+
+			status_t = ekg_status_string(u->status, 0);
 
 			if (config_contacts_orderbystate ?
 				xstrncmp(contacts_order + j, status_t, 2) :		/* when config_contacts_orderbystate, we need to have got this status in contacts_order now. */
@@ -339,9 +345,19 @@ int ncurses_contacts_update(window_t *w, int save_pos) {
 				footer_status = status_t;
 			}
 
-			if (c && newconference_member_find(c, u->nickname)  && !all)
-				snprintf(tmp, sizeof(tmp), "contacts_%s_%s", status_t, affil);
-			else if (u->descr && config_contacts_descr)
+#ifdef HAVE_EXPAT_H
+			/* For xmpp plugin to  show affiliations and roles in MUC */
+			if (c && newconference_member_find(c, u->nickname)  && !all) {
+				if (u->descr && config_contacts_descr)
+					snprintf(tmp, sizeof(tmp), "contacts_%s_%s_descr_full", status_t, affil);
+				else if (u->descr)
+					snprintf(tmp, sizeof(tmp), "contacts_%s_%s_descr", status_t, affil);
+				else
+					snprintf(tmp, sizeof(tmp), "contacts_%s_%s", status_t, affil);
+			} else 
+#endif
+
+			if (u->descr && config_contacts_descr)
 				snprintf(tmp, sizeof(tmp), "contacts_%s_descr_full", status_t);
 			else if (u->descr && !config_contacts_descr)
 				snprintf(tmp, sizeof(tmp), "contacts_%s_descr", status_t);
