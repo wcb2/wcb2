@@ -37,15 +37,15 @@ affiliation
 	
 	<affiliation>	
 	
-	* outcast
+		* outcast
 	
-	* none
+		* none
 	
-	* member
+		* member
 	
-	* admin
+		* admin
 	
-	* owner
+		* owner
 	
 	
 	
@@ -268,9 +268,9 @@ muc_list
 	
 	<type>
 	
-	* affiliation
+		* affiliation
 	
-	* role
+		* role
 	
 	
 	<list>
@@ -337,13 +337,13 @@ role
 	
 	<role>	
 	
-	* none
+		* none
 	
-	* visitor
+		* visitor
 	
-	* participant
+		* participant
 	
-	* moderator
+		* moderator
 	
 	
 	
