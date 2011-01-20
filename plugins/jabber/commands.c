@@ -539,6 +539,12 @@ static COMMAND(jabber_command_away)
 	return 0;
 }
 
+/**
+ *  This function changes your password
+ *
+ *  Syntax: /passwrd <new_password>
+ *
+ */
 static COMMAND(jabber_command_passwd)
 {
 	jabber_private_t *j = session_private_get(session);
@@ -572,7 +578,8 @@ static COMMAND(jabber_command_passwd)
 }
 
 
-/* This function destroys MUC
+/**
+ *  This function destroys MUC
  *	
  *  Syntax: /destroy <conference> [params]
  *  Params: --jid <new_jid>, --password <pass>, --reason <reason>
@@ -636,7 +643,8 @@ static COMMAND(jabber_muc_command_destroy)
 	xfree(password); xfree(reason);
 }
 
-/* This function sends invitation to join MUC to some guy
+/**
+ *  This function sends invitation to join MUC to some guy
  *	
  *  Syntax: /invite <conference> <jid/alias> [reason]
  *
@@ -673,7 +681,8 @@ static COMMAND(jabber_muc_command_invite)
 	xfree(conf);
 }
 
-/* This function sends private messages in MUC
+/**
+ *  This function sends private messages in MUC
  *	
  *  Syntax: /pm <nick> <message>
  *
@@ -736,7 +745,8 @@ static COMMAND(jabber_muc_command_muc_list)
 	return 0;
 }
 
-/* This function retrieves info from MUC user
+/**  
+ *  This function retrieves info from MUC user
  *	
  *  Syntax: /muc_info <nick>
  *
@@ -800,7 +810,8 @@ static COMMAND(jabber_muc_command_muc_info)
 	return 0;
 }
 
-/* This function changes nick in MUC 
+/** 
+ *  This function changes nick in MUC 
  *	
  *  Syntax: /nick [conference] <new_nick>
  *
@@ -838,6 +849,12 @@ static COMMAND(jabber_muc_command_nick) {
 	return 0;
 }
 
+/** 
+ *  This function handles authentication requests 
+ *	
+ *  Syntax: /auth <options> <jid>
+ *
+ */
 static COMMAND(jabber_command_auth) {
 	jabber_private_t *j = session->priv;
 
