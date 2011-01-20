@@ -2,12 +2,16 @@
 // (c) copyright 2001-2003 wojtek kaniewski <wojtekka@irc.pl>
 // (c) copyright      2004 piotr kupisiewicz <deletek@ekg2.org>
 // (c) copyright      2004 tomasz torcz <zdzichu@irc.pl>
+// (c) copyright 2010-2011 fess
 
 allow_add_reply_id
 	type: integer
 	default value: 1
 	
-	Whether ekg2 should add Reply-IDs for incoming messages:
+	Defines whether we should add Reply-IDs for incoming messages
+	
+	
+	Possible values:
 	
 		0 - disabled
 	
@@ -19,7 +23,10 @@ allow_remote_control
 	type: integer
 	default value: 0
 	
-	Allow remote control. Possible values:
+	Allow remote control
+	
+	
+	Possible values:
 	
 		0 - disabled
 	
@@ -27,14 +34,16 @@ allow_remote_control
 	
 		2 - enabled for allow_remote_control_jid
 	
-		666 - enabled for all(DO NOT USE IT!!!)	
+	  666 - enabled for all(DO NOT USE IT!!!)	
 
 auto_auth
 	type: integer
 	default value: 0
 	
-	Whether ekg2 should handle authorization request automagically.
+	Whether we should handle authorization request automagically
+	
 	Variable bitmapped (i.e. you should sum up following values):
+	
 	
 		1 - accept subscribe requests
 	
@@ -46,9 +55,9 @@ auto_auth
 	
 		5 - ignore subscribe requests
 	
-		10 - ignore unsubscribe requests
+	   10 - ignore unsubscribe requests
 	
-		16 - when adding contacts, don't request auth
+	   16 - when adding contacts, don't request auth
 
 auto_bookmark_sync
 	type: bool
@@ -68,7 +77,7 @@ auto_reconnect
 	
 		0 - no reconnect at all
 	
-	   >0 - amount of seconds, how long ekg2 will wait to reconnect
+	  int - amount of seconds between reconnect
 
 auto_find
 	type: integer
@@ -78,7 +87,7 @@ auto_find
 	
 		0 - auto_find disables
 	
-	   >0 - finds out every vcard of every person, who sends us a message
+	  int - finds out every vcard of every person, who sends us a message
 
 default_nickname
 	type: string
@@ -112,15 +121,18 @@ display_notify
 	type: integer
 	default value: -1
 	
-	-1 - use global display_notify variable.
+	Possible values:
 	
-	 0 - ignore status changes
+		-1 - use global display_notify variable
 	
-	 1 - show all changes
+		 0 - ignore status changes
 	
-	 2 - show only changes from unavailable to available and vice versa
+	 	 1 - show all changes
 	
-	Setting ,,contacts'' variable to 2 takes precendence (status changes
+	 	 2 - show only changes from unavailable to available and vice versa
+	
+	
+	Setting "contacts" variable to 2 takes precendence (status changes
 	are hidden). 
 
 display_server_features
@@ -139,12 +151,11 @@ iq_last
 	type: bool
 	default value: 1
 	
-	Defines whether the answer will be sent
+	Possible values:
 	
+		1 - we will response to this iq
 	
-	1 - we will response to this iq
-	
-	0 - <service-unavailable/> will be sent instead of requested information
+		0 - <service-unavailable/> will be sent instead of requested information
 
 iq_ping
 	type: bool
@@ -153,9 +164,11 @@ iq_ping
 	Defines whether the answer will be sent
 	
 	
-	1 - we will response to this iq
+	Possible values:
 	
-	0 - <service-unavailable/> will be sent instead of requested information
+		1 - we will response to this iq
+	
+		0 - <service-unavailable/> will be sent instead of requested information
 
 iq_time
 	type: bool
@@ -164,9 +177,11 @@ iq_time
 	Defines whether the answer will be sent
 	
 	
-	1 - we will response to this iq
+	Possible values:
 	
-	0 - <service-unavailable/> will be sent instead of requested information
+		1 - we will response to this iq
+	
+		0 - <service-unavailable/> will be sent instead of requested information
 
 iq_version
 	type: bool
@@ -175,15 +190,17 @@ iq_version
 	Defines whether the answer will be sent
 	
 	
-	1 - we will response to this iq
+	Possible values:
 	
-	0 - <service-unavailable/> will be sent instead of requested information
+		1 - we will response to this iq
+	
+		0 - <service-unavailable/> will be sent instead of requested information
 
 log_formats
 	type: string
 	default value: xml,simple
 	
-	Defines file formats to use when logging to file.
+	Defines file formats to use when logging to file
 	
 	See also: log_path variable
 
@@ -198,22 +215,26 @@ password
 	type: string
 	default value: none
 	
-	User password.
-	
-	Necessary while connecting.
+	User password
 
 photo_hash
 	type: string
 	default value: none
 	
-	Sha-1 hash of your avatar.
+	Sha-1 hash of your avatar
 
 plaintext_passwd
 	type: bool
 	default value: 0
 	
-	Determines whether password can be sent using plaintext (1) or digest (0)
-	method.
+	Determines whether password can be sent using plaintext or digest method:
+	
+	
+	Possible values:
+	
+		0 - digest
+	
+		1 - plaintext
 
 ping_server
 	type: integer
@@ -221,15 +242,15 @@ ping_server
 	
 	Possible values:
 	
-		0  -  ekg2 will not ping server
+		 0  -  we will not ping server
 	
-	   >0  -  amount of seconds between pings
+	   int  -  amount of seconds between pings
 
 port
 	type: integer
 	default value: 5222
 	
-	Server port.
+	Server port
 
 prefer_family
 	type: integer
@@ -240,35 +261,35 @@ prefer_family
 	
 	Possible values:
 	
-		   0     -  default(ipv4)
+		0 - default(ipv4)
 	
-		AF_INET  -  ipv4
+		4 - ipv4
 	
-		AF_INET6 -  ipv6
+		6 - ipv6
 
 priority
 	type: integer
 	default value: 5
 	
-	Jabber server connection priority.
+	Priority of this resource
 
 resource
 	type: string
 	default value: ekg2
 	
-	Jabber resource.
+	Jabber resource
 
 server
 	type: string
 	default value: none 
 	
-	Server address. Set only if it's other than server part of JID.
+	Server address. Set only if it's other than server part of JID
 
 ssl_port
 	type: integer
 	default value: 5223
 	
-	Ciphered connection port.
+	Ciphered connection port
 
 use_compression
 	type: integer
@@ -284,30 +305,29 @@ use_ssl
 	type: bool
 	default value: 1
 	
-	If set to 1 ekg2 will use ciphered connection.
+	If set to 1 ekg2 will use ciphered connection
 
 use_tls
 	type: bool
 	default value: 1
 	
-	If set to 1 ekg2 will use ciphered connection.
+	If set to 1 ekg2 will use ciphered connection
 
 ver_client_name
 	type: string
 	default value: none
 	
-	Client name returned when being queried.
+	Client name returned when being queried
 
 ver_client_version
 	type: string
 	default value: none
 	
-	Client version returned when being queried.
+	Client version returned when being queried
 
 ver_os
 	type: string
 	default value: none
 	
-	OS information returned when being queried.
+	OS information returned when being queried
 
-$Id: session-en.txt 5012 2010-10-03 15:09:15Z wiechu $
