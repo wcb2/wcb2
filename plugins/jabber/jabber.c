@@ -1237,7 +1237,7 @@ static int jabber_theme_init() {
 
 	/* Formats for muc_info function */
 	format_add("jabber_muc_info_beg",        "%g,+=%G---- Information about %c%1%n", 1);
-	format_add("jabber_muc_info_val_s",      "%g|| %c%1 %{2bafdxGYMBY}X%3 %K(%n%4%K)", 1);
+	format_add("jabber_muc_info_val_s",      "%g|| %c%1 %{2bafdxgYGBy}X%3 %K(%n%4%K)", 1);
 	format_add("jabber_muc_info_val",        "%g|| %c%1 %n%2", 1);
 	format_add("jabber_muc_info_end",        "%g`+=%G---- End of form%n", 1);
 
@@ -1421,7 +1421,7 @@ static int jabber_theme_init() {
 	format_add("jabber_ctcp_request",		_("%> (%1) %T%2%n requested IQ %g%4%n"), 1);
 
 /* common errors */
-	format_add("jabber_generic_error",	_("%! Error from %m%1%n: %R(%2) %r%3"), 1);
+	format_add("jabber_generic_error",	_("%! Error from %g%1%n: %R(%2) %r%3"), 1);
 
 #endif	/* !NO_DEFAULT_THEME */
 	return 0;

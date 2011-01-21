@@ -1378,18 +1378,18 @@ void theme_init()
 	/* zmiany stanu */
 	format_add("away", _("%> (%1) Status changed to %Yaway%n\n"), 1);
 	format_add("away_descr", _("%> (%3) Status changed to %Yaway%n: %T%1%n%2\n"), 1);
-	format_add("back", _("%> (%1) Status changed to %Gavailable%n\n"), 1);
-	format_add("back_descr", _("%> (%3) Status changed to %Gavailable%n: %T%1%n%2%n\n"), 1);
+	format_add("back", _("%> (%1) Status changed to %gavailable%n\n"), 1);
+	format_add("back_descr", _("%> (%3) Status changed to %gavailable%n: %T%1%n%2%n\n"), 1);
 	format_add("invisible", _("%> (%1) Status changed to %cinvisible%n\n"), 1);
 	format_add("invisible_descr", _("%> (%3) Status changed to %cinvisible%n: %T%1%n%2\n"), 1);
 	format_add("dnd", _("%> (%1) Status changed to %Bdo not disturb%n\n"), 1);
 	format_add("dnd_descr", _("%> (%3) Status changed to %Bdo not disturb%n: %T%1%n%2\n"), 1);
 	format_add("gone", _("%> (%1) Status changed to %Rgone%n\n"), 1);
 	format_add("gone_descr", _("%> (%3) Status changed to %Rgone%n: %T%1%n%2%n%n\n"), 1);
-	format_add("ffc", _("%> (%1) Status changed to %Wfree for chat%n\n"), 1);
-	format_add("ffc_descr", _("%> (%3) Status changed to %Wfree for chat%n: %T%1%n%2%n\n"), 1);
-	format_add("xa", _("%> (%1) Status changed to %gextended away%n\n"), 1);
-	format_add("xa_descr", _("%> (%3) Status changed to %gextended away%n: %T%1%n%2%n%n\n"), 1);
+	format_add("ffc", _("%> (%1) Status changed to %Gfree for chat%n\n"), 1);
+	format_add("ffc_descr", _("%> (%3) Status changed to %Gfree for chat%n: %T%1%n%2%n\n"), 1);
+	format_add("xa", _("%> (%1) Status changed to %yextended away%n\n"), 1);
+	format_add("xa_descr", _("%> (%3) Status changed to %yextended away%n: %T%1%n%2%n%n\n"), 1);
 	format_add("private_mode_is_on", _("% (%1) Friends only mode is on\n"), 1);
 	format_add("private_mode_is_off", _("%> (%1) Friends only mode is off\n"), 1);
 	format_add("private_mode_on", _("%) (%1) Turned on ,,friends only'' mode\n"), 1);
@@ -1399,8 +1399,8 @@ void theme_init()
 
 	format_add("auto_away", _("%> (%1) Auto %Yaway%n\n"), 1);
 	format_add("auto_away_descr", _("%> (%3) Auto %Yaway%n: %T%1%n%2%n\n"), 1);
-	format_add("auto_xa", _("%> (%1) Auto %gextended away%n\n"), 1);
-	format_add("auto_xa_descr", _("%> (%3) Auto %gextended away%n: %T%1%n%2%n\n"), 1);
+	format_add("auto_xa", _("%> (%1) Auto %yextended away%n\n"), 1);
+	format_add("auto_xa_descr", _("%> (%3) Auto %yextended away%n: %T%1%n%2%n\n"), 1);
 	format_add("auto_back", _("%> (%1) Auto back%n\n"), 1);
 	format_add("auto_back_descr", _("%> (%3) Auto back: %T%1%n%2%n\n"), 1);
 
@@ -1447,18 +1447,18 @@ void theme_init()
 
 	/* contact list */
 	format_add("list_empty", _("%! Roster is empty\n"), 1);
-	format_add("list_avail", _("%> %1 %G(available)%n %b%3:%4%n\n"), 1);
-	format_add("list_avail_descr", _("%> %1 %G(available: %n%5%G)%n %b%3:%4%n\n"), 1);
+	format_add("list_avail", _("%> %1 %g(available)%n %b%3:%4%n\n"), 1);
+	format_add("list_avail_descr", _("%> %1 %g(available: %n%5%G)%n %b%3:%4%n\n"), 1);
 	format_add("list_away", _("%> %1 %Y(away)%n %b%3:%4%n\n"), 1);
 	format_add("list_away_descr", _("%> %1 %Y(away: %n%5%Y)%n %b%3:%4%n\n"), 1);
 	format_add("list_dnd", _("%> %1 %B(do not disturb)%n %b%3:%4%n\n"), 1);
 	format_add("list_dnd_descr", _("%> %1 %B(do not disturb:%n %5%G)%n %b%3:%4%n\n"), 1);
-	format_add("list_chat", _("%> %1 %W(free for chat)%n %b%3:%4%n\n"), 1);
-	format_add("list_chat_descr", _("%> %1 %W(free for chat%n: %5%W)%n %b%3:%4%n\n"), 1);
+	format_add("list_chat", _("%> %1 %G(free for chat)%n %b%3:%4%n\n"), 1);
+	format_add("list_chat_descr", _("%> %1 %G(free for chat%n: %5%W)%n %b%3:%4%n\n"), 1);
 	format_add("list_error", _("%> %1 %m(error) %b%3:%4%n\n"), 1);
 	format_add("list_error", _("%> %1 %m(error%n: %5%m)%n %b%3:%4%n\n"), 1);
-	format_add("list_xa", _("%> %1 %g(extended away)%n %b%3:%4%n\n"), 1);
-	format_add("list_xa_descr", _("%> %1 %g(extended away: %n%5%g)%n %b%3:%4%n\n"), 1);
+	format_add("list_xa", _("%> %1 %y(extended away)%n %b%3:%4%n\n"), 1);
+	format_add("list_xa_descr", _("%> %1 %y(extended away: %n%5%g)%n %b%3:%4%n\n"), 1);
 	format_add("list_gone", _("%> %1 %R(gone)%n %b%3:%4%n\n"), 1);
 	format_add("list_gone_descr", _("%> %1 %R(gone: %n%5%g)%n %b%3:%4%n\n"), 1);
 	format_add("list_notavail", _("%> %1 %r(offline)%n\n"), 1);
@@ -1476,12 +1476,12 @@ void theme_init()
 	format_add("contacts_header_group", "%K %1%n", 1);
 	format_add("contacts_metacontacts_header", "", 1);
 
-	theme_init_contact_status("avail", 'G', 1);
+	theme_init_contact_status("avail", 'g', 1);
 	theme_init_contact_status("away", 'Y', 1);
 	theme_init_contact_status("dnd", 'B', 1);
-	theme_init_contact_status("chat", 'W', 1);
+	theme_init_contact_status("chat", 'G', 1);
 	theme_init_contact_status("error", 'm', 0);
-	theme_init_contact_status("xa", 'g', 1);
+	theme_init_contact_status("xa", 'y', 1);
 	theme_init_contact_status("gone", 'R', 1);
 	theme_init_contact_status("notavail", 'r', 0);
 	theme_init_contact_status("invisible", 'c', 1);
@@ -1519,12 +1519,12 @@ void theme_init()
 	format_add("quit_descr", _("%> Bye: %T%1%n%2\n"), 1);
 	format_add("config_changed", _("Save new configuration ? (y-yes/n-no) "), 1);
 	format_add("config_must_reconnect", _("%) You must reconnect for the changes to take effect\n"), 2);
-	format_add("quit_keep_reason", _("You've set keep_reason to save status.\nDo you want to save current description to file (it will be restored upon next EKG exec)? (t-yes/n-no) "), 1);
+	format_add("quit_keep_reason", _("You've set keep_reason to save status.\nDo you want to save current description to file (it will be restored upon next EKG exec)? (y-yes/n-no) "), 1);
 	format_add("saved", _("%> Configuration saved\n"), 1);
 	format_add("error_saving", _("%! There was some error during save\n"), 1);
 
 	/* incoming messages */
-	format_add("message", "%g.-- %n%1 %c%2%n%6%n%g--- -- -%n\n%g|%n %|%3%n\n%|%g`----- ---- --- -- -%n\n", 1);
+	format_add("message", "%g.-- Message from: %m%1 %c%2%n%6%n%g--- -- -%n\n%g|%n %|%3%n\n%|%g`----- ---- --- -- -%n\n", 1);
 	format_add("message_timestamp", "(%Y-%m-%d %H:%M) ", 1);
 	format_add("message_timestamp_today", "(%H:%M) ", 1);
 	format_add("message_timestamp_now", "", 1);
@@ -1579,24 +1579,24 @@ void theme_init()
 	format_add("message_too_long", _("%! Message was too long and got shortened\n"), 1);
 
 	/* people are changing their statuses */
-	format_add("status_avail", _("%> (%3) %1 is %Gavailable%n\n"), 1);
-	format_add("status_avail_descr", _("%> (%3) %1 is %Gavailable%n: %T%4%n\n"), 1);
+	format_add("status_avail", _("%> (%3) %1 is %gavailable%n\n"), 1);
+	format_add("status_avail_descr", _("%> (%3) %1 is %gavailable%n: %T%4%n\n"), 1);
 	format_add("status_away", _("%> (%3) %1 is %Yaway%n\n"), 1);
 	format_add("status_away_descr", _("%> (%3) %1 is %Yaway%n: %T%4%n\n"), 1);
 	format_add("status_notavail", _("%> (%3) %1 is %roffline%n\n"), 1);
 	format_add("status_notavail_descr", _("%> (%3) %1 is %roffline%n: %T%4%n\n"), 1);
 	format_add("status_invisible", _("%> (%3) %1 is %cinvisible%n\n"), 1);
 	format_add("status_invisible_descr", _("%> (%3) %1 is %cinvisible%n: %T%4%n\n"), 1);
-	format_add("status_xa", _("%> (%3) %1 is %gextended away%n\n"), 1);
-	format_add("status_xa_descr", _("%> (%3) %1 is %gextended away%n: %T%4%n\n"), 1);
+	format_add("status_xa", _("%> (%3) %1 is %yextended away%n\n"), 1);
+	format_add("status_xa_descr", _("%> (%3) %1 is %yextended away%n: %T%4%n\n"), 1);
 	format_add("status_gone", _("%> (%3) %1 is %Rgone%n\n"), 1);
 	format_add("status_gone_descr", _("%> (%3) %1 is %Rgone%n: %T%4%n\n"), 1);
 	format_add("status_dnd", _("%> (%3) %1 %Bdo not disturb%n\n"), 1);
 	format_add("status_dnd_descr", _("%> (%3) %1 %Bdo not disturb%n: %T%4%n\n"), 1);
 	format_add("status_error", _("%> (%3) %1 %merror fetching status%n\n"), 1);
 	format_add("status_error_descr", _("%> (%3) %1 %merror fetching status%n: %T%4%n\n"), 1);
-	format_add("status_chat", _("%> (%3) %1 is %Wfree for chat%n\n"), 1);
-	format_add("status_chat_descr", _("%> (%3) %1 is %Wfree for chat%n: %T%4%n\n"), 1);
+	format_add("status_chat", _("%> (%3) %1 is %Gfree for chat%n\n"), 1);
+	format_add("status_chat_descr", _("%> (%3) %1 is %Gfree for chat%n: %T%4%n\n"), 1);
 	format_add("status_unknown", _("%> (%3) %1 is %Munknown%n\n"), 1);
 	format_add("status_unknown_descr", _("%> (%3) %1 is %Munknown%n: %T%4%n\n"), 1);
 
@@ -1693,7 +1693,7 @@ void theme_init()
 	format_add("search_stopped", _("%> Search stopped\n"), 1);
 
 	/* 1 uin, 2 name, 3 nick, 4 city, 5 born, 6 gender, 7 active */
-	format_add("search_results_multi_avail", "%G<>%n", 1);
+	format_add("search_results_multi_avail", "%g<>%n", 1);
 	format_add("search_results_multi_away", "%Y<>%n", 1);
 	format_add("search_results_multi_invisible", "%c<>%n", 1);
 	format_add("search_results_multi_notavail", "  ", 1);
@@ -1702,7 +1702,7 @@ void theme_init()
 	/*	format_add("search_results_multi_male", "m", 1); */
 	format_add("search_results_multi", "%7 %[-8]1 %K|%n %[12]3 %K|%n %[12]2 %K|%n %[4]5 %K|%n %[12]4\n", 1);
 
-	format_add("search_results_single_avail", _("%G(available)%N"), 1);
+	format_add("search_results_single_avail", _("%g(available)%N"), 1);
 	format_add("search_results_single_away", _("%Y(away)%n"), 1);
 	format_add("search_results_single_notavail", _("%r(offline)%n"), 1);
 	format_add("search_results_single_invisible", _("%c(invisible)%n"), 1);
@@ -1737,8 +1737,8 @@ void theme_init()
 	format_add("user_info_last_status", _("%K| %nLast status: %T%1%n\n"), 1);
 	format_add("user_info_footer", "%K`----- ---- --- -- -%n\n", 1);
 
-	format_add("user_info_avail", _("%Gavailable%n"), 1);
-	format_add("user_info_avail_descr", _("%Gavailable%n %K(%n%2%K)%n"), 1);
+	format_add("user_info_avail", _("%gavailable%n"), 1);
+	format_add("user_info_avail_descr", _("%gavailable%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_away", _("%Yaway%n"), 1);
 	format_add("user_info_away_descr", _("%Yaway%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_notavail", _("%roffline%n"), 1);
@@ -1747,12 +1747,12 @@ void theme_init()
 	format_add("user_info_invisible_descr", _("%cinvisible%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_dnd", _("%Bdo not disturb%n"), 1);
 	format_add("user_info_dnd_descr", _("%Bdo not disturb%n %K(%n%2%K)%n"), 1);
-	format_add("user_info_chat", _("%Wfree for chat%n"), 1);
-	format_add("user_info_chat_descr", _("%Wfree for chat%n %K(%n%2%K)%n"), 1);
+	format_add("user_info_chat", _("%Gfree for chat%n"), 1);
+	format_add("user_info_chat_descr", _("%Gfree for chat%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_error", _("%m error%n"), 1);
 	format_add("user_info_error_descr", _("%merror%n %K(%n%2%K)%n"), 1);
-	format_add("user_info_xa", _("%gextended away%n"), 1);
-	format_add("user_info_xa_descr", _("%gextended away%n %K(%n%2%K)%n"), 1);
+	format_add("user_info_xa", _("%yextended away%n"), 1);
+	format_add("user_info_xa_descr", _("%yextended away%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_gone", _("%Rgone%n"), 1);
 	format_add("user_info_gone_descr", _("%Rgone%n %K(%n%2%K)%n"), 1);
 	format_add("user_info_blocking", _("%mblocking%n"), 1);
@@ -1776,20 +1776,20 @@ void theme_init()
 	format_add("show_status_server", _("%) Current server: %T%1%n:%T%2%n\n"), 1);
 	format_add("show_status_server_tls", _("%) Current server: %T%1%n:%T%2%Y (connection encrypted)%n\n"), 1);
 	format_add("show_status_connecting", _("%) Connecting ..."), 1);
-	format_add("show_status_avail", _("%Gavailable%n"), 1);
-	format_add("show_status_avail_descr", _("%Gavailable%n (%T%1%n%2)"), 1);
+	format_add("show_status_avail", _("%gavailable%n"), 1);
+	format_add("show_status_avail_descr", _("%gavailable%n (%T%1%n%2)"), 1);
 	format_add("show_status_away", _("%Yaway%n"), 1);
 	format_add("show_status_away_descr", _("%Yaway%n (%T%1%n%2)"), 1);
 	format_add("show_status_invisible", _("%cinvisible%n"), 1);
 	format_add("show_status_invisible_descr", _("%cinvisible%n (%T%1%n%2)"), 1);
-	format_add("show_status_xa", _("%gextended away%n"), 1);
-	format_add("show_status_xa_descr", _("%gextended away%n (%T%1%n%2)"), 1);
+	format_add("show_status_xa", _("%yextended away%n"), 1);
+	format_add("show_status_xa_descr", _("%yextended away%n (%T%1%n%2)"), 1);
 	format_add("show_status_gone", _("%Rgone%n"), 1);
 	format_add("show_status_gone_descr", _("%Rgone%n (%T%1%n%2)"), 1);
 	format_add("show_status_dnd", _("%cdo not disturb%n"), 1);
 	format_add("show_status_dnd_descr", _("%cdo not disturb%n (%T%1%n%2)"), 1);
-	format_add("show_status_chat", _("%Wfree for chat%n"), 1);
-	format_add("show_status_chat_descr", _("%Wfree for chat%n (%T%1%n%2)"), 1);
+	format_add("show_status_chat", _("%Gfree for chat%n"), 1);
+	format_add("show_status_chat_descr", _("%Gfree for chat%n (%T%1%n%2)"), 1);
 	format_add("show_status_notavail", _("%roffline%n"), 1);
 	format_add("show_status_private_on", _(", for friends only"), 1);
 	format_add("show_status_private_off", "", 1);
@@ -2037,8 +2037,8 @@ void theme_init()
 	format_add("metacontact_info_status", "%K| %nStatus: %T%1%n\n", 1);
 	format_add("metacontact_info_footer", "%K`----- ---- --- -- -%n\n", 1);
 
-	format_add("metacontact_info_avail", _("%Gavailable%n"), 1);
-	format_add("metacontact_info_avail_descr", _("%Gavailable%n %K(%n%2%K)%n"), 1);
+	format_add("metacontact_info_avail", _("%gavailable%n"), 1);
+	format_add("metacontact_info_avail_descr", _("%gavailable%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_away", _("%Yaway%n"), 1);
 	format_add("metacontact_info_away_descr", _("%Yaway%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_notavail", _("%roffline%n"), 1);
@@ -2047,12 +2047,12 @@ void theme_init()
 	format_add("metacontact_info_invisible_descr", _("%cinvisible%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_dnd", _("%Bdo not disturb%n"), 1);
 	format_add("metacontact_info_dnd_descr", _("%Bdo not disturb%n %K(%n%2%K)%n"), 1);
-	format_add("metacontact_info_chat", _("%Wfree for chat%n"), 1);
-	format_add("metacontact_info_chat_descr", _("%Wfree for chat%n %K(%n%2%K)%n"), 1);
+	format_add("metacontact_info_chat", _("%Gfree for chat%n"), 1);
+	format_add("metacontact_info_chat_descr", _("%Gfree for chat%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_error", _("%merror%n"), 1);
 	format_add("metacontact_info_error_descr", _("%merror%n %K(%n%2%K)%n"), 1);
-	format_add("metacontact_info_xa", _("%gextended away%n"), 1);
-	format_add("metacontact_info_xa_descr", _("%gextended away%n %K(%n%2%K)%n"), 1);
+	format_add("metacontact_info_xa", _("%yextended away%n"), 1);
+	format_add("metacontact_info_xa_descr", _("%yextended away%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_gone", _("%Rgone%n"), 1);
 	format_add("metacontact_info_gone_descr", _("%Rgone%n %K(%n%2%K)%n"), 1);
 	format_add("metacontact_info_blocking", _("%mblocking%n"), 1);
