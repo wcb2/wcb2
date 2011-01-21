@@ -93,7 +93,15 @@ default_nickname
 	type: string
 	default value: none
 	
-	This variable will be your nickname in MUC if you won't specify another nick 
+	this will be your nickname in muc if you won't specify another nick 
+
+default_service
+	type: string
+	default value: none
+	
+	Default MUC service
+	
+	If you'll type "/join <room>" without '@', service will be automatically taken from here
 
 display_ctcp
 	type: bool

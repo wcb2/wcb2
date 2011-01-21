@@ -2425,11 +2425,10 @@ static COMMAND(jabber_command_vacation) { /* JEP-0109: Vacation Messages (DEFERR
 /**
  * jabber_muc_command_join()
  *
- * @param params [0] (<b>full channel name</b>)
- * @param params [1] (<b>nickname</b>)
- * @param params [2] (<b>password</b>)
+ * @param params [0] full channel name
+ * @param params [1] nickname
+ * @param params [2] password
  *
- * @todo make (session) variable jabber:default_muc && then if exists and params[0] has not specific server than append '@' jabber:default_muc and use it.
  * @todo history requesting, without history requesting.. etc
  */
 
@@ -2444,21 +2443,20 @@ static COMMAND(jabber_muc_command_join) {
 	char *password = (params[1] && params[2]) ? saprintf("<password>%s</password>", params[2]) : NULL;
 
 	char *mucuid;
+
+	if (xstrchr(target, '@') == NULL) {
+		char *default_service = jabber_unescape(session_get(session, "default_server"));
+		
+		mucuid = saprintf("xmpp:%s@%s", target, default_service);
+		xfree(default_service);
+	} else 
+		mucuid = xmpp_uid(target);
+
 	
-	if (!username) {		/* shouldn't happen */
-		printq("invalid_params", name);
-		return -1;
-	}
-
-	if (!xstrncmp(target, "xmpp:", 5)) target += 5; /* remove xmpp: */
-
-	mucuid = xmpp_uid(target);
-
 	tmp = jabber_escape(username);
 	watch_write(j->send_watch, "<presence to='%s/%s'><x xmlns='http://jabber.org/protocol/muc'>%s</x></presence>", 
-			target, tmp, password ? password : "");
+			mucuid + 5, tmp, password ? password : "");
 	xfree(tmp);
-
 
 	conf = newconference_create(session, mucuid, 1);
 	conf->priv_data = xstrdup(username);
