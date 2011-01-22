@@ -22,12 +22,12 @@ jabber_muc_notice \n%g-- %gNotice from: %P%2%n %g--\n%3\n%g----\n
 
 # Conference headers and footers
 contacts_moderator_header %C  -- Moderators --
+contacts_moderator_footer  
 
 contacts_participant_header %C -- Participants --
 contacts_participant_footer  
 
 contacts_visitor_header %C   -- Visitors --
-contacts_visitor_footer  
 
 # Contact's headers and footers
 header 
