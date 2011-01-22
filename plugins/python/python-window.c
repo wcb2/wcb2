@@ -194,7 +194,8 @@ PyObject *ekg_window_echo(ekg_windowObj * self, PyObject *args)
 
 PyObject *ekg_window_echo_format(ekg_windowObj * self, PyObject *args)
 {
-	char *str = NULL;
+	char *str[10];
+	int i;
 	char *format = NULL;
 
 	if (!self->w) {
@@ -202,12 +203,15 @@ PyObject *ekg_window_echo_format(ekg_windowObj * self, PyObject *args)
 		return NULL;
 	}
 
-	if (!PyArg_ParseTuple(args, "ss", &format, &str))
+	for (i=0;i<10;i++)
+		str[i] = "";
+
+	if (!PyArg_ParseTuple(args, "s|ssssssssss", &format, str,str+1,str+2,str+3,str+4,str+5,str+6,str+7,str+8,str+9))
 		return NULL;
 
 	debug("[python] Printing on window '%s'\n", self->w->target);
 
-	print_info(self->w->target, self->w->session, format, str);
+	print_info(self->w->target, self->w->session, format, str[0],str[1],str[2],str[3],str[4],str[5],str[6],str[7],str[8],str[9]);
 
 	Py_INCREF(Py_None);
 	return Py_None;
