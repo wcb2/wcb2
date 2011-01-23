@@ -2455,8 +2455,12 @@ static COMMAND(cmd_query) {
 
 	if ((conf = newconference_find(session, window_current->target)) && !xstrncmp(session->uid, "xmpp:", 5)) {  /* some conference's nickname? */
 		userlist_t *u;
+		char *nick;
 
-		if (u = newconference_member_find(conf, xstrchr(params[0], '/') + 1))
+		if (params[0] && (nick = xstrchr(params[0], '/')))
+			++nick;
+		
+		if (nick && (u = newconference_member_find(conf, nick)))
 			par0 = u->uid;
 		else {
 			printq("invalid_session");
