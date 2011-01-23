@@ -2449,8 +2449,20 @@ static COMMAND(cmd_reload)
 static COMMAND(cmd_query) {
 	char *par0 = NULL;
 	metacontact_t *m;
+	newconference_t *conf;
 	window_t *w;
 	char *tmp;
+
+	if ((conf = newconference_find(session, window_current->target)) && !xstrncmp(session->uid, "xmpp:", 5)) {  /* some conference's nickname? */
+		userlist_t *u;
+
+		if (u = newconference_member_find(conf, xstrchr(params[0], '/') + 1))
+			par0 = u->uid;
+		else {
+			printq("invalid_session");
+			return -1;
+		}
+	}
 
 	if (params[0][0] == '@' || xstrchr(params[0], ',')) {	/* you want to talk with lot people? let's create conference ! */
 		struct conference *c = conference_create(session, params[0]);
@@ -2506,7 +2518,7 @@ next:
 		par0 = i->name;
 		session = session_find(i->s_uid);
 	}
-
+	
 	if (!par0) {						/* everything else if it's valid uid/ (nickname if we have user in roster) */
 		const char *uid = get_uid(session, params[0]);
 
