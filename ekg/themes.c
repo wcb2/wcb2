@@ -264,6 +264,12 @@ static char *va_format_string(const char *format, va_list ap) {
 			if ((*p - '0') > argc)
 				argc = *p - '0';
 		} else {
+			if (*p == '{')
+				p++;
+
+			if (!*p)
+				break;
+
 			if (*p >= '1' && *p <= '9' && (*p - '0') > argc)
 				argc = *p - '0';
 		}

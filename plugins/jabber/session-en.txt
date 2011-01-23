@@ -219,6 +219,14 @@ msg_gen_thread
 	Whether to automagically generate thread-IDs for outgoing messages
 	without given thread.
 
+muc_colored_nicks
+	type: bool
+	default value: 0
+	
+	Colorise nicks in MUC
+	
+	Depends on zlib library
+
 password
 	type: string
 	default value: none

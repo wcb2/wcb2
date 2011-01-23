@@ -1037,11 +1037,11 @@ JABBER_HANDLER(jabber_handle_message) {
 					debug_error("[MUC, MESSAGE] userlist_find_u(%s) failed\n", nick);
 					return;
 				}
-
+				
 				formatted = format_string(format_find(
 							is_me ? ( isour ? "jabber_muc_me_sent" : "jabber_muc_me" )
 							      : ( isour ? "jabber_muc_send" : (tous ? "jabber_muc_recv2us" : "jabber_muc_recv"))),
-						session_name(s), uid2, nick, is_me ? text+4 : text, attr);
+						session_name(s), uid2, nick, is_me ? text+4 : text, attr, get_nick_color(nick, s));
 			} else {
 				formatted = format_string(format_find("jabber_muc_notice"), session_name(s), uid+5, text);
 			}

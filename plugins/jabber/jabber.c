@@ -1215,8 +1215,8 @@ static int jabber_theme_init() {
 	/* %1 - session %2 - message %3 - start %4 - end */
 	format_add("jabber_vacation", _("%> You'd set up your vacation status: %g%2%n (since: %3 expires@%4)"), 1);
 
-	/* %1 - sessionname %2 - mucjid %3 - nickname %4 - text %5 - atr */
-	format_add("jabber_muc_recv",	"%B<%w%X%5%3%B>%n %4", 1);
+	/* %1 - sessionname %2 - mucjid %3 - nickname %4 - text %5 - attr %6 */
+	format_add("jabber_muc_recv",	"%B<%w%X%5%{6BbRrMmCcYyGgWwBbGrMmCcYyGgww}X%3%B>%n %4", 1);
 	format_add("jabber_muc_recv2us",	"%B<%R%5%3%B>%n %T%4", 1);
 	format_add("jabber_muc_send",	"%B<%n%X%5%W%3%B>%n %4", 1);
 	format_add("jabber_muc_me",	"%y*%X%5%3%B%n %4", 1);
@@ -1630,6 +1630,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("iq_version",		VAR_BOOL, "1", 0, NULL),
 	PLUGIN_VAR_ADD("log_formats",		VAR_STR, "xml,simple,sqlite", 0, NULL),
 	PLUGIN_VAR_ADD("msg_gen_thread",	VAR_BOOL, "0", 0, NULL),
+	PLUGIN_VAR_ADD("muc_colored_nicks",	VAR_BOOL, "0", 0, NULL),
 	PLUGIN_VAR_ADD("password",		    VAR_STR, NULL, 1, NULL),
 	PLUGIN_VAR_ADD("photo_hash",		VAR_STR, NULL, 0, NULL),
 	PLUGIN_VAR_ADD("plaintext_passwd",	VAR_INT, "0", 0, NULL),
@@ -1734,6 +1735,24 @@ static int jabber_plugin_destroy() {
 	plugin_unregister(&jabber_plugin);
 
 	return 0;
+}
+
+char *get_nick_color(char *nick, session_t *s) {
+	static char *colors[] = { "B", "b", "R", "r", "M", "m", "C", "c", "Y", "y", "G", "g", "W", "w" };
+	static char *default_color = "w";
+	static int color_count = sizeof(colors)/sizeof(char*);
+	
+	int colored = session_int_get(s, "muc_colored_nicks");
+
+#ifdef HAVE_ZLIB
+	if (colored) {
+ 		uLong crc = crc32(0L, Z_NULL, 0);
+ 		crc = crc32(crc, nick, strlen(nick));
+		return colors[crc%color_count];
+	}
+#endif
+
+	return default_color;
 }
 
 /*

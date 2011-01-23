@@ -247,6 +247,7 @@ char *jabber_thread_gen(jabber_private_t *j, const char *uid);
 uint32_t *jabber_msg_format(const char *plaintext, const xmlnode_t *html);
 #endif /* __EKG_JABBER_JABBER_H */
 
+char *get_nick_color(char *nick, session_t *s);
 /*
  * Local Variables:
  * mode: c
