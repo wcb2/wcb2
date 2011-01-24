@@ -716,6 +716,7 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 	char *start, **words, *separators;
 	char *cmd;
 	int i, count, word, j, words_count, word_current, open_quote;
+	int is_muc = 0;
 	size_t linelen;
 
 	/* 
@@ -727,7 +728,9 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 		continue_complete = 0;
 		continue_complete_count = 0;
 	}
-	
+	/* Is this window a conference one */
+	if (newconference_find(window_current->session, window_current->target))
+		is_muc = 1;
 	/*
 	 * je¶li uzbierano ju¿ co¶ to próbujemy wy¶wietliæ wszystkie mo¿liwo¶ci
 	 */
@@ -877,7 +880,10 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 			continue_complete_count++;
 		if (!completions[cnt]) /* nigdy nie powinno siê zdarzyæ, ale na wszelki ... */
 			goto cleanup;
-			
+		
+		if (is_muc && !words)
+			words_count++;
+
 		for(i = 0; i < words_count; i++) {
 			if(i == word) {
 				if(xstrchr(completions[cnt],  ('\001'))) {
@@ -912,6 +918,10 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 	cmd = saprintf(("/%s "), (config_tab_command) ? config_tab_command : "chat");
 	/* nietypowe dope³nienie nicków przy rozmowach */
 	if (!xstrcmp(line, ("")) || (!xstrncasecmp(line, cmd, xstrlen(cmd)) && word == 2 && send_nicks_count > 0) || (!xstrcasecmp(line, cmd) && send_nicks_count > 0)) {
+
+		if (is_muc && !config_tab_command) 
+			goto initial;
+
 		if (send_nicks_index >= send_nicks_count)
 			send_nicks_index = 0;
 
@@ -931,15 +941,18 @@ int ekg2_complete(int *line_start, int *line_index, char *line, int line_maxlen)
 		ekg2_completions = completions;
 		return 0;
 	}
-	xfree(cmd);
 
+initial:
+
+	xfree(cmd);
 	/* pocz±tek nicka, komendy? */
 	if (word == 0) {
 		/* dj's fixes... */
 		if (start[0] != '/' && window_current && window_current->target) {
-			if (newconference_find(window_current->session, window_current->target))
+			if (is_muc) {
 				conference_nick_generator(start, xstrlen(start));
-			else
+				if (completions) continue_complete = 1;
+			} else
 				known_uin_generator(start, xstrlen(start));
 			if (completions) {
 				char *completion_char = (config_completion_char && *config_completion_char) ? config_completion_char : NULL;
