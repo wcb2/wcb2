@@ -83,6 +83,7 @@
 #include "xmalloc.h"
 #include "plugins.h"
 #include "sessions.h"
+#include "strings.h"
 #include "recode.h"
 
 #include "dynstuff_inline.h"
