@@ -1007,7 +1007,14 @@ JABBER_HANDLER(jabber_handle_message) {
 			int isour = (c && !xstrcmp(c->priv_data, nick)) ? 1 : 0;			/* is our message? */
 			char *formatted;
 			userlist_t *u;
-			int tous = !bsent && c && (text == xstrstr(text, c->priv_data));
+
+			int highlight_method = session_int_get(s, "highlight_method");
+			int tous = 0;
+			
+			if (highlight_method == 1)
+				tous = !bsent && c && (text == xstrstr(text, c->priv_data));
+			else if (highlight_method == 2)
+				tous = !bsent && c && xstrstr(text, c->priv_data);
 
 			if (!tous)
 				class |= EKG_MSGCLASS_NOT2US;

@@ -1624,6 +1624,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("gpg_active",		VAR_BOOL, "0", 0, jabber_gpg_changed),
 	PLUGIN_VAR_ADD("gpg_key",		    VAR_STR, NULL, 0, jabber_gpg_changed),
 	PLUGIN_VAR_ADD("gpg_password",		VAR_STR, NULL, 1, jabber_gpg_changed),
+	PLUGIN_VAR_ADD("highlight_method",	VAR_INT,  "1", 0, NULL),
 	PLUGIN_VAR_ADD("iq_last",		    VAR_BOOL, "1", 0, NULL),
 	PLUGIN_VAR_ADD("iq_ping",		    VAR_BOOL, "1", 0, NULL),
 	PLUGIN_VAR_ADD("iq_time",		    VAR_BOOL, "1", 0, NULL),
