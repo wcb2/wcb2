@@ -2445,7 +2445,7 @@ static COMMAND(jabber_muc_command_join) {
 	char *mucuid;
 
 	if (xstrchr(target, '@') == NULL) {
-		char *default_service = jabber_unescape(session_get(session, "default_server"));
+		char *default_service = jabber_unescape(session_get(session, "default_service"));
 		
 		mucuid = saprintf("xmpp:%s@%s", target, default_service);
 		xfree(default_service);

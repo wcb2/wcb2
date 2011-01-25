@@ -2451,24 +2451,26 @@ static COMMAND(cmd_query) {
 	metacontact_t *m;
 	newconference_t *conf;
 	window_t *w;
-	char *tmp;
+	char *tmp, *tmp2;
 
 	if ((conf = newconference_find(session, window_current->target)) && !xstrncmp(session->uid, "xmpp:", 5)) {  /* some conference's nickname? */
 		userlist_t *u;
 		char *nick;
 
-		if (params[0] && (nick = xstrchr(params[0], '/')))
+		if (params[0] && (nick = xstrchr(params[0], '/'))) {
 			++nick;
+			tmp2 = saprintf("%s/%s", window_current->target, nick);
+		}
 		
-		if (nick && (u = newconference_member_find(conf, nick)))
-			par0 = u->uid;
+		if (tmp2 && (u = newconference_member_find(conf, nick)))
+			par0 = tmp2;
 		else {
 			printq("invalid_session");
 			return -1;
 		}
 	}
 
-	if (params[0][0] == '@' || xstrchr(params[0], ',')) {	/* you want to talk with lot people? let's create conference ! */
+	if (!par0 && (params[0][0] == '@' || xstrchr(params[0], ','))) {	/* you want to talk with lot people? let's create conference ! */
 		struct conference *c = conference_create(session, params[0]);
 		
 		if (!c)
@@ -2568,6 +2570,8 @@ next:
 
 	if (params[1])	/* if we've got message in params[1] send it */
 		command_exec_format(par0, session, quiet, ("/ %s"), params[1]);
+	
+	xfree(tmp2);
 	return 0;
 }
 
