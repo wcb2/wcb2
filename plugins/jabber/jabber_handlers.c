@@ -1039,7 +1039,6 @@ JABBER_HANDLER(jabber_handle_message) {
 
 					else						attr[0] = ' ';
 
-
 				} else {
 					debug_error("[MUC, MESSAGE] userlist_find_u(%s) failed\n", nick);
 					return;

@@ -1,0 +1,37 @@
+diff --git a/contrib/themes/fess.theme b/contrib/themes/fess.theme
+index 3f434d5..33d9659 100644
+--- a/contrib/themes/fess.theme
++++ b/contrib/themes/fess.theme
+@@ -80,4 +80,4 @@ statusbar_act_important2us %W
+ statusbar_act %r
+ 
+ # Statusbar
+-statusbar %l%w[%n%B%l%{?session %{session} %G%{?avail avail}%Y%{?away away}%{?invisible invis}%R%{?notavail notavail}%Y%{?xa xa}%R%{?dnd do not disturb}%G%{?chat freeforchat}}%{?!session ---}%w] [%n%B%l%{?window %{window}}%{?query :%{query}}%{?debug debug}%{?activity %w] [%n%r%lact: }%c%{activity}%{?mail %b] [%n%B%l mail:}%{mail}%{?more %b] [%n%B%lmore}%w]%n%l
++statusbar %l%w[%n%B%l%{?session %{session} %G%{?avail avail}%Y%{?away away}%{?invisible invis}%R%{?notavail notavail}%Y%{?xa xa}%B%{?dnd do not disturb}%G%{?chat freeforchat}}%{?!session ---}%w] [%n%B%l%{?window %{window}}%{?query :%{query}}%{?debug debug}%{?activity %w] [%n%r%lact: }%c%{activity}%{?mail %b] [%n%B%l mail:}%{mail}%{?more %b] [%n%B%lmore}%w]%n%l
+diff --git a/ekg/themes.c b/ekg/themes.c
+index 33306a6..43b0382 100644
+--- a/ekg/themes.c
++++ b/ekg/themes.c
+@@ -1792,8 +1792,8 @@ void theme_init()
+ 	format_add("show_status_xa_descr", _("%yextended away%n (%T%1%n%2)"), 1);
+ 	format_add("show_status_gone", _("%Rgone%n"), 1);
+ 	format_add("show_status_gone_descr", _("%Rgone%n (%T%1%n%2)"), 1);
+-	format_add("show_status_dnd", _("%cdo not disturb%n"), 1);
+-	format_add("show_status_dnd_descr", _("%cdo not disturb%n (%T%1%n%2)"), 1);
++	format_add("show_status_dnd", _("%Bdo not disturb%n"), 1);
++	format_add("show_status_dnd_descr", _("%Bdo not disturb%n (%T%1%n%2)"), 1);
+ 	format_add("show_status_chat", _("%Gfree for chat%n"), 1);
+ 	format_add("show_status_chat_descr", _("%Gfree for chat%n (%T%1%n%2)"), 1);
+ 	format_add("show_status_notavail", _("%roffline%n"), 1);
+diff --git a/plugins/jabber/jabber_handlers.c b/plugins/jabber/jabber_handlers.c
+index eb70f7d..c614788 100644
+--- a/plugins/jabber/jabber_handlers.c
++++ b/plugins/jabber/jabber_handlers.c
+@@ -1039,7 +1039,6 @@ JABBER_HANDLER(jabber_handle_message) {
+ 
+ 					else						attr[0] = ' ';
+ 
+-
+ 				} else {
+ 					debug_error("[MUC, MESSAGE] userlist_find_u(%s) failed\n", nick);
+ 					return;

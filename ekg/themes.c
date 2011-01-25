@@ -1792,8 +1792,8 @@ void theme_init()
 	format_add("show_status_xa_descr", _("%yextended away%n (%T%1%n%2)"), 1);
 	format_add("show_status_gone", _("%Rgone%n"), 1);
 	format_add("show_status_gone_descr", _("%Rgone%n (%T%1%n%2)"), 1);
-	format_add("show_status_dnd", _("%cdo not disturb%n"), 1);
-	format_add("show_status_dnd_descr", _("%cdo not disturb%n (%T%1%n%2)"), 1);
+	format_add("show_status_dnd", _("%Bdo not disturb%n"), 1);
+	format_add("show_status_dnd_descr", _("%Bdo not disturb%n (%T%1%n%2)"), 1);
 	format_add("show_status_chat", _("%Gfree for chat%n"), 1);
 	format_add("show_status_chat_descr", _("%Gfree for chat%n (%T%1%n%2)"), 1);
 	format_add("show_status_notavail", _("%roffline%n"), 1);

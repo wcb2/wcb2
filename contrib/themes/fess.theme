@@ -80,4 +80,4 @@ statusbar_act_important2us %W
 statusbar_act %r
 
 # Statusbar
-statusbar %l%w[%n%B%l%{?session %{session} %G%{?avail avail}%Y%{?away away}%{?invisible invis}%R%{?notavail notavail}%Y%{?xa xa}%R%{?dnd do not disturb}%G%{?chat freeforchat}}%{?!session ---}%w] [%n%B%l%{?window %{window}}%{?query :%{query}}%{?debug debug}%{?activity %w] [%n%r%lact: }%c%{activity}%{?mail %b] [%n%B%l mail:}%{mail}%{?more %b] [%n%B%lmore}%w]%n%l
+statusbar %l%w[%n%B%l%{?session %{session} %G%{?avail avail}%Y%{?away away}%{?invisible invis}%R%{?notavail notavail}%Y%{?xa xa}%B%{?dnd do not disturb}%G%{?chat freeforchat}}%{?!session ---}%w] [%n%B%l%{?window %{window}}%{?query :%{query}}%{?debug debug}%{?activity %w] [%n%r%lact: }%c%{activity}%{?mail %b] [%n%B%l mail:}%{mail}%{?more %b] [%n%B%lmore}%w]%n%l
