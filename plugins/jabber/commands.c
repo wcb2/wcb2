@@ -739,7 +739,7 @@ static COMMAND(jabber_muc_command_muc_lists)
 	else	
 		watch_write(j->send_watch, 
 					"<iq id=\"%s\" to=\"%s\" type=\"get\">"
-						"query xmlns=\"http://jabber.org/protocol/muc#admin\">"
+						"<query xmlns=\"http://jabber.org/protocol/muc#admin\">"
 							"<item %s=\"%s\"/>"
 						"</query>"
 					"</iq>", id, c->name + 5, type, list);
