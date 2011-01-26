@@ -712,10 +712,10 @@ static COMMAND(jabber_muc_command_pm)
 
 /* This function retrieves lists from MUC 
  *	
- *  Syntax: /muc_list <affiliation\role> <list>
+ *  Syntax: /muc_lists <affiliation\role> <list>
  *
  */
-static COMMAND(jabber_muc_command_muc_list) 
+static COMMAND(jabber_muc_command_muc_lists) 
 {
 	jabber_private_t *j = session->priv;
 	newconference_t *c;
@@ -730,82 +730,22 @@ static COMMAND(jabber_muc_command_muc_list)
 	} 
 	else
 	{
-		printq("generic_error", "/xmpp:muc_list only valid in MUC");
+		printq("generic_error", "/xmpp:muc_lists only valid in MUC");
 		return 1;
 	}
 	
 	if (!(id = jabber_iq_reg(session, "mucadmin_", c->name+5, "query", "http://jabber.org/protocol/muc#admin")))
 		printq("generic_error", "Error in getting id for list request, check debug window");
 	else	
-		watch_write(j->send_watch, "<iq id=\"%s\" to=\"%s\" type=\"get\"><query xmlns=\"http://jabber.org/protocol/muc#admin\"><item %s=\"%s\"/></query></iq>", id, c->name + 5, type, list);
+		watch_write(j->send_watch, 
+					"<iq id=\"%s\" to=\"%s\" type=\"get\">"
+						"query xmlns=\"http://jabber.org/protocol/muc#admin\">"
+							"<item %s=\"%s\"/>"
+						"</query>"
+					"</iq>", id, c->name + 5, type, list);
 
 	xfree(type);
 	xfree(list);
-
-	return 0;
-}
-
-/**  
- *  This function retrieves info from MUC user
- *	
- *  Syntax: /muc_info <nick>
- *
- */
-static COMMAND(jabber_muc_command_muc_info) 
-{
-	newconference_t  *c  = NULL;
-	userlist_t       *u  = NULL;
-
-	char *nick = params[0];
-
-	if (nick == NULL){
-		printq("invalid_params", name);
-		return -1;
-	}
-	
-	c = newconference_find(session, window_current->target);
-	if (c == NULL) {
-		printq("generic_error", "/xmpp:muc_info only valid in MUC");
-		return 1;
-	}
-	
-	u = newconference_member_find(c, nick);
-	if (u == NULL) {
-		printq("generic_error", "User not found");
-		return 1;
-	}
-	
-	jabber_userlist_private_t *up = jabber_userlist_priv_get(u);
-	
-	char *role         = up->role;
-	char *affil        = up->aff;
-	char *status       = NULL;
-	char *resource     = NULL;
-
-	resource = u->resources ? xstrdup(u->resources->name) : xstrdup("Not present");
-
-	switch(u->status) {
-		case EKG_STATUS_FFC:  status = xstrdup("Chat");
-								break;
-		case EKG_STATUS_AWAY: status = xstrdup("Away");
-								break;
-		case EKG_STATUS_XA:   status = xstrdup("Extended Away");
-								break;
-		case EKG_STATUS_DND:  status = xstrdup("Do not disturb");
-								break;
-		default:              status = xstrdup("Available");
-								break;
-	}
-
-	print("jabber_muc_info_beg",    u->uid + 5);
-	print("jabber_muc_info_val_s", "Status:     ", ekg_status_string(u->status, 1), status, u->descr);
-	print("jabber_muc_info_val",   "Resource:   ", resource);
-	print("jabber_muc_info_val",   "Affiliation:", affil);
-	print("jabber_muc_info_val",   "Role:       ", role);
-	print("jabber_muc_info_end");
-
-	xfree(status);
-	xfree(resource);
 
 	return 0;
 }
@@ -2951,8 +2891,7 @@ void jabber_register_commands()
 	command_add(&jabber_plugin, "xmpp:modify", "!Uu ?", jabber_command_modify,JABBER_FLAGS_REQ, 
 			"-n --nickname -g --group");
 	command_add(&jabber_plugin, "xmpp:msg", "!uUN !", jabber_command_msg,	JABBER_FLAGS_MSG, NULL);
-	command_add(&jabber_plugin, "xmpp:muc_list", "!p !", jabber_muc_command_muc_list, JABBER_FLAGS_TARGET, "affiliation role");
-	command_add(&jabber_plugin, "xmpp:muc_info", "!n", jabber_muc_command_muc_info, JABBER_FLAGS_TARGET, NULL);
+	command_add(&jabber_plugin, "xmpp:muc_lists", "!p !", jabber_muc_command_muc_lists, JABBER_FLAGS_TARGET, "affiliation role");
 	command_add(&jabber_plugin, "xmpp:nick", "!C ?", jabber_muc_command_nick,	JABBER_FLAGS_REQ, NULL);
 	command_add(&jabber_plugin, "xmpp:part", "!C ?", jabber_muc_command_part, JABBER_FLAGS_TARGET, NULL);
 	command_add(&jabber_plugin, "xmpp:pm", "!n !", jabber_muc_command_pm, JABBER_FLAGS_MSG, NULL);

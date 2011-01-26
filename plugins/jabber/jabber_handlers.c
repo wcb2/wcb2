@@ -663,11 +663,11 @@ static const struct jabber_generic_handler jabber_handlers[] =
 {
 	{ "message",		jabber_handle_message },
 	{ "presence",		jabber_handle_presence },
-	{ "iq",			jabber_handle_iq },
+	{ "iq",			    jabber_handle_iq },
 
 		/* XXX: shall below two have some kind of namespace? (previously they were 'stream:'-prefixed) */
 	{ "features",		jabber_handle_stream_features },
-	{ "error",		jabber_handle_stream_error },
+	{ "error",		    jabber_handle_stream_error },
 
 	{ "challenge",		jabber_handle_challenge },
 	{ "compressed",		jabber_handle_compressed },
@@ -1543,8 +1543,8 @@ JABBER_HANDLER(jabber_handle_presence) {
 						char *errcode     = NULL; char *reason      = NULL; char *new_nick = NULL;
 						char *actor       = NULL; char *new_jid     = NULL;
 
-						int prio = 10; 
-						int nc = 0;    /* Nick changed */
+						int prio = 5; 
+						int nc   = 0;    /* Nick changed */
 						
 						xmlnode_t       *qtmp, *qtmp2;
 						newconference_t *c;
@@ -1572,7 +1572,11 @@ JABBER_HANDLER(jabber_handle_presence) {
 						reason  = qtmp ? jabber_unescape(qtmp->data) : NULL;
 						
 						qtmp  = xmlnode_find_child(child, "actor"); 
-						actor   = qtmp  ? jabber_unescape(jabber_attr(qtmp->atts, "jid")) : NULL;
+						actor = qtmp  ? jabber_unescape(jabber_attr(qtmp->atts, "jid")) : NULL;
+						
+						qtmp  = xmlnode_find_child(n, "priority");
+						prio  = qtmp ? atoi(qtmp->data) : 5;
+							
 						
 						if (!xstrcmp(errcode, "301")) {
 							print_info(mucuid, s, "muc_kb", session_name(s), "banned", nickname, jid, 
@@ -1598,9 +1602,9 @@ JABBER_HANDLER(jabber_handle_presence) {
 						} else if (na)
 							print_info(mucuid, s, "muc_left", session_name(s), nickname, jid, mucuid + 5, reason);
 
-						ulist   = newconference_member_find(c, nickname);
+						ulist = newconference_member_find(c, nickname);
 						if (resource) res = userlist_resource_find(ulist, resource + 1);
-							
+
 						if (ulist) {
 							if (nc) {
 								if (!xstrcmp(c->priv_data, nickname)) {
@@ -1621,7 +1625,10 @@ JABBER_HANDLER(jabber_handle_presence) {
 							}
 						} else {
 							ulist = newconference_member_add(c, jid ? xmpp_uid(jid) : uid, nickname);
-							if (resource && ulist) res = userlist_resource_add(ulist, resource + 1, prio);
+							
+							if (resource && ulist)
+								res = userlist_resource_add(ulist, resource + 1, prio);
+
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
@@ -1636,8 +1643,11 @@ JABBER_HANDLER(jabber_handle_presence) {
 							if (qtmp) ulist->status = jabber_status_int(j->istlen, qtmp->data);
 							else      ulist->status = EKG_STATUS_AVAIL;
 							
+							
 							qtmp = xmlnode_find_child(n, "status"); 
 							if (qtmp) ulist->descr = jabber_unescape(qtmp->data);
+							
+							if (res) res->status = ulist->status;
 						}
 
 						query_emit(NULL, "userlist-refresh");

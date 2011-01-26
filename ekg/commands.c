@@ -1329,7 +1329,8 @@ COMMAND(cmd_list)
 	int count = 0, show_all = 1, show_away = 0, show_active = 0, show_inactive = 0, show_invisible = 0, show_descr = 0, show_blocked = 0, show_offline = 0, show_online = 0, i;
 	char *show_group = NULL;
 	const char *tmp;
-	metacontact_t *m = NULL;
+	metacontact_t *m   = NULL;
+	newconference_t *c = NULL;
 	const char *params0 = params[0];
 	const char *__first_name, *__last_name;
 	int __ip, __port, __last_ip, __last_port;
@@ -1424,7 +1425,12 @@ next:
 			xfree(status);
 			return 0;
 		}
-	
+		
+		c = newconference_find(session, window_current->target);
+
+		if (c && (u = newconference_member_find(c, params0)))
+			goto list_user;
+
 		if (!(u = userlist_find(session, params0)) || !u->nickname) {
 			printq("user_not_found", params0);
 			return -1;
@@ -2451,7 +2457,8 @@ static COMMAND(cmd_query) {
 	metacontact_t *m;
 	newconference_t *conf;
 	window_t *w;
-	char *tmp, *tmp2;
+	char *tmp  = NULL;
+	char *tmp2 = NULL;
 
 	if ((conf = newconference_find(session, window_current->target)) && !xstrncmp(session->uid, "xmpp:", 5)) {  /* some conference's nickname? */
 		userlist_t *u;
@@ -4372,7 +4379,7 @@ void command_init()
 	command_add(NULL, ("last"), "CpuU CuU", cmd_last, SESSION_MUSTHAS,
 	  "-c --clear -s --stime -n --number");
 
-	command_add(NULL, ("list"), "CpuUsm p p p p p p p p", cmd_list, SESSION_MUSTHAS,
+	command_add(NULL, ("list"), "CpuUsmn p p p p p p p p", cmd_list, SESSION_MUSTHAS,
 	  "-a --active -A --away -B --blocked -d --description -i --inactive -I --invisible -m --member -n --notavail -o --offline -O --online");
 
 	command_add(NULL, ("me"), "?", cmd_me, SESSION_MUSTBECONNECTED, NULL);
