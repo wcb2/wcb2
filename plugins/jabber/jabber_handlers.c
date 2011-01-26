@@ -1546,10 +1546,11 @@ JABBER_HANDLER(jabber_handle_presence) {
 						int prio = 5; 
 						int nc   = 0;    /* Nick changed */
 						
-						xmlnode_t       *qtmp, *qtmp2;
-						newconference_t *c;
-						userlist_t      *ulist;
-						ekg_resource_t  *res;
+						xmlnode_t       *qtmp   = NULL;  
+						xmlnode_t       *qtmp2  = NULL;
+						newconference_t *c      = NULL;
+						userlist_t      *ulist  = NULL;
+						ekg_resource_t  *res    = NULL;
 
 						if (!(c = newconference_find(s, mucuid))) {
 							debug("[jabber,muc] recved muc#user but conference: %s not found ?\n", mucuid);
