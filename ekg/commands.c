@@ -2454,11 +2454,12 @@ static COMMAND(cmd_reload)
 
 static COMMAND(cmd_query) {
 	char *par0 = NULL;
+	char *tmp  = NULL;
+	char *tmp2 = NULL;
+	
 	metacontact_t *m;
 	newconference_t *conf;
 	window_t *w;
-	char *tmp  = NULL;
-	char *tmp2 = NULL;
 
 	if ((conf = newconference_find(session, window_current->target)) && !xstrncmp(session->uid, "xmpp:", 5)) {  /* some conference's nickname? */
 		userlist_t *u;
