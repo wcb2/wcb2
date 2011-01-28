@@ -1756,6 +1756,119 @@ char *get_nick_color(char *nick, session_t *s) {
 	return default_color;
 }
 
+jabber_bookmark_t *find_bookmark(char *type, char *id, struct list *bookmarks) {
+	jabber_bookmark_t *book;
+
+	if (!xstrcmp(type, "name")) {
+		for (; bookmarks && (book = bookmarks->data); bookmarks = bookmarks->next)
+			if (!xstrcmp(book->priv_data.conf->name, id)) break;
+	} 
+	else if (!xstrcmp(type, "conf")) {
+		for (; bookmarks && (book = bookmarks->data); bookmarks = bookmarks->next)
+			if (!xstrcmp(book->priv_data.conf->jid, id) && (book->type == JABBER_BOOKMARK_CONFERENCE)) break;
+	}
+	else if (!xstrcmp(type, "url")) {
+		for (; bookmarks && (book = bookmarks->data); bookmarks = bookmarks->next)
+			if (!xstrcmp(book->priv_data.url->url, id) && (book->type == JABBER_BOOKMARK_URL)) break;
+	}  
+		
+	if (bookmarks == NULL)
+		return NULL;
+
+	return book;
+}
+
+int modify_bookmark(jabber_bookmark_t *book, char **splitted) {
+
+	int type = book->type;
+	int sync = 0;
+
+	if (type == JABBER_BOOKMARK_URL) {
+		if (jabber_attr(splitted, "name")) {
+			xfree(book->priv_data.url->name);
+			book->priv_data.url->name = xstrdup(jabber_attr(splitted, "name"));
+			++sync;
+		} 
+		
+		if (jabber_attr(splitted, "url")) {
+			xfree(book->priv_data.url->url);
+			book->priv_data.url->url = xstrdup(jabber_attr(splitted, "url"));
+			++sync;
+		}
+	}
+	else if (type == JABBER_BOOKMARK_CONFERENCE) {
+		if (jabber_attr(splitted, "name")) {
+			xfree(book->priv_data.conf->name);
+			book->priv_data.conf->name = xstrdup(jabber_attr(splitted, "name"));
+			++sync;
+		}
+		if (jabber_attr(splitted, "jid")) {
+			xfree(book->priv_data.conf->jid);
+			book->priv_data.conf->jid = xstrdup(jabber_attr(splitted, "jid"));
+			++sync;
+		}
+									
+		if (jabber_attr(splitted, "nick")) {
+			xfree(book->priv_data.conf->nick);
+			book->priv_data.conf->nick = xstrdup(jabber_attr(splitted, "nick"));
+			++sync;
+		}
+									
+		if (jabber_attr(splitted, "pass")) {
+			xfree(book->priv_data.conf->pass);
+			book->priv_data.conf->pass = xstrdup(jabber_attr(splitted, "pass"));
+			++sync;
+		}
+
+		if (jabber_attr(splitted, "autojoin")) {
+			book->priv_data.conf->autojoin = atoi(jabber_attr(splitted, "autojoin"));
+			++sync;
+		}
+	}
+
+	if (sync) return 0;
+	else      return 1;
+}								
+
+int add_bookmark(jabber_private_t *j, char **splitted) {
+
+	jabber_bookmark_t *book = NULL;
+
+	char *type = splitted[0];
+	char *id   = splitted[1];
+
+	if (!xstrcmp(type, "url")) {
+		book		= xmalloc(sizeof(jabber_bookmark_t));
+		book->type	= JABBER_BOOKMARK_URL;
+
+		book->priv_data.url        = xmalloc(sizeof(jabber_bookmark_url_t));
+		book->priv_data.url->name  = xstrdup(jabber_attr(splitted, "name"));
+		book->priv_data.url->url   = xstrdup(id);
+
+	} 
+	else if (!xstrcmp(type, "conf")) {
+		book		= xmalloc(sizeof(jabber_bookmark_t));
+		book->type	= JABBER_BOOKMARK_CONFERENCE;
+
+		book->priv_data.conf = xmalloc(sizeof(jabber_bookmark_conference_t));
+		book->priv_data.conf->name = xstrdup(jabber_attr(splitted, "name"));
+		book->priv_data.conf->jid	= xstrdup(id);
+		book->priv_data.conf->nick= xstrdup(jabber_attr(splitted, "nick")); 
+		book->priv_data.conf->pass= xstrdup(jabber_attr(splitted, "pass"));
+
+		if (jabber_attr(splitted, "autojoin") && atoi(jabber_attr(splitted, "autojoin")))	
+			book->priv_data.conf->autojoin = 1;
+
+	} 
+
+	if (book) {
+		list_add(&(j->bookmarks), book);
+		return 0;
+	}
+	
+	return -1;
+}
+
 /*
  * Local Variables:
  * mode: c

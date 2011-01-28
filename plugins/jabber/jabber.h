@@ -248,6 +248,13 @@ uint32_t *jabber_msg_format(const char *plaintext, const xmlnode_t *html);
 #endif /* __EKG_JABBER_JABBER_H */
 
 char *get_nick_color(char *nick, session_t *s);
+
+/* Operations with bookmarks */
+jabber_bookmark_t *find_bookmark(char *type, char *id, struct list *bookmarks);
+int modify_bookmark(jabber_bookmark_t *book, char **splitted);
+int add_bookmark(jabber_private_t *j, char **splitted);
+
+
 /*
  * Local Variables:
  * mode: c

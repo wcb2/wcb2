@@ -115,6 +115,8 @@ bookmark
 	
 	  --url             <url>
 	
+	  --jid             <jid>
+	
 	  --autojoin        <bool>
 	
 	  --nick            <nick>
@@ -131,6 +133,8 @@ bookmark
 	  Remove useless one:     /bookmark -r --url <useless_url>
 	
 	  Change nick:            /bookmark -m --name <name_of_bookmark> --nick <new_nick>
+	
+	  Change jid:             /bookmark -m --name gay_porn --jid gay_porn2@conference.jabber.org
 	
 	  View all bookmarks:     /bookmark -d
 	
