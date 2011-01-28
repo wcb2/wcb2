@@ -231,14 +231,20 @@ msg_gen_thread
 	type: bool
 	default value: 0
 	
-	Whether to automagically generate thread-IDs for outgoing messages
+	Whether to automatically generate thread-IDs for outgoing messages
 	without given thread.
 
 muc_colored_nicks
 	type: bool
 	default value: 0
 	
-	Colorises nicks in MUC. Depends on zlib library
+	Defines if nicks in MUC will be colorful. Depends on zlib library
+
+muc_send_chatstate
+	type: bool
+	default value: 1
+	
+	Defines whether your status and description will be send to MUC
 
 password
 	type: string

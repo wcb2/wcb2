@@ -469,7 +469,9 @@ static COMMAND(jabber_command_xml)
 
 static COMMAND(jabber_command_away)
 {
+	jabber_private_t *j = session_private_get(session);
 	const char *descr, *format;
+	int muc_send_chatstate = session_int_get(session, "muc_send_chatstate");
 	
 	if (params[0]) {
 		session_descr_set(session, (!xstrcmp(params[0], "-")) ? NULL : params[0]);
@@ -536,6 +538,41 @@ static COMMAND(jabber_command_away)
 	if (session_connected_get(session)) 
 		jabber_write_status(session);
 	
+	if (!muc_send_chatstate) 
+		return 0;
+
+	/* Send status and descr to MUC's*/
+	char *muc_status      = NULL;
+	const char *muc_show  = NULL;
+	newconference_t *c;
+
+	if (descr) muc_status = saprintf("<status>%s</status>", descr);
+	
+	switch (session->status) {
+		case EKG_STATUS_FFC:       muc_show = "<show>chat</show>";
+								   break;
+		case EKG_STATUS_AWAY:
+		case EKG_STATUS_AUTOAWAY:  muc_show = "<show>away</show>";
+								   break;
+		case EKG_STATUS_XA:
+		case EKG_STATUS_AUTOXA:    muc_show = "<show>xa</show>";
+								   break;
+		case EKG_STATUS_DND:       muc_show = "<show>dnd</show>";
+								   break;
+	}
+
+	for (c = newconferences; c; c = c->next) {
+		if(!xstrcmp(c->session, session->uid))
+			watch_write(j->send_watch, 
+				"<presence to=\"%s\">"
+					"%s"
+					"%s"
+				"</presence>",  c->name + 5,
+								muc_show   ? muc_show    : "",
+							    muc_status ? muc_status  : "");
+	}
+	xfree(muc_status);
+
 	return 0;
 }
 
@@ -1880,7 +1917,7 @@ static COMMAND(jabber_command_private) {
 
 			array_free(splitted);
 			
-			if (bookmark_sync ==  -2)
+			if (bookmark_sync == -2)
 				return -1;
 
 			if (bookmark_sync > 0) {
@@ -2216,14 +2253,36 @@ static COMMAND(jabber_muc_command_join) {
 	jabber_private_t *j = session_private_get(session);
 	newconference_t *conf;
 
-	const char *default_nickname = session_get(session, "default_nickname");
+	int muc_send_chatstate = session_int_get(session, "muc_send_chatstate");
 
-	char *tmp;
+	const char *default_nickname = session_get(session, "default_nickname");
+	const char *muc_show         = NULL;
+
+	char *descr         = NULL; char *tmp      = NULL;
+	char *muc_status    = NULL; char *mucuid   = NULL;
+	
 	char *username = (params[1]) ? xstrdup(params[1]) : default_nickname ? xstrdup(default_nickname) : (tmp = xstrchr(session->uid, '@')) ? xstrndup(session->uid+5, tmp-session->uid-5) : NULL;
 	char *password = (params[1] && params[2]) ? saprintf("<password>%s</password>", params[2]) : NULL;
 
-	char *mucuid;
+	descr = (char *) session_descr_get(session);
 
+	if (muc_send_chatstate) {
+		if (descr) muc_status = saprintf("<status>%s</status>", descr);
+	
+		switch (session->status) {
+			case EKG_STATUS_FFC:       muc_show = "<show>chat</show>";
+								   break;
+			case EKG_STATUS_AWAY:
+			case EKG_STATUS_AUTOAWAY:  muc_show = "<show>away</show>";
+								   break;
+			case EKG_STATUS_XA:
+			case EKG_STATUS_AUTOXA:    muc_show = "<show>xa</show>";
+								   break;
+			case EKG_STATUS_DND:       muc_show = "<show>dnd</show>";
+								   break;
+		}
+	}
+	
 	if (xstrchr(target, '@') == NULL) {
 		char *default_service = jabber_unescape(session_get(session, "default_service"));
 		
@@ -2231,12 +2290,20 @@ static COMMAND(jabber_muc_command_join) {
 		xfree(default_service);
 	} else 
 		mucuid = xmpp_uid(target);
-
 	
 	tmp = jabber_escape(username);
-	watch_write(j->send_watch, "<presence to='%s/%s'><x xmlns='http://jabber.org/protocol/muc'>%s</x></presence>", 
-			mucuid + 5, tmp, password ? password : "");
-	xfree(tmp);
+	
+	watch_write(j->send_watch, 
+		"<presence to='%s/%s'>"
+			"%s"
+			"%s"
+			"<x xmlns='http://jabber.org/protocol/muc'>"
+				"%s"
+			"</x>"
+		"</presence>", mucuid + 5, tmp,
+					   muc_show   ? muc_show   : "",
+					   muc_status ? muc_status : "",
+					   password   ? password   : "");
 
 	conf = newconference_create(session, mucuid, 1);
 	conf->priv_data = xstrdup(username);
@@ -2244,6 +2311,9 @@ static COMMAND(jabber_muc_command_join) {
 	xfree(username);
 	xfree(password);
 	xfree(mucuid);
+	xfree(muc_status);
+	xfree(tmp); 
+
 	return 0;
 }
 

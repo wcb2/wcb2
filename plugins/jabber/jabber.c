@@ -1632,6 +1632,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("log_formats",		VAR_STR, "xml,simple,sqlite", 0, NULL),
 	PLUGIN_VAR_ADD("msg_gen_thread",	VAR_BOOL, "0", 0, NULL),
 	PLUGIN_VAR_ADD("muc_colored_nicks",	VAR_BOOL, "0", 0, NULL),
+	PLUGIN_VAR_ADD("muc_send_chatstate",VAR_BOOL, "1", 0, NULL),
 	PLUGIN_VAR_ADD("password",		    VAR_STR, NULL, 1, NULL),
 	PLUGIN_VAR_ADD("photo_hash",		VAR_STR, NULL, 0, NULL),
 	PLUGIN_VAR_ADD("plaintext_passwd",	VAR_INT, "0", 0, NULL),
