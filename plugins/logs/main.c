@@ -146,6 +146,23 @@ static char *log_escape(const char *str)
 	return res;
 }
 
+static char *remove_crap(char *tmp_text) {
+	char *text = (char *)xmalloc(sizeof(char) * (xstrlen(tmp_text) + 1));
+	
+	int copy = 1;
+	int i    = 0;
+
+	while (*tmp_text != '\0') {
+		if (*tmp_text == '\033') copy = 0;
+		if (copy) text[i++] = *tmp_text;
+		
+		if ((*tmp_text == 'm') && !copy) copy = 1;
+		tmp_text++;
+	}
+
+	return text;
+}
+
 static char *fstring_reverse(fstring_t *fstr) {
 	const char *str;
 	const short *attr;
@@ -851,9 +868,9 @@ static void logs_xml(FILE *file, const char *session, const char *uid, const cha
 	fputs("\t\t<nick>", file);  fputs(gotten_nickname, file);  fputs("</nick>\n", file);
 	fputs("\t</sender>\n", file);
 
-	fputs("\t<body>\n", file);
+	fputs("\t<body>", file);
 	if (textcopy) fputs(textcopy, file);
-	fputs("\t</body>\n", file);
+	fputs("</body>\n", file);
 
 	fputs("</message>\n", file);
 	fputs("</ekg2log>\n", file);
@@ -941,7 +958,7 @@ static QUERY(logs_handler) {
 	char *session	= *(va_arg(ap, char**));
 	char *uid	= *(va_arg(ap, char**));
 	char **rcpts	= *(va_arg(ap, char***));
-	char *text	= *(va_arg(ap, char**));
+	char *tmp_text	= *(va_arg(ap, char**));
 		uint32_t **UNUSED(format)	= va_arg(ap, uint32_t**);
 	time_t	 sent	= *(va_arg(ap, time_t*));
 	int  class	= *(va_arg(ap, int*));
@@ -951,6 +968,8 @@ static QUERY(logs_handler) {
 	log_window_t *lw;
 	char *conf_uid = NULL;		/* conference-uid */
 	char *target_uid;
+
+	char *text = remove_crap(tmp_text);
 
 	/* olewamy jesli to irc i ma formatke irssi like, czekajac na irc-protocol-message */
 	if (session_check(s, 0, "irc") && logs_log_format(s) == LOG_FORMAT_IRSSI) 
@@ -1003,6 +1022,8 @@ static QUERY(logs_handler) {
 			logs_irssi(lw->file, session, uid, text, sent, EKG_MSGCLASS_MESSAGE);
 			break;
 	}
+
+	xfree(text);
 	return 0;
 }
 
