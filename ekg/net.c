@@ -171,7 +171,7 @@ watch_t *ekg_resolver4(plugin_t *plugin, const char *server, watcher_handler_fun
 				if ((nexthost = xstrchr(hostname, ','))) *nexthost = '\0';
 				sport = ekg_resolver_split(hostname, port);
 
-				srv_resolver (&gim_host_list, hostname, proto_port, sport, 0);
+				//srv_resolver (&gim_host_list, hostname, proto_port, sport, 0);
 				basic_resolver (&gim_host_list, hostname, sport);
 				resolve_missing_entries(&gim_host_list);
 
