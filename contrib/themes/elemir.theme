@@ -1,0 +1,89 @@
+# Chat and info messages format
+chat %c┌── %n%1 %c%2%n%6%n%c─── ── ─%n\n%c│%n %|%3%n\n%|%c└───── ──── ─── ── ─%n\n
+sent %b┌── %n%1 %c%2%n%6%n%b─── ── ─%n\n%b│%n %|%3%n\n%|%b└───── ──── ─── ── ─%n\n
+
+#-query_started_window
+
+# Vertical line
+contacts_vertical_line_char 
+
+# Prompt
+prompt %T──%g>%n
+
+# MUC notice
+jabber_muc_notice \n%g── %gNotice from: %P%2%n %g──\n%3\n%g────\n 
+
+# Conference headers and footers
+contacts_moderator_header %C  ── Moderators ──
+contacts_moderator_footer  
+
+contacts_participant_header %C ── Participants ──
+contacts_participant_footer  
+
+contacts_visitor_header %C   ── Visitors ──
+
+# Contact's headers and footers
+contacts_header
+contacts_header_group %G%1%n
+contacts_metacontacts_header 
+
+# Free for chat
+contacts_chat_header %C     ── Chat ──
+
+# Avail
+contacts_avail_header %C   ── Availble ──
+
+# Away
+contacts_away_header %C     ── Away ──
+
+# Extended away
+contacts_xa_header %C   ── Ext Away ──
+
+# Do not disturb
+contacts_dnd_header %C    ── DoNotD ──
+
+# Not available
+contacts_notavail_header %C   ── NotAvail ──
+contacts_notavail_footer  
+
+# Invisible
+contacts_invisible_header %C     ── Invis ──
+
+# Unknown users
+contacts_unknown_header %C   ── %Y!%CUnknown ──
+contacts_unknown_footer  
+
+# Blocking users
+contacts_blocking_header %C   ── Blocking ──
+contacts_blocking_footer  
+
+# Error'd users
+contacts_error_header %C    ── %r!%CError ──
+contacts_error_footer  
+
+# Footers
+contacts_footer  
+contacts_footer_group  
+contacts_metacontacts_footer  
+
+# Status Bar
+statusbar1 %l                    %K│
+statusbar2 %c(%w%{time}%c)%w %c(%w%{?session %{?away %G}%{?avail %Y}%{?chat %W}%{?dnd %K}%{?xa %g}%{?gone %R}%{?invisible %C}%{?notavail %r}%{session}}%{?!session ---}%c) %{?window (%wwin%c/%w%{?typing %C}%{window}}%{?query %c:%W%{query}}%{?debug %c(%Cdebug}%c)%w%{?activity  %c(%wact%c/%W}%{activity}%{?activity %c)%w}
+
+# Jabber form
+jabber_form_title %g╔═%G───── %3 %n(%c%2%n)
+jabber_form_item %g║ %n%(21)3 (%6) %K|%n ──%4 %(20)5
+
+jabber_form_item_beg %g║ ┌─%G─────%n
+jabber_form_item_plain %g║ │ %G─────%n
+jabber_form_item_end %g║ └─%G─────%n
+
+jabber_form_item_sub %g║ %|%n\t%3
+
+jabber_form_command %g║ %nType %W/%3 %g%2 %W%4%n,
+jabber_form_instructions %g║ %n%|%3
+jabber_form_description %g║ %n%|%3
+jabber_form_end %g╚═%G───── End of this %3 form ;)%n
+
+jabber_registration_item %g║ %n            ──%3 %4%n
+
