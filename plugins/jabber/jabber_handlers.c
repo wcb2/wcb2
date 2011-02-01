@@ -1633,7 +1633,7 @@ JABBER_HANDLER(jabber_handle_presence) {
 							print_info(mucuid, s, "muc_joined", session_name(s), nickname, jid, mucuid + 5, "", role, affiliation);
 						}
 
-						if (ulist && !nc) {
+						if (ulist) {
 							jabber_userlist_private_t *up = jabber_userlist_priv_get(ulist);
 							if (up && !na) {
 								up->role	= xstrdup(role);
@@ -1644,11 +1644,15 @@ JABBER_HANDLER(jabber_handle_presence) {
 							if (qtmp) ulist->status = jabber_status_int(j->istlen, qtmp->data);
 							else      ulist->status = EKG_STATUS_AVAIL;
 							
-							
 							qtmp = xmlnode_find_child(n, "status"); 
 							if (qtmp) ulist->descr = jabber_unescape(qtmp->data);
+							else {
+								xfree(ulist->descr);
+								ulist->descr = NULL;
+							}
 							
-							if (res) res->status = ulist->status;
+							if (res)         res->status = ulist->status;
+							if (res && prio) res->prio   = prio;
 						}
 
 						query_emit(NULL, "userlist-refresh");
