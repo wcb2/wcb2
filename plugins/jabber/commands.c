@@ -82,7 +82,7 @@ static COMMAND(jabber_command_connect)
 	const char *server;
 
 	jabber_private_t *j = session_private_get(session);
-	
+
 	if (session->connecting) {
 		printq("during_connect", session_name(session));
 		return -1;
@@ -2117,12 +2117,16 @@ static COMMAND(jabber_command_register)
 	if (!session_connected_get(session)) {
 		if ((!passwd || !*passwd || !xstrcmp(passwd, "foo"))) {
 			session_set(session, "__new_account", "1");
+			session_set(session, "__inband_reg",  "1");
 			if (params[0]) session_set(session, "password", params[0]);
 			jabber_command_connect(("connect"), NULL, session, target, quiet);
 			return 0;
+		} 
+		
+		if (!session_get(session, "__inband_reg")) {
+			printq("not_connected", session_name(session));
+			return -1;
 		}
-		printq("not_connected", session_name(session));
-		return -1;
 	}
 
 	if (!j->send_watch) return -1;
@@ -2132,9 +2136,11 @@ static COMMAND(jabber_command_register)
 		printq("invalid_params", name);
 		return -1;
 	}
-	watch_write(j->send_watch, "<iq type=\"%s\" to=\"%s\" id=\"transpreg%d\"><query xmlns=\"jabber:iq:register\">", params[1] || unregister ? "set" : "get", server, j->id++);
+	watch_write(j->send_watch, "<iq type=\"%s\" to=\"%s\" id=\"%s%d\"><query xmlns=\"jabber:iq:register\">", params[1] || unregister ? "set" : "get", server, unregister  ? "unregister" : "register", j->id++);
+
 	if (unregister)
 		watch_write(j->send_watch, "<remove/>");
+
 	if (splitted) {
 		int i = 0;
 		int use_x_data = 0;
@@ -2148,6 +2154,15 @@ static COMMAND(jabber_command_register)
 			if (use_x_data)
 				watch_write(j->send_watch, "<field var=\"%s\"><value>%s</value></field>", splitted[i], splitted[i+1]);
 			else	watch_write(j->send_watch, "<%s>%s</%s>", splitted[i], splitted[i+1], splitted[i]);
+		}
+
+		/* XEP-0158: CAPTCHA Forms */
+		if (session_get(session, "__have_captcha")){
+			watch_write(j->send_watch, "<field var=\"%s\"><value>%s</value></field>", "sid",       session_get(session, "__captcha_sid"));
+			watch_write(j->send_watch, "<field var=\"%s\"><value>%s</value></field>", "challenge", session_get(session, "__captcha_challenge"));
+			
+			session_set(session, "__have_captcha", NULL); session_set(session, "__captcha_challenge", NULL); 
+			session_set(session, "__captcha_sid",  NULL);
 		}
 
 		if (use_x_data) watch_write(j->send_watch, "</x>");

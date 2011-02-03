@@ -697,19 +697,38 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_register) {
 	char *from_str = (from) ? jabber_unescape(from) : xstrdup(_("unknown"));
 	int done = 0;
 
+	/* Parse answer (jabber_x_data) */
 	for (reg = n->children; reg; reg = reg->next) {
 		if (!xstrcmp(reg->name, "x") && !xstrcmp("jabber:x:data", reg->xmlns) && 
 				( !xstrcmp("form", jabber_attr(reg->atts, "type")) || !jabber_attr(reg->atts, "type")))
 		{
-			done = 1;
+			if (!xmlnode_find_child(reg, "title")) 
+				print("jabber_form_title", session_name(s), from_str, from_str);
+
 			jabber_handle_xmldata_form(s, from_str, "register", reg->children, "--jabber_x_data");
-			break;
+			xfree(from_str);
+			
+			return;
 		}
 	}
-	if (!done && !n->children) { 
-		/* XXX */
+
+	/* Registration complete */
+	if (!n->children || (!xmlnode_find_child(n, "instructions") && !xmlnode_find_child(n, "registered"))) {
 		done = 1;
 	}
+
+	/* Tell user that everything is cool */
+	if (done) {
+		if (*id == 'r') print("jabber_registration_ok");
+		else            print("jabber_cancellation_ok"); 
+
+		if (session_get(s, "__new_account")) {
+			print("jabber_registration_ok_server");
+			session_set(s, "__inband_reg", NULL);
+		}
+	}
+
+	/* Parse answer */
 	if (!done) {
 		xmlnode_t *instr = xmlnode_find_child(n, "instructions");
 		print("jabber_form_title", session_name(s), from_str, from_str);

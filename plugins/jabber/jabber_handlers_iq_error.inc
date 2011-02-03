@@ -13,7 +13,7 @@ static char *jabber_iq_error_string(xmlnode_t *n) {			/* in n we have <error */
 
 	ecode = jabber_attr(n->atts, "code");
 	ntext = xmlnode_find_child(n, "text");
-	etext = ntext ? jabber_unescape(ntext->data) : NULL;
+	etext = ntext ? jabber_unescape(ntext->data) : jabber_unescape(n->data);
 	
 	if (!etext && n->children) 
 		etext = jabber_unescape(n->children->name); 
@@ -85,15 +85,34 @@ JABBER_HANDLER_ERROR(jabber_handle_iq_error_generic) {
 	xfree(etext);
 }
 
+JABBER_HANDLER_ERROR(jabber_handle_iq_error_register) {
+	char *etext = NULL;
+
+	xmlnode_t *nerror  = NULL;
+	nerror = xmlnode_find_child(n, "error");
+	
+	if (nerror)
+		etext  = jabber_iq_error_string(nerror);
+
+	if (*id == 'r') print("jabber_registration_error", from, etext);
+	else            print("jabber_cancellation_error", from, etext);
+
+	xfree(etext);
+}
+
 static const struct jabber_iq_generic_handler jabber_iq_error_handlers[] = {
-	{ "vCard",	"vcard-temp",					jabber_handle_iq_error_vcard },
-	{ "query",	"jabber:iq:last",				jabber_handle_iq_error_last },
-	{ NULL,		"jabber:iq:privacy",				jabber_handle_iq_error_privacy },
-	{ NULL,		"jabber:iq:private",				jabber_handle_iq_error_private },
-	{ NULL,		"jabber:iq:version",				jabber_handle_iq_error_version },
-	{ NULL,		"jabber:iq:search",				jabber_handle_iq_error_search },
+	{ "vCard",	"vcard-temp",					    jabber_handle_iq_error_vcard    },
+	{ "query",	"jabber:iq:last",				    jabber_handle_iq_error_last     },
+
+	{ NULL,		"jabber:iq:privacy",				jabber_handle_iq_error_privacy  },
+	{ NULL,		"jabber:iq:private",				jabber_handle_iq_error_private  },
+	{ NULL,		"jabber:iq:register",				jabber_handle_iq_error_register },
+	{ NULL,		"jabber:iq:search",				    jabber_handle_iq_error_search   },
+	{ NULL,		"jabber:iq:version",				jabber_handle_iq_error_version  },
+
 	{ NULL,		"http://jabber.org/protocol/disco#info",	jabber_handle_iq_error_disco_info },
 	{ NULL,		"http://jabber.org/protocol/disco#items",	jabber_handle_iq_error_disco },
+
 	{ "",		NULL,						NULL }
 };
 

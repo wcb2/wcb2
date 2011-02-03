@@ -17,6 +17,11 @@ contacts_vertical_line_char
 # Prompt
 prompt %T--%g>%n
 
+# Forms
+jabber_form_item %g|| %K[%y%6%K] %n%(30)3 %K|%n --%4 %(20)5
+jabber_form_instructions %g|| %R>> %|%n%3
+jabber_form_description %g|| %R>> %|%n%3
+
 # MUC notice
 jabber_muc_notice \n%g-- %gNotice from: %P%2%n %g--\n%3\n%g----\n 
 

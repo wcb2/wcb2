@@ -204,6 +204,10 @@ void jabber_iq_auth_send(session_t *s, const char *username, const char *passwd,
 
 JABBER_HANDLER(jabber_handle_stream_features) {
 	jabber_private_t *j = s->priv;
+	
+	if (session_get(s, "__inband_reg")) {
+		return;
+	}
 
 	int use_sasl = !j->sasl_connecting && (session_int_get(s, "disable_sasl") != 2);
 	int use_fjuczers = 0;	/* bitmaska (& 1 -> session) (& 2 -> bind) */
@@ -544,7 +548,7 @@ JABBER_HANDLER(jabber_handle_challenge) {
 		const char *password = session_get(s, "password");
 
 		string_t str = string_init(NULL);	/* text to encode && sent */
-		char *encoded;				/* BASE64 response text */
+		char *encoded;				        /*  BASE64 response text  */
 
 		char tmp_cnonce[32];
 		char *cnonce;
@@ -1079,7 +1083,7 @@ JABBER_HANDLER(jabber_handle_message) {
 static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char *command, xmlnode_t *form, const char *param) { /* JEP-0004: Data Forms */
 	xmlnode_t *node;
 	int fieldcount = 0;
-/*	const char *FORM_TYPE = NULL; */
+	char *form_type = NULL;
 
 	for (node = form; node; node = node->next) {
 		if (!xstrcmp(node->name, "title")) {
@@ -1100,7 +1104,6 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 			int subcount = 0;
 
 			int isreq = 0;	/* -1 - optional; 1 - required */
-			/* ?WO? XEP-0004 tells nothing about optional values ??? */
 			
 			if (!fieldcount) print("jabber_form_command", session_name(s), uid, command, param);
 
@@ -1137,7 +1140,7 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 				print("jabber_form_hidden", session_name(s), uid, label, var, def_option);
 			else
 				print("jabber_form_item", session_name(s), uid, label, var, def_option, 
-					isreq == -1 ? "X" : isreq == 1 ? "V" : " ", type);
+					isreq == -1 ? "X" : isreq == 1 ? "X" : " ", type);
 
 			if (sub && sub->len > 1) {
 				int len = sub->len;
@@ -1145,6 +1148,18 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 				print("jabber_form_item_sub", session_name(s), uid, sub->str);
 				string_free(sub, 1);
 			}
+
+			/* XEP-0158: CAPTCHA Forms */
+			if (!xstrcmp(var, "FORM_TYPE")) {
+				form_type = def_option;
+				session_set(s, "__have_captcha", "1");
+			}
+
+			if (!xstrcmp(form_type, "urn:xmpp:captcha")) {
+				if      (!xstrcmp(var, "challenge")) session_set(s, "__captcha_challenge", def_option);
+				else if (!xstrcmp(var, "sid"))       session_set(s, "__captcha_sid",       def_option);
+			}
+
 			fieldcount++;
 			xfree(var);
 			xfree(type);
@@ -1357,23 +1372,13 @@ JABBER_HANDLER(jabber_handle_iq) {
 	}
 
 	switch (type) {
-		case JABBER_IQ_TYPE_RESULT:		callbacks = jabber_iq_result_handlers;		break;
+		case JABBER_IQ_TYPE_RESULT:		callbacks = jabber_iq_result_handlers;	break;
 		case JABBER_IQ_TYPE_SET:		callbacks = jabber_iq_set_handlers;		break;
 		case JABBER_IQ_TYPE_GET:		callbacks = jabber_iq_get_handlers;		break;
-
-		case JABBER_IQ_TYPE_ERROR:
-			jabber_handle_iq_error_generic_old(s, n, from, id);
-			return;
-		case JABBER_IQ_TYPE_NONE:
-			debug_error("[jabber] <iq> wtf iq type: %s\n", atype);
-			return;
-
-		default:
-			/* never here */
-
-			/* protect from gcc warning: 
-			 *	jabber_handlers.c:1271: warning: 'callbacks' may be used uninitialized in this function */
-			return;
+		case JABBER_IQ_TYPE_ERROR:      callbacks = jabber_iq_error_handlers;	break;
+		case JABBER_IQ_TYPE_NONE:       
+		default:                        debug_error("[jabber] <iq> wtf iq type: %s\n", atype); 
+										return;
 	}
 
 	if (!xstrcmp(id, "auth")) {
@@ -1399,6 +1404,16 @@ JABBER_HANDLER(jabber_handle_iq) {
 		session_set(s, "__new_password", NULL);
 		return;
 	}
+
+	if (xstrstr(id, "register") && (n->children == NULL) && (type == JABBER_IQ_TYPE_RESULT)) {
+		jabber_handle_iq_result_register(s, n, from, id);
+		return;
+	}		
+	
+	if (xstrstr(id, "register") && (type == JABBER_IQ_TYPE_ERROR)) {
+		jabber_handle_iq_error_register(s, n, from, id);
+		return;
+	}		
 
 	for (q = n->children; q; q = q->next) {
 		const char *ns = q->xmlns;
@@ -1789,7 +1804,6 @@ static void jabber_session_connected(session_t *s) {
 	protocol_connected_emit(s);
 
 	if (session_get(s, "__new_account")) {
-		print("register", s->uid);
 		if (!xstrcmp(session_get(s, "password"), "foo")) print("register_change_passwd", s->uid, "foo");
 		session_set(s, "__new_account", NULL);
 	}

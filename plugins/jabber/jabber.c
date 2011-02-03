@@ -467,7 +467,8 @@ void jabber_handle_disconnect(session_t *s, const char *reason, int type) {
 		userlist_free(s);
 		query_emit(NULL, "userlist-refresh");
 	}
-
+	
+	session_set(s, "__inband_reg", NULL);
 	session_set(s, "__sasl_excepted", NULL);
 	session_int_set(s, "__roster_retrieved", 0);
 	session_int_set(s, "__session_need_start", 0);
@@ -510,14 +511,12 @@ static void xmlnode_handle_start(void *data, const char *name, const char **atts
 			 *	So, to avoid regression, we use here j->connecting != 2 
 			 */
 
-		if (!j->istlen && !j->sasl_connecting && session_get(s, "__new_account")) {
-			char *epasswd	= jabber_escape(passwd);
+		if (!j->istlen && !j->sasl_connecting && session_get(s, "__new_account") && session_get(s, "__inband_reg")) {
 			watch_write(j->send_watch, 
-				"<iq type=\"set\" to=\"%s\" id=\"register%d\">"
-				"<query xmlns=\"jabber:iq:register\"><username>%s</username><password>%s</password></query></iq>", 
-				j->server, j->id++, username, epasswd ? epasswd : ("foo"));
-
-			xfree(epasswd);
+				"<iq type=\"get\" to=\"%s\" id=\"register%d\">"
+					"<query xmlns=\"jabber:iq:register\"/>"
+				"</iq>", j->server, j->id++);
+			return;
 		}
 
 		if (!j->istlen && session_int_get(s, "disable_sasl") != 2) {
@@ -1416,12 +1415,21 @@ static int jabber_theme_init() {
 
 /* jabber:iq:version */
 	format_add("jabber_version_response",		_("%> Jabber ID: %T%1%n\n%> Client name: %T%2%n\n%> Client version: %T%3%n\n%> Operating system: %T%4%n\n"), 1);
-	format_add("jabber_version_error",		_("%! (%1) Error in getting %gjabber:iq:version%n from %W%2%n: %r%3"), 1);
+	format_add("jabber_version_error",		_("%! (%1) Error in getting %gjabber:iq:version%n from %W%2%n: %r%3\n"), 1);
 
 	format_add("jabber_ctcp_request",		_("%> (%1) %T%2%n requested IQ %g%4%n"), 1);
 
+/* jabber:iq:register */
+	format_add("jabber_registration_ok",		_("%> Registration successful\n"), 1);
+	format_add("jabber_registration_ok_server",	_("%> Now enter your password and reconnect\n"), 1);
+	format_add("jabber_registration_error",		_("%! Error during registration: %r%2\n"), 1);
+	
+	format_add("jabber_cancellation_ok",		_("%> Cancellation successful\n"), 1);
+	format_add("jabber_cancellation_error",		_("%! Error during cancellation: %r%2\n"), 1);
+
 /* common errors */
 	format_add("jabber_generic_error",	_("%! Error from %g%1%n: %R(%2) %r%3"), 1);
+
 
 #endif	/* !NO_DEFAULT_THEME */
 	return 0;
@@ -1610,7 +1618,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("auto_bookmark_sync",	VAR_BOOL, "1", 0, NULL),
 	PLUGIN_VAR_ADD("auto_connect",		VAR_INT, "0", 0, NULL),
 	PLUGIN_VAR_ADD("auto_find",		    VAR_INT, "0", 0, NULL),
-	PLUGIN_VAR_ADD("auto_privacylist_sync", VAR_BOOL, "1", 0, NULL),
+	PLUGIN_VAR_ADD("auto_privacylist_sync", VAR_BOOL, "0", 0, NULL),
 	PLUGIN_VAR_ADD("auto_reconnect",	VAR_INT, "0", 0, NULL),
 	PLUGIN_VAR_ADD("auto_xa",		    VAR_INT, "0", 0, NULL),
 	PLUGIN_VAR_ADD("auto_xa_descr",		VAR_STR, 0, 0, NULL),
@@ -1636,7 +1644,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("password",		    VAR_STR, NULL, 1, NULL),
 	PLUGIN_VAR_ADD("photo_hash",		VAR_STR, NULL, 0, NULL),
 	PLUGIN_VAR_ADD("plaintext_passwd",	VAR_INT, "0", 0, NULL),
-	PLUGIN_VAR_ADD("ping_server",		VAR_BOOL, "0", 0, NULL),
+	PLUGIN_VAR_ADD("ping_server",		VAR_BOOL, "10", 0, NULL),
 	PLUGIN_VAR_ADD("port",			    VAR_INT, "5222", 0, NULL),
 	PLUGIN_VAR_ADD("prefer_family",		VAR_INT, "0", 0, NULL),
 	PLUGIN_VAR_ADD("priority",		    VAR_INT, "5", 0, NULL),
