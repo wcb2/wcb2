@@ -1085,6 +1085,11 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 	int fieldcount = 0;
 	char *form_type = NULL;
 
+	/* To avoid being headless */
+	for (node = form; node; node = node->next) {
+		if (!xstrcmp(node->name, "title")) break;
+	} if (!node) print("jabber_form_title", session_name(s), uid, "Beginning of the form"); 
+
 	for (node = form; node; node = node->next) {
 		if (!xstrcmp(node->name, "title")) {
 			char *title = jabber_unescape(node->data);
@@ -1092,7 +1097,9 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 			xfree(title);
 		} else if (!xstrcmp(node->name, "instructions")) {
 			char *inst = jabber_unescape(node->data);
+			print("jabber_form_instructions_title");
 			print("jabber_form_instructions", session_name(s), uid, inst);
+			print("jabber_form_instructions_end");
 			xfree(inst);
 		} else if (!xstrcmp(node->name, "field")) {
 			xmlnode_t *child;
@@ -1104,8 +1111,6 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 			int subcount = 0;
 
 			int isreq = 0;	/* -1 - optional; 1 - required */
-			
-			if (!fieldcount) print("jabber_form_command", session_name(s), uid, command, param);
 
 			for (child = node->children; child; child = child->next) {
 				if (!xstrcmp(child->name, "required")) isreq = 1;
@@ -1134,13 +1139,19 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 				} else debug_error("[jabber] wtf? FIELD->CHILD: %s\n", child->name);
 			}
 
-			if (!(xstrcmp(type, "fixed")))
+			if (!(xstrcmp(type, "fixed"))) {
+				print("jabber_form_description_title");
 				print("jabber_form_description", session_name(s), uid, def_option);
-			else if (!(xstrcmp(type, "hidden")))
-				print("jabber_form_hidden", session_name(s), uid, label, var, def_option);
-			else
-				print("jabber_form_item", session_name(s), uid, label, var, def_option, 
-					isreq == -1 ? "X" : isreq == 1 ? "X" : " ", type);
+				print("jabber_form_description_end");
+			}
+			else if (!(xstrcmp(type, "hidden"))) {
+				print("jabber_form_item_item_hidden" , session_name(s), uid, label, def_option);
+				print("jabber_form_item_key_hidden"  , session_name(s), uid, var, isreq == 1 ? "!" : " ");
+			}
+			else {
+				print("jabber_form_item" , session_name(s), uid, label, def_option);
+				print("jabber_form_item_key"  , session_name(s), uid, var, isreq == 1 ? "!" : " ");
+			}
 
 			if (sub && sub->len > 1) {
 				int len = sub->len;
@@ -1166,8 +1177,10 @@ static void jabber_handle_xmldata_form(session_t *s, const char *uid, const char
 			xfree(label);
 		}
 	}
-	if (!fieldcount) print("jabber_form_command", session_name(s), uid, command);
 	print("jabber_form_end", session_name(s), uid, command, param);
+
+	if (fieldcount && param && param[0]) 
+		print("jabber_form_command", session_name(s), uid, command, param);
 }
 
 /* handluje <x xmlns=jabber:x:data type=submit */

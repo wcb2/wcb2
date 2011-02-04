@@ -1193,18 +1193,30 @@ static int jabber_theme_init() {
 	format_add("jabber_remotecontrols_commited_command",_("%> (%1) RC %W%2%n: requested command: %W%3%n @ session: %4 window: %5 quiet: %6"), 1);	
 
 	format_add("jabber_form_title",		  "%g,+=%G----- %3 %n(%c%2%n)", 1);
-	format_add("jabber_form_item",		  "%g|| %n%(21)3 (%6) %K|%n --%4 %(20)5", 1);	/* %3 - label %4 - keyname %5 - value %6 - req; optional */
 
 	format_add("jabber_form_item_beg",	  "%g|| ,+=%G-----%n", 1);
-	format_add("jabber_form_item_plain",	  "%g|| | %n %3: %5", 1);			/* %3 - label %4 - keyname %5 - value */
+	format_add("jabber_form_item_plain",  "%g|| | %n %3: %5",  1);			/* %3 - label %4 - keyname %5 - value */
 	format_add("jabber_form_item_end",	  "%g|| `+=%G-----%n", 1);
 
-	format_add("jabber_form_item_val",	  "%K[%b%3%n %g%4%K]%n", 1);			/* %3 - value %4 - label */
+	format_add("jabber_form_item_val",	  "%K[%b%3%n %g%4%K] %n", 1);			/* %3 - value %4 - label */
 	format_add("jabber_form_item_sub",	  "%g|| %|%n\t%3", 1);			/* %3 formated jabber_form_item_val */
 
-	format_add("jabber_form_command",	_("%g|| %nType %W/%3 %g%2 %W%4%n"), 1); 
-	format_add("jabber_form_instructions",	  "%g|| %n%|%3", 1);
-	format_add("jabber_form_description",	  "%g|| %n%|%3", 1);
+	format_add("jabber_form_instructions_title", "%g|| ,+=%G------ %yInstructions%G -------+", 1);
+	format_add("jabber_form_instructions",	  	 "%g|| | %|%n %3", 1);
+	format_add("jabber_form_instructions_end",	 "%g|| `+=%G---------------------------+", 1);
+	
+	format_add("jabber_form_description_title",  "%g|| ,+=%G------ %yDescriptions%G -------+", 1);
+	format_add("jabber_form_description",	  	 "%g|| | %|%n %3", 1);
+	format_add("jabber_form_description_end",	 "%g|| `+=%G---------------------------+", 1);
+
+	format_add("jabber_form_item",               "%g|| ,+=%G--%n %3: %n%4",       1);              /* %3 - label  %4 - value   */
+	format_add("jabber_form_item_key",		     "%g|| `+=%G--%n %K--%3 %r%4",    1);              /* %3 - key    %4 - opt\req */
+	
+	/* If you need it - copy these formats to your theme */
+//	format_add("jabber_form_item_hidden",        "%g|| ,+=%G--%n %3: %n%4",       1);              /* %3 - label  %4 - value   */
+//	format_add("jabber_form_item_key_hidden",	 "%g|| `+=%G--%n %K--%3 %r%4",    1);              /* %3 - key    %4 - opt\req */
+
+	format_add("jabber_form_command",	_("%> Note: You must use %4 in your command%n"), 1); 
 	format_add("jabber_form_end",		_("%g`+=%G----- End of this %3 form ;)%n"), 1);
 
 	format_add("jabber_registration_item",	  "%g|| %n	      --%3 %4%n", 1); /* %3 - keyname %4 - value */ /* XXX, merge */

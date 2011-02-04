@@ -702,9 +702,6 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_register) {
 		if (!xstrcmp(reg->name, "x") && !xstrcmp("jabber:x:data", reg->xmlns) && 
 				( !xstrcmp("form", jabber_attr(reg->atts, "type")) || !jabber_attr(reg->atts, "type")))
 		{
-			if (!xmlnode_find_child(reg, "title")) 
-				print("jabber_form_title", session_name(s), from_str, from_str);
-
 			jabber_handle_xmldata_form(s, from_str, "register", reg->children, "--jabber_x_data");
 			xfree(from_str);
 			
@@ -731,14 +728,15 @@ JABBER_HANDLER_RESULT(jabber_handle_iq_result_register) {
 	/* Parse answer */
 	if (!done) {
 		xmlnode_t *instr = xmlnode_find_child(n, "instructions");
-		print("jabber_form_title", session_name(s), from_str, from_str);
+		print("jabber_form_title", session_name(s), from_str, "Beginning of registration form");
 
 		if (instr && instr->data) {
 			char *instr_str = jabber_unescape(instr->data);
+			print("jabber_form_instructions_title");
 			print("jabber_form_instructions", session_name(s), from_str, instr_str);
+			print("jabber_form_instructions_end");
 			xfree(instr_str);
 		}
-		print("jabber_form_command", session_name(s), from_str, "register", "");
 
 		for (reg = n->children; reg; reg = reg->next) {
 			char *jname, *jdata;
