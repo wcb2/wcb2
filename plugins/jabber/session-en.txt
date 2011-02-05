@@ -113,6 +113,25 @@ display_ctcp
 	
 		1 - any requests will be displayed to you
 
+display_muc_events
+	type: integer
+	default value: 15
+	
+	Defines what information in MUC will be shown to you
+	
+	Variable bitmapped (i.e. you should sum up following values):
+	
+	
+		0 - nothing
+	
+		1 - nick changes
+	
+		2 - leaves/joins
+	
+		4 - kicks/bans
+	
+		8 - affiliation/roles changes
+
 disable_sasl
 	type: integer
 	default value: 0

@@ -1640,6 +1640,7 @@ static plugins_params_t jabber_plugin_vars[] = {
 	PLUGIN_VAR_ADD("disable_sasl",		VAR_INT, "0", 0, NULL),
 	PLUGIN_VAR_ADD("display_ctcp",		VAR_BOOL, "0", 0, NULL),
 	PLUGIN_VAR_ADD("display_notify",	VAR_INT, "-1", 0, NULL),
+	PLUGIN_VAR_ADD("display_muc_events",VAR_INT, "15", 0, NULL),
 	PLUGIN_VAR_ADD("display_server_features", VAR_INT, "1", 0, NULL),
 	PLUGIN_VAR_ADD("gpg_active",		VAR_BOOL, "0", 0, jabber_gpg_changed),
 	PLUGIN_VAR_ADD("gpg_key",		    VAR_STR, NULL, 0, jabber_gpg_changed),
