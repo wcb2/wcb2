@@ -546,7 +546,11 @@ static COMMAND(jabber_command_away)
 	const char *muc_show  = NULL;
 	newconference_t *c;
 
-	if (descr) muc_status = saprintf("<status>%s</status>", descr);
+	if (descr) {
+		char *tmp_descr = jabber_escape(descr);
+		muc_status = saprintf("<status>%s</status>", tmp_descr);
+		xfree(tmp_descr);
+	}
 	
 	switch (session->status) {
 		case EKG_STATUS_FFC:       muc_show = "<show>chat</show>";
