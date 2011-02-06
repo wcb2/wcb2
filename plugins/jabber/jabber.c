@@ -1202,11 +1202,11 @@ static int jabber_theme_init() {
 	format_add("jabber_form_item_sub",	  "%g|| %|%n\t%3", 1);			/* %3 formated jabber_form_item_val */
 
 	format_add("jabber_form_instructions_title", "%g|| ,+=%G------ %yInstructions%G -------+", 1);
-	format_add("jabber_form_instructions",	  	 "%g|| | %|%n %3", 1);
+	format_add("jabber_form_instructions",	  	 "%g|| |  %|%n%3", 1);
 	format_add("jabber_form_instructions_end",	 "%g|| `+=%G---------------------------+", 1);
 	
 	format_add("jabber_form_description_title",  "%g|| ,+=%G------ %yDescriptions%G -------+", 1);
-	format_add("jabber_form_description",	  	 "%g|| | %|%n %3", 1);
+	format_add("jabber_form_description",	  	 "%g|| |  %|%n%3", 1);
 	format_add("jabber_form_description_end",	 "%g|| `+=%G---------------------------+", 1);
 
 	format_add("jabber_form_item",               "%g|| ,+=%G--%n %3: %n%4",       1);              /* %3 - label  %4 - value   */
