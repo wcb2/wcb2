@@ -2283,7 +2283,7 @@ static COMMAND(jabber_muc_command_join) {
 	char *username = (params[1]) ? xstrdup(params[1]) : default_nickname ? xstrdup(default_nickname) : (tmp = xstrchr(session->uid, '@')) ? xstrndup(session->uid+5, tmp-session->uid-5) : NULL;
 	char *password = (params[1] && params[2]) ? saprintf("<password>%s</password>", params[2]) : NULL;
 
-	descr = (char *) session_descr_get(session);
+	descr = (char *) jabber_escape(session_descr_get(session));
 
 	if (muc_send_chatstate) {
 		if (descr) muc_status = saprintf("<status>%s</status>", descr);
@@ -2330,7 +2330,7 @@ static COMMAND(jabber_muc_command_join) {
 	xfree(username);
 	xfree(password);
 	xfree(mucuid);
-	xfree(muc_status);
+	xfree(muc_status); xfree(descr);
 	xfree(tmp); 
 
 	return 0;
