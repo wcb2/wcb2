@@ -2,8 +2,8 @@
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>
- *			    Robert J. Wo¼ny <speedy@ziew.org>
- *			    Pawe³ Maziarz <drg@o2.pl>
+ *			    Robert J. Woï¿½ny <speedy@ziew.org>
+ *			    Paweï¿½ Maziarz <drg@o2.pl>
  *			    Dawid Jarosz <dawjar@poczta.onet.pl>
  *			    Piotr Domagalski <szalik@szalik.net>
  *			    Adam Mikuta <adammikuta@poczta.onet.pl>
@@ -268,11 +268,11 @@ DYNSTUFF_LIST_DECLARE(aliases, alias_t, list_alias_free,
 /*
  * alias_add()
  *
- * dopisuje alias do listy aliasów.
+ * dopisuje alias do listy aliasï¿½w.
  *
  *  - string - linia w formacie 'alias cmd',
- *  - quiet - czy wypluwaæ mesgi na stdout,
- *  - append - czy dodajemy kolejn± komendê?
+ *  - quiet - czy wypluwaï¿½ mesgi na stdout,
+ *  - append - czy dodajemy kolejnï¿½ komendï¿½?
  *
  * 0/-1
  */
@@ -298,7 +298,7 @@ int alias_add(const char *string, int quiet, int append)
 			} else {
 				list_add(&a->commands, xstrdup(cmd));
 				
-				/* przy wielu komendach trudno dope³niaæ, bo wg. której? */
+				/* przy wielu komendach trudno dopeï¿½niaï¿½, bo wg. ktï¿½rej? */
 				for (c = commands; c; c = c->next) {
 					if (!xstrcasecmp(c->name, a->name)) {
 						xfree(c->params);
@@ -361,7 +361,7 @@ int alias_add(const char *string, int quiet, int append)
 /*
  * alias_remove()
  *
- * usuwa alias z listy aliasów.
+ * usuwa alias z listy aliasï¿½w.
  *
  *  - name - alias lub NULL,
  *  - quiet.
@@ -578,7 +578,7 @@ void changed_make_window(const char *var)
 /*
  * changed_mesg()
  *
- * funkcja wywo³ywana przy zmianie warto¶ci zmiennej ,,mesg''.
+ * funkcja wywoï¿½ywana przy zmianie wartoï¿½ci zmiennej ,,mesg''.
  */
 void changed_mesg(const char *var)
 {
@@ -591,11 +591,11 @@ void changed_mesg(const char *var)
 /*
  * changed_auto_save()
  *
- * wywo³ywane po zmianie warto¶ci zmiennej ,,auto_save''.
+ * wywoï¿½ywane po zmianie wartoï¿½ci zmiennej ,,auto_save''.
  */
 void changed_auto_save(const char *var)
 {
-	/* oszukujemy, ale takie zachowanie wydaje siê byæ
+	/* oszukujemy, ale takie zachowanie wydaje siï¿½ byï¿½
 	 * bardziej ,,naturalne'' */
 	last_save = time(NULL);
 }
@@ -603,13 +603,13 @@ void changed_auto_save(const char *var)
 /*
  * changed_display_blinking()
  *
- * wywo³ywane po zmianie warto¶ci zmiennej ,,display_blinking''.
+ * wywoï¿½ywane po zmianie wartoï¿½ci zmiennej ,,display_blinking''.
  */
 void changed_display_blinking(const char *var)
 {
 	session_t *s;
 
-	/* wy³±czamy wszystkie blinkaj±ce uid'y */
+	/* wyï¿½ï¿½czamy wszystkie blinkajï¿½ce uid'y */
 	for (s = sessions; s; s = s->next) {
 		userlist_t *ul;
 
@@ -623,7 +623,7 @@ void changed_display_blinking(const char *var)
 /*
  * changed_theme()
  *
- * funkcja wywo³ywana przy zmianie warto¶ci zmiennej ,,theme''.
+ * funkcja wywoï¿½ywana przy zmianie wartoï¿½ci zmiennej ,,theme''.
  */
 void changed_theme(const char *var)
 {
@@ -746,10 +746,10 @@ DYNSTUFF_LIST_DECLARE(conferences, struct conference, conference_free_item,
  * dopisuje konferencje do listy konferencji.
  *
  *  - name - nazwa konferencji,
- *  - nicklist - lista nicków, grup, czegokolwiek,
- *  - quiet - czy wypluwaæ mesgi na stdout.
+ *  - nicklist - lista nickï¿½w, grup, czegokolwiek,
+ *  - quiet - czy wypluwaï¿½ mesgi na stdout.
  *
- * zaalokowan± struct conference lub NULL w przypadku b³êdu.
+ * zaalokowanï¿½ struct conference lub NULL w przypadku bï¿½ï¿½du.
  */
 struct conference *conference_add(session_t *session, const char *name, const char *nicklist, int quiet)
 {
@@ -865,7 +865,7 @@ struct conference *conference_add(session_t *session, const char *name, const ch
 /*
  * conference_remove()
  *
- * usuwa konferencjê z listy konferencji.
+ * usuwa konferencjï¿½ z listy konferencji.
  *
  *  - name - konferencja lub NULL dla wszystkich,
  *  - quiet.
@@ -906,9 +906,9 @@ int conference_remove(const char *name, int quiet)
 /*
  * conference_create()
  *
- * tworzy now± konferencjê z wygenerowan± nazw±.
+ * tworzy nowï¿½ konferencjï¿½ z wygenerowanï¿½ nazwï¿½.
  *
- *  - nicks - lista ników tak, jak dla polecenia conference.
+ *  - nicks - lista nikï¿½w tak, jak dla polecenia conference.
  */
 struct conference *conference_create(session_t *session, const char *nicks)
 {
@@ -927,7 +927,7 @@ struct conference *conference_create(session_t *session, const char *nicks)
 /*
  * conference_find()
  *
- * znajduje i zwraca wska¼nik do konferencji lub NULL.
+ * znajduje i zwraca wskaï¿½nik do konferencji lub NULL.
  *
  *  - name - nazwa konferencji.
  */
@@ -951,7 +951,7 @@ struct conference *conference_find(const char *name)
  *  - c - konferencja,
  *  - uin - numer.
  *
- * 1 je¶li jest, 0 je¶li nie.
+ * 1 jeï¿½li jest, 0 jeï¿½li nie.
  */
 int conference_participant(struct conference *c, const char *uid)
 {
@@ -971,13 +971,13 @@ int conference_participant(struct conference *c, const char *uid)
 /*
  * conference_find_by_uids()
  *
- * znajduje konferencjê, do której nale¿± podane uiny. je¿eli nie znaleziono,
- * zwracany jest NULL. je¶li numerów jest wiêcej, zostan± dodane do
- * konferencji, bo najwyra¼niej kto¶ do niej do³±czy³.
+ * znajduje konferencjï¿½, do ktï¿½rej naleï¿½ï¿½ podane uiny. jeï¿½eli nie znaleziono,
+ * zwracany jest NULL. jeï¿½li numerï¿½w jest wiï¿½cej, zostanï¿½ dodane do
+ * konferencji, bo najwyraï¿½niej ktoï¿½ do niej doï¿½ï¿½czyï¿½.
  * 
- *  - from - kto jest nadawc± wiadomo¶ci,
- *  - recipients - tablica numerów nale¿±cych do konferencji,
- *  - count - ilo¶æ numerów,
+ *  - from - kto jest nadawcï¿½ wiadomoï¿½ci,
+ *  - recipients - tablica numerï¿½w naleï¿½ï¿½cych do konferencji,
+ *  - count - iloï¿½ï¿½ numerï¿½w,
  *  - quiet.
  */
 struct conference *conference_find_by_uids(session_t *s, const char *from, const char **recipients, int count, int quiet) 
@@ -1037,7 +1037,7 @@ struct conference *conference_find_by_uids(session_t *s, const char *from, const
  * ustawia stan konferencji na ignorowany lub nie.
  *
  *  - name - nazwa konferencji,
- *  - flag - 1 ignorowaæ, 0 nie ignorowaæ,
+ *  - flag - 1 ignorowaï¿½, 0 nie ignorowaï¿½,
  *  - quiet.
  *
  * 0/-1
@@ -1060,7 +1060,7 @@ int conference_set_ignore(const char *name, int flag, int quiet)
 /*
  * conference_rename()
  *
- * zmienia nazwê instniej±cej konferencji.
+ * zmienia nazwï¿½ instniejï¿½cej konferencji.
  * 
  *  - oldname - stara nazwa,
  *  - newname - nowa nazwa,
@@ -1097,7 +1097,7 @@ int conference_rename(const char *oldname, const char *newname, int quiet)
 /*
  * help_path()
  *
- * zwraca plik z pomoc± we w³a¶ciwym jêzyku lub null je¶li nie ma takiego pliku
+ * zwraca plik z pomocï¿½ we wï¿½aï¿½ciwym jï¿½zyku lub null jeï¿½li nie ma takiego pliku
  *
  */
 FILE *help_path(char *name, char *plugin) {
@@ -1153,7 +1153,7 @@ help_again:
  * ekg_hash()
  *
  * liczy prosty hash z nazwy, wykorzystywany przy przeszukiwaniu list
- * zmiennych, formatów itp.
+ * zmiennych, formatï¿½w itp.
  *
  *  - name - nazwa.
  */
@@ -1172,11 +1172,11 @@ int ekg_hash(const char *name)
 /*
  * mesg_set()
  *
- * w³±cza/wy³±cza/sprawdza mo¿liwo¶æ pisania do naszego terminala.
+ * wï¿½ï¿½cza/wyï¿½ï¿½cza/sprawdza moï¿½liwoï¿½ï¿½ pisania do naszego terminala.
  *
  *  - what - MESG_ON, MESG_OFF lub MESG_CHECK
  * 
- * -1 je¶li b³ad, lub aktualny stan: MESG_ON/MESG_OFF
+ * -1 jeï¿½li bï¿½ad, lub aktualny stan: MESG_ON/MESG_OFF
 */
 int mesg_set(int what)
 {
@@ -1238,7 +1238,7 @@ char *strip_spaces(char *line) {
 /*
  * play_sound()
  *
- * odtwarza dzwiêk o podanej nazwie.
+ * odtwarza dzwiï¿½k o podanej nazwie.
  *
  * 0/-1
  */
@@ -1265,7 +1265,7 @@ int play_sound(const char *sound_path)
 /*
  * child_add()
  *
- * dopisuje do listy uruchomionych dzieci procesów.
+ * dopisuje do listy uruchomionych dzieci procesï¿½w.
  *
  *  - plugin
  *  - pid
@@ -1404,10 +1404,10 @@ const char *prepare_pathf(const char *filename, ...) {
 /*
  * prepare_path()
  *
- * zwraca pe³n± ¶cie¿kê do podanego pliku katalogu ~/.ekg2/
+ * zwraca peï¿½nï¿½ ï¿½cieï¿½kï¿½ do podanego pliku katalogu ~/.ekg2/
  *
  *  - filename - nazwa pliku,
- *  - do_mkdir - czy tworzyæ katalog ~/.ekg2 ?
+ *  - do_mkdir - czy tworzyï¿½ katalog ~/.ekg2 ?
  */
 const char *prepare_path(const char *filename, int do_mkdir)
 {
@@ -1728,7 +1728,7 @@ struct timer *timer_add_ms(plugin_t *plugin, const char *name, unsigned int peri
 	struct timer *t;
 	struct timeval tv;
 
-	/* wylosuj now± nazwê, je¶li nie mamy */
+	/* wylosuj nowï¿½ nazwï¿½, jeï¿½li nie mamy */
 	if (!name) {
 		int i;
 
@@ -1772,15 +1772,15 @@ struct timer *timer_add_ms(plugin_t *plugin, const char *name, unsigned int peri
  *
  * dodaje timera.
  *
- *  - plugin - plugin obs³uguj±cy timer,
- *  - name - nazwa timera w celach identyfikacji. je¶li jest równa NULL,
+ *  - plugin - plugin obsï¿½ugujï¿½cy timer,
+ *  - name - nazwa timera w celach identyfikacji. jeï¿½li jest rï¿½wna NULL,
  *	     zostanie przyznany pierwszy numerek z brzegu.
- *  - period - za jaki czas w sekundach ma byæ uruchomiony,
- *  - persist - czy sta³y timer,
- *  - function - funkcja do wywo³ania po up³yniêciu czasu,
+ *  - period - za jaki czas w sekundach ma byï¿½ uruchomiony,
+ *  - persist - czy staï¿½y timer,
+ *  - function - funkcja do wywoï¿½ania po upï¿½yniï¿½ciu czasu,
  *  - data - dane przekazywane do funkcji.
  *
- * zwraca zaalokowan± struct timer lub NULL w przypadku b³êdu.
+ * zwraca zaalokowanï¿½ struct timer lub NULL w przypadku bï¿½ï¿½du.
  */
 struct timer *timer_add(plugin_t *plugin, const char *name, unsigned int period, int persist, int (*function)(int, void *), void *data)
 {
@@ -1805,7 +1805,7 @@ struct timer *timer_add_session(session_t *session, const char *name, unsigned i
  *
  * usuwa timer.
  *
- *  - plugin - plugin obs³uguj±cy timer,
+ *  - plugin - plugin obsï¿½ugujï¿½cy timer,
  *  - name - nazwa timera,
  *
  * 0/-1
@@ -1861,7 +1861,7 @@ int timer_remove_session(session_t *session, const char *name)
 /*
  * timer_handle_command()
  *
- * obs³uga timera wywo³uj±cego komendê.
+ * obsï¿½uga timera wywoï¿½ujï¿½cego komendï¿½.
  */
 TIMER(timer_handle_command)
 {
@@ -1877,7 +1877,7 @@ TIMER(timer_handle_command)
 /*
  * timer_remove_user()
  *
- * usuwa wszystkie timery u¿ytkownika.
+ * usuwa wszystkie timery uï¿½ytkownika.
  *
  * 0/-1
  */
@@ -1899,11 +1899,11 @@ int timer_remove_user(int at)
 /* 
  * xstrmid()
  *
- * wycina fragment tekstu alokuj±c dla niego pamiêæ.
+ * wycina fragment tekstu alokujï¿½c dla niego pamiï¿½ï¿½.
  *
- *  - str - tekst ¼ród³owy,
+ *  - str - tekst ï¿½rï¿½dï¿½owy,
  *  - start - pierwszy znak,
- *  - length - d³ugo¶æ wycinanego tekstu, je¶li -1 do koñca.
+ *  - length - dï¿½ugoï¿½ï¿½ wycinanego tekstu, jeï¿½li -1 do koï¿½ca.
  */
 char *xstrmid(const char *str, int start, int length)
 {
@@ -1953,7 +1953,7 @@ struct color_map color_map_default[26] = {
 	{ 'C', 0, 255, 255, },
 	{ 'W', 255, 255, 255, },
 
-	/* dodatkowe mapowanie ró¿nych kolorów istniej±cych w GG */
+	/* dodatkowe mapowanie rï¿½ï¿½nych kolorï¿½w istniejï¿½cych w GG */
 	{ 'C', 128, 255, 255, },
 	{ 'G', 128, 255, 128, },
 	{ 'M', 255, 128, 255, },
@@ -1969,8 +1969,8 @@ struct color_map color_map_default[26] = {
 /*
  * color_map()
  *
- * funkcja zwracaj±ca kod koloru z domy¶lnej 16-kolorowej palety terminali
- * ansi odpadaj±cemu podanym warto¶ciom RGB.
+ * funkcja zwracajï¿½ca kod koloru z domyï¿½lnej 16-kolorowej palety terminali
+ * ansi odpadajï¿½cemu podanym wartoï¿½ciom RGB.
  */
 char color_map(unsigned char r, unsigned char g, unsigned char b)
 {
@@ -2018,8 +2018,8 @@ int isalpha_pl(unsigned char c)
 /*
  * strcasestr()
  *
- * robi to samo co xstrstr() tyle ¿e bez zwracania uwagi na wielko¶æ
- * znaków.
+ * robi to samo co xstrstr() tyle ï¿½e bez zwracania uwagi na wielkoï¿½ï¿½
+ * znakï¿½w.
  */
 char *strcasestr(const char *haystack, const char *needle)
 {
@@ -2064,7 +2064,7 @@ int msg_all(session_t *s, const char *function, const char *what)
 /*
  * say_it()
  *
- * zajmuje siê wypowiadaniem tekstu, uwa¿aj±c na ju¿ dzia³aj±cy
+ * zajmuje siï¿½ wypowiadaniem tekstu, uwaï¿½ajï¿½c na juï¿½ dziaï¿½ajï¿½cy
  * syntezator w tle.
  *
  * 0/-1/-2. -2 w przypadku, gdy dodano do bufora.
@@ -2143,9 +2143,9 @@ static char base64_charset[] =
 /*
  * base64_encode()
  *
- * zapisuje ci±g znaków w base64.
+ * zapisuje ciï¿½g znakï¿½w w base64.
  *
- *  - buf - ci±g znaków.
+ *  - buf - ciï¿½g znakï¿½w.
  *
  * zaalokowany bufor.
  */
@@ -2200,9 +2200,9 @@ char *base64_encode(const char *buf, size_t len)
 /*
  * base64_decode()
  *
- * dekoduje ci±g znaków z base64.
+ * dekoduje ciï¿½g znakï¿½w z base64.
  *
- *  - buf - ci±g znaków.
+ *  - buf - ciï¿½g znakï¿½w.
  *
  * zaalokowany bufor.
  */
@@ -2256,15 +2256,15 @@ char *base64_decode(const char *buf)
 /*
  * split_line()
  * 
- * podaje kolejn± liniê z bufora tekstowego. niszczy go bezpowrotnie, dziel±c
- * na kolejne stringi. zdarza siê, nie ma potrzeby pisania funkcji dubluj±cej
- * bufor ¿eby tylko mieæ nieruszone dane wej¶ciowe, skoro i tak nie bêd± nam
- * po¼niej potrzebne. obcina `\r\n'.
+ * podaje kolejnï¿½ liniï¿½ z bufora tekstowego. niszczy go bezpowrotnie, dzielï¿½c
+ * na kolejne stringi. zdarza siï¿½, nie ma potrzeby pisania funkcji dublujï¿½cej
+ * bufor ï¿½eby tylko mieï¿½ nieruszone dane wejï¿½ciowe, skoro i tak nie bï¿½dï¿½ nam
+ * poï¿½niej potrzebne. obcina `\r\n'.
  * 
- *  - ptr - wska¼nik do zmiennej, która przechowuje aktualn± pozycjê
+ *  - ptr - wskaï¿½nik do zmiennej, ktï¿½ra przechowuje aktualnï¿½ pozycjï¿½
  *    w przemiatanym buforze
  * 
- * wska¼nik do kolejnej linii tekstu lub NULL, je¶li to ju¿ koniec bufora.
+ * wskaï¿½nik do kolejnej linii tekstu lub NULL, jeï¿½li to juï¿½ koniec bufora.
  */
 char *split_line(char **ptr)
 {
@@ -2293,7 +2293,7 @@ char *split_line(char **ptr)
 /*
  * ekg_status_label()
  *
- * tworzy etykietê formatki opisuj±cej stan.
+ * tworzy etykietï¿½ formatki opisujï¿½cej stan.
  */
 const char *ekg_status_label(const int status, const char *descr, const char *prefix)
 {
@@ -2492,9 +2492,9 @@ int ekg_status_int(const char *text)
 /*
  * ekg_sent_message_format()
  *
- * funkcja pomocnicza dla protoko³ów obs³uguj±cych kolorki. z podanego
+ * funkcja pomocnicza dla protokoï¿½ï¿½w obsï¿½ugujï¿½cych kolorki. z podanego
  * tekstu wycina kolorki i zwraca informacje o formatowaniu tekstu bez
- * kolorków.
+ * kolorkï¿½w.
  */
 uint32_t *ekg_sent_message_format(const char *text)
 {
@@ -2503,13 +2503,13 @@ uint32_t *ekg_sent_message_format(const char *text)
 	const char *p, *end;
 	int len;
 
-	/* je¶li nie stwierdzono znaków kontrolnych, spadamy */
+	/* jeï¿½li nie stwierdzono znakï¿½w kontrolnych, spadamy */
 /*
 	if (!xstrpbrk(text, "\x02\x03\x12\x14\x1f"))
 		return NULL;
  */
 
-	/* oblicz d³ugo¶æ tekstu bez znaczków formatuj±cych */
+	/* oblicz dï¿½ugoï¿½ï¿½ tekstu bez znaczkï¿½w formatujï¿½cych */
 	for (p = text, len = 0; *p; p++) {
 		if (!xstrchr(("\x02\x03\x12\x14\x1f"), *p))
 			len++;
@@ -2569,7 +2569,7 @@ uint32_t *ekg_sent_message_format(const char *text)
 			continue;
 		}
 
-		/* zwyk³y znak */
+		/* zwykï¿½y znak */
 		*q = *p;
 		for (j = (int) (q - newtext); j < len; j++)
 			format[j] = attr;
@@ -2581,7 +2581,6 @@ uint32_t *ekg_sent_message_format(const char *text)
 }
 
 size_t strlen_pl(const char *s) {
-#if USE_UNICODE
 	int ok = 1, len=xstrlen(s), count = 0;
 	const char *end = s+len;
 
@@ -2592,9 +2591,6 @@ size_t strlen_pl(const char *s) {
 		}
 	}
 	return count;
-#else
-	return xstrlne(s);
-#endif
 }
 
 static int tolower_pl(const unsigned char c);
@@ -2617,9 +2613,9 @@ char *xstrncat_pl(char *dest, const char *src, size_t n) {
 /*
  * strncasecmp_pl()
  *
- * porównuje dwa ci±gi o okre¶lonej przez n d³ugo¶ci
- * dzia³a analogicznie do xstrncasecmp()
- * obs³uguje polskie znaki
+ * porï¿½wnuje dwa ciï¿½gi o okreï¿½lonej przez n dï¿½ugoï¿½ci
+ * dziaï¿½a analogicznie do xstrncasecmp()
+ * obsï¿½uguje polskie znaki
  */
 int strncasecmp_pl(const char *cs, const char *ct , size_t count)
 {
@@ -2664,28 +2660,28 @@ int strcasecmp_pl(const char *cs, const char *ct)
 /*
  * tolower_pl()
  *
- * zamienia podany znak na ma³y je¶li to mo¿liwe
- * obs³uguje polskie znaki
+ * zamienia podany znak na maï¿½y jeï¿½li to moï¿½liwe
+ * obsï¿½uguje polskie znaki
  */
 static int tolower_pl(const unsigned char c) {
 	switch(c) {
-		case 161: /* ¡ */
+		case 161: /* ï¿½ */
 			return 177;
-		case 198: /* Æ */
+		case 198: /* ï¿½ */
 			return 230;
-		case 202: /* Ê */
+		case 202: /* ï¿½ */
 			return 234;
-		case 163: /* £ */
+		case 163: /* ï¿½ */
 			return 179;
-		case 209: /* Ñ */
+		case 209: /* ï¿½ */
 			return 241;
-		case 211: /* Ó */
+		case 211: /* ï¿½ */
 			return 243;
-		case 166: /* ¦ */
+		case 166: /* ï¿½ */
 			return 182;
-		case 175: /* ¯ */
+		case 175: /* ï¿½ */
 			return 191;
-		case 172: /* ¬ */
+		case 172: /* ï¿½ */
 			return 188;
 		default: /* reszta */
 			return tolower(c);
@@ -2695,8 +2691,8 @@ static int tolower_pl(const unsigned char c) {
 /*
  * saprintf()
  *
- * dzia³a jak sprintf() tylko, ¿e wyrzuca wska¼nik
- * do powsta³ego ci±gu
+ * dziaï¿½a jak sprintf() tylko, ï¿½e wyrzuca wskaï¿½nik
+ * do powstaï¿½ego ciï¿½gu
  */
 char *saprintf(const char *format, ...)
 {
@@ -2713,7 +2709,7 @@ char *saprintf(const char *format, ...)
 /*
  * xstrtr()
  *
- * zamienia wszystko znaki a na b w podanym ci±gu
+ * zamienia wszystko znaki a na b w podanym ciï¿½gu
  * nie robie jego kopi!
  */
 void xstrtr(char *text, char from, char to)
